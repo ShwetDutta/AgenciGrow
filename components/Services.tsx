@@ -40,7 +40,7 @@ const Services: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             className="text-5xl lg:text-7xl font-black text-[#0F172A] mb-8 leading-[1]"
           >
-            Growth is a Science, <br/> 
+            Growth is a Science, <br /> 
             <span className="text-[#00D094]">Not an Accident.</span>
           </motion.h2>
           <p className="text-[#475569] text-xl font-light leading-relaxed">
@@ -51,7 +51,7 @@ const Services: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {services.map((s, i) => (
             <motion.div 
-              key={i}
+              key={s.title}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}

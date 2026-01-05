@@ -51,7 +51,7 @@ const Footer: React.FC = () => {
 
           <div className="bg-white/5 p-10 border border-white/5 rounded-2xl flex flex-col justify-between">
             <div>
-              <h4 className="text-[#F8FAFC] font-black text-2xl mb-6 leading-tight">Ready to Scale? <br/> Let's Talk Growth.</h4>
+              <h4 className="text-[#F8FAFC] font-black text-2xl mb-6 leading-tight">Ready to Scale? <br /> Let's Talk Growth.</h4>
               <p className="text-[#94A3B8] mb-10 text-[11px] font-medium leading-relaxed">Stop guessing and start engineering your revenue. Secure your dedicated strategy call with our lead growth architects below.</p>
             </div>
             <a 
@@ -60,9 +60,9 @@ const Footer: React.FC = () => {
               className="flex items-center justify-between gap-4 w-full bg-[#00D094] text-[#0F172A] py-6 px-8 rounded-lg font-black text-[14px] uppercase tracking-[0.05em] hover:bg-white transition-all shadow-xl group text-left leading-tight"
             >
               <span>
-                BOOK<br/>
-                YOUR<br/>
-                STRATEGY<br/>
+                BOOK<br />
+                YOUR<br />
+                STRATEGY<br />
                 CALL
               </span>
               <Calendar size={24} className="group-hover:scale-110 transition-transform opacity-80" />

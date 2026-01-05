@@ -20,8 +20,8 @@ const About: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               className="text-5xl lg:text-7xl font-black text-[#F8FAFC] mb-12 tracking-tighter leading-[0.95]"
             >
-              Capital Efficiency <br/> over <span className="text-[#00D094]">Vanity Metrics.</span>
-            </h2>
+              Capital Efficiency <br /> over <span className="text-[#00D094]">Vanity Metrics.</span>
+            </motion.h2>
             <div className="space-y-8 text-xl text-[#94A3B8] font-light leading-relaxed">
               <p>
                 The digital marketplace is flooded with "experts" selling clicks. At AgenciGrow, we sell outcomes. Every strategy we deploy is designed to maximize the spread between acquisition cost and lifetime value.
@@ -34,7 +34,7 @@ const About: React.FC = () => {
                   'Technical SEO Integrity'
                 ].map((item, i) => (
                   <motion.div 
-                    key={i}
+                    key={item}
                     initial={{ opacity: 0, x: -10 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.1 }}
