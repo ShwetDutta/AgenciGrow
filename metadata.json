@@ -1,0 +1,8 @@
+{
+  "name": "AgenciGrow - Performance Marketing & Growth",
+  "description": "A high-conversion marketing agency website built for growth-focused brands, featuring strategic service breakdowns and seamless Calendly integration.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
