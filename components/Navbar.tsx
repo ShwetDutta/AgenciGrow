@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export const Logo = ({ light = false }: { light?: boolean }) => (
+export const Logo = () => (
   <div className="flex items-center gap-2 group cursor-pointer select-none">
     <div className="flex items-center">
       <span className="text-2xl font-extrabold tracking-tight">
@@ -56,7 +56,7 @@ const Navbar: React.FC = () => {
     }`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-12 flex justify-between items-center">
         <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
-          <Logo light={true} />
+          <Logo />
         </a>
 
         <div className="hidden md:flex items-center space-x-12">

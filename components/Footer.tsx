@@ -16,7 +16,7 @@ const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-20 pb-24 border-b border-white/5">
           <div className="space-y-10">
-            <Logo light={true} />
+            <Logo />
             <p className="text-[#94A3B8] text-sm leading-relaxed font-medium max-w-xs">
               Next-gen growth engineering for category-defining brands. We turn marketing into a compounding investment.
             </p>
