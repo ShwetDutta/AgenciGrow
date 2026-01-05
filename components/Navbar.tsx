@@ -29,6 +29,15 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Lock body scroll when menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [isOpen]);
+
   const navLinks = [
     { name: 'Services', href: '#services' },
     { name: 'About', href: '#about' },
@@ -51,14 +60,15 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-      scrolled ? 'nav-glass py-4' : 'bg-transparent py-8'
+    <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${
+      scrolled || isOpen ? 'nav-glass py-4' : 'bg-transparent py-8'
     }`}>
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 flex justify-between items-center">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 flex justify-between items-center relative z-[110]">
         <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
           <Logo />
         </a>
 
+        {/* Desktop Nav */}
         <div className="hidden md:flex items-center space-x-12">
           {navLinks.map((link) => (
             <a
@@ -85,36 +95,56 @@ const Navbar: React.FC = () => {
           </a>
         </div>
 
-        <button onClick={() => setIsOpen(!isOpen)} className={`md:hidden p-2 text-[#F8FAFC]`}>
+        {/* Mobile Toggle Button */}
+        <button 
+          onClick={() => setIsOpen(!isOpen)} 
+          className="md:hidden p-2 text-[#F8FAFC] hover:text-[#00D094] transition-colors"
+          aria-label="Toggle Menu"
+        >
           {isOpen ? <X size={32} /> : <Menu size={32} />}
         </button>
       </div>
 
+      {/* Full Screen Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="md:hidden fixed inset-0 bg-[#0F172A] z-40 flex flex-col justify-center items-center gap-12"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden fixed inset-0 bg-[#0F172A] z-[90] h-screen w-screen flex flex-col justify-center items-center overflow-y-auto px-6"
           >
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="text-4xl text-[#F8FAFC] font-black tracking-tighter"
-                onClick={(e) => { e.preventDefault(); scrollTo(link.href); }}
+            <div className="flex flex-col items-center gap-10 py-20">
+              {navLinks.map((link, idx) => (
+                <motion.a
+                  key={link.name}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.05 }}
+                  href={link.href}
+                  className="text-4xl text-[#F8FAFC] font-black tracking-tighter hover:text-[#00D094] transition-colors"
+                  onClick={(e) => { e.preventDefault(); scrollTo(link.href); }}
+                >
+                  {link.name}
+                </motion.a>
+              ))}
+              
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: navLinks.length * 0.05 }}
+                className="mt-6"
               >
-                {link.name}
-              </a>
-            ))}
-            <a
-              href="#booking"
-              className="px-12 py-5 bg-[#00D094] text-[#0F172A] font-black text-xl rounded-sm"
-              onClick={(e) => { e.preventDefault(); scrollTo('#booking'); }}
-            >
-              Book Strategy Call
-            </a>
+                <a
+                  href="#booking"
+                  className="px-10 py-5 bg-[#00D094] text-[#0F172A] font-black text-lg rounded-sm shadow-2xl hover:bg-white transition-all uppercase tracking-widest"
+                  onClick={(e) => { e.preventDefault(); scrollTo('#booking'); }}
+                >
+                  Book Strategy Call
+                </a>
+              </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
