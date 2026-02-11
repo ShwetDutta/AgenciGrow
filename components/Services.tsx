@@ -25,25 +25,25 @@ const services = [
 
 const Services: React.FC = () => {
   return (
-    <section id="services" className="py-32 bg-[#F8FAFC]">
+    <section id="services" className="py-32 bg-[#0B0B0E]">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="max-w-3xl mb-24">
           <motion.span 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            className="text-[#00D094] font-black text-xs uppercase tracking-[0.4em] mb-4 block"
+            className="text-[#C63AFF] font-black text-xs uppercase tracking-[0.4em] mb-4 block"
           >
             Core Competencies
           </motion.span>
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-5xl lg:text-7xl font-black text-[#0F172A] mb-8 leading-[1]"
+            className="text-5xl lg:text-7xl font-black text-white mb-8 leading-[1]"
           >
             Growth is a Science, <br /> 
-            <span className="text-[#00D094]">Not an Accident.</span>
+            <span className="text-[#C63AFF]">Not an Accident.</span>
           </motion.h2>
-          <p className="text-[#475569] text-xl font-light leading-relaxed">
+          <p className="text-[#B5B5C0] text-xl font-light leading-relaxed">
             Our methodology is modular yet integrated. We deploy growth architectures designed to be managed like a high-yield investment portfolio.
           </p>
         </div>
@@ -56,19 +56,19 @@ const Services: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
               viewport={{ once: true }}
-              className="group p-12 bg-white rounded-2xl border border-[#E5E7EB] hover:border-[#00D094] hover:shadow-2xl transition-all duration-500 relative overflow-hidden"
+              className="group p-12 bg-white/5 rounded-2xl border border-white/10 hover:border-[#C63AFF]/50 hover:shadow-[0_0_30px_rgba(198,58,255,0.15)] transition-all duration-500 relative overflow-hidden"
             >
-              <div className="w-16 h-16 bg-[#0F172A] text-[#00D094] rounded-xl flex items-center justify-center mb-10 group-hover:bg-[#00D094] group-hover:text-[#0F172A] transition-all">
+              <div className="w-16 h-16 bg-[#0B0B0E] text-[#C63AFF] rounded-xl flex items-center justify-center mb-10 group-hover:bg-[#C63AFF] group-hover:text-white transition-all">
                 {s.icon}
               </div>
               
-              <div className="text-[10px] font-black text-[#94A3B8] uppercase tracking-widest mb-4">
+              <div className="text-[10px] font-black text-[#8E8E9F] uppercase tracking-widest mb-4">
                 {s.tag}
               </div>
               
-              <h3 className="text-3xl font-black text-[#0F172A] mb-6 tracking-tight">{s.title}</h3>
+              <h3 className="text-3xl font-black text-white mb-6 tracking-tight">{s.title}</h3>
               
-              <p className="text-[#475569] text-lg leading-relaxed font-light">
+              <p className="text-[#B5B5C0] text-lg leading-relaxed font-light">
                 {s.desc}
               </p>
             </motion.div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0F172A">
+    <meta name="theme-color" content="#0B0B0E">
     
     <!-- SEO Metadata -->
     <title>AgenciGrow | Performance Engineered Growth for Brands</title>
@@ -17,13 +17,6 @@
     <meta property="og:description" content="We bridge the gap between creative capital and algorithmic precision to build compounding growth systems.">
     <meta property="og:image" content="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200&h=630">
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://agencigrow.com/">
-    <meta property="twitter:title" content="AgenciGrow | Performance Engineered Growth">
-    <meta property="twitter:description" content="Building high-impact growth architectures for market-leading brands.">
-    <meta property="twitter:image" content="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200&h=630">
-
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -33,18 +26,19 @@
     
     <style>
         :root {
-            --primary-bg: #0F172A;
-            --accent: #00D094;
-            --surface: #F8FAFC;
-            --text-primary: #0F172A;
-            --text-secondary: #475569;
-            --text-muted: #94A3B8;
-            --border: #E5E7EB;
+            --primary-bg: #0B0B0E;
+            --accent: #C63AFF;
+            --accent-secondary: #7B4DFF;
+            --surface: #0F0F14;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B5B5C0;
+            --text-muted: #8E8E9F;
+            --border: rgba(198, 58, 255, 0.1);
             --off-white: #F8FAFC;
         }
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--surface);
+            background-color: var(--primary-bg);
             color: var(--text-primary);
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
@@ -62,41 +56,43 @@
             position: absolute;
             filter: blur(80px);
             z-index: 0;
-            opacity: 0.15;
+            opacity: 0.12;
             border-radius: 50%;
             pointer-events: none;
         }
 
         .nav-glass {
-            background: rgba(15, 23, 42, 0.9);
+            background: rgba(11, 11, 14, 0.9);
             backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(248, 250, 252, 0.1);
+            border-bottom: 1px solid rgba(198, 58, 255, 0.1);
         }
 
         .btn-premium {
             transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
             position: relative;
             overflow: hidden;
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
         }
         .btn-premium:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px -5px rgba(0, 208, 148, 0.3);
+            box-shadow: 0 10px 30px -5px rgba(198, 58, 255, 0.4);
+            filter: brightness(1.1);
         }
 
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--surface); }
-        ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: var(--primary-bg); }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; opacity: 0.5; }
     </style>
 <script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
-    "framer-motion": "https://esm.sh/framer-motion@^12.24.0",
-    "@emailjs/browser": "https://esm.sh/@emailjs/browser@^4.4.1",
-    "vite": "https://esm.sh/vite@^7.3.0"
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react": "https://esm.sh/react@^19.2.4",
+    "framer-motion": "https://esm.sh/framer-motion@^12.34.0",
+    "vite": "https://esm.sh/vite@^7.3.1",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
+    "@emailjs/browser": "https://esm.sh/@emailjs/browser@^4.4.1"
   }
 }
 </script>

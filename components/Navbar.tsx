@@ -6,13 +6,13 @@ export const Logo = () => (
   <div className="flex items-center gap-2 group cursor-pointer select-none">
     <div className="flex items-center">
       <span className="text-2xl font-extrabold tracking-tight">
-        <span style={{ color: '#00D094' }}>Agenci</span>
-        <span className="text-[#F8FAFC]">Grow</span>
+        <span style={{ color: '#C63AFF' }}>Agenci</span>
+        <span className="text-[#FFFFFF]">Grow</span>
       </span>
       <div className="ml-1 flex items-center translate-y-[2px]">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M13 11L18 6M18 6H13M18 6V11" stroke="#00D094" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M7 17L12 12M12 12H7M12 12V17" stroke="#00D094" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.6"/>
+          <path d="M13 11L18 6M18 6H13M18 6V11" stroke="#C63AFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M7 17L12 12M12 12H7M12 12V17" stroke="#7B4DFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.6"/>
         </svg>
       </div>
     </div>
@@ -76,7 +76,7 @@ const Navbar: React.FC = () => {
               href={link.href}
               onClick={(e) => { e.preventDefault(); scrollTo(link.href); }}
               className={`text-[11px] font-black uppercase tracking-[0.2em] transition-all hover:translate-y-[-1px] ${
-                scrolled ? 'text-[#94A3B8] hover:text-[#00D094]' : 'text-[#F8FAFC]/70 hover:text-[#00D094]'
+                scrolled ? 'text-[#B5B5C0] hover:text-[#C63AFF]' : 'text-white/70 hover:text-[#C63AFF]'
               }`}
             >
               {link.name}
@@ -85,11 +85,7 @@ const Navbar: React.FC = () => {
           <a
             href="#booking"
             onClick={(e) => { e.preventDefault(); scrollTo('#booking'); }}
-            className={`px-8 py-3 rounded-sm text-[11px] font-black uppercase tracking-[0.15em] transition-all shadow-lg ${
-              scrolled 
-                ? 'bg-[#00D094] text-[#0F172A] hover:bg-white hover:text-[#0F172A]' 
-                : 'bg-[#00D094] text-[#0F172A] hover:bg-[#F8FAFC]'
-            }`}
+            className={`px-8 py-3 rounded-sm text-[11px] font-black uppercase tracking-[0.15em] transition-all shadow-lg bg-gradient-to-r from-[#C63AFF] to-[#7B4DFF] text-white hover:brightness-110`}
           >
             Book Strategy Call
           </a>
@@ -98,7 +94,7 @@ const Navbar: React.FC = () => {
         {/* Mobile Toggle Button */}
         <button 
           onClick={() => setIsOpen(!isOpen)} 
-          className="md:hidden p-2 text-[#F8FAFC] hover:text-[#00D094] transition-colors"
+          className="md:hidden p-2 text-white hover:text-[#C63AFF] transition-colors"
           aria-label="Toggle Menu"
         >
           {isOpen ? <X size={32} /> : <Menu size={32} />}
@@ -113,7 +109,7 @@ const Navbar: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden fixed inset-0 bg-[#0F172A] z-[90] h-screen w-screen flex flex-col justify-center items-center overflow-y-auto px-6"
+            className="md:hidden fixed inset-0 bg-[#0B0B0E] z-[90] h-screen w-screen flex flex-col justify-center items-center overflow-y-auto px-6"
           >
             <div className="flex flex-col items-center gap-10 py-20">
               {navLinks.map((link, idx) => (
@@ -123,7 +119,7 @@ const Navbar: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.05 }}
                   href={link.href}
-                  className="text-4xl text-[#F8FAFC] font-black tracking-tighter hover:text-[#00D094] transition-colors"
+                  className="text-4xl text-white font-black tracking-tighter hover:text-[#C63AFF] transition-colors"
                   onClick={(e) => { e.preventDefault(); scrollTo(link.href); }}
                 >
                   {link.name}
@@ -138,7 +134,7 @@ const Navbar: React.FC = () => {
               >
                 <a
                   href="#booking"
-                  className="px-10 py-5 bg-[#00D094] text-[#0F172A] font-black text-lg rounded-sm shadow-2xl hover:bg-white transition-all uppercase tracking-widest"
+                  className="px-10 py-5 bg-gradient-to-r from-[#C63AFF] to-[#7B4DFF] text-white font-black text-lg rounded-sm shadow-2xl hover:brightness-110 transition-all uppercase tracking-widest"
                   onClick={(e) => { e.preventDefault(); scrollTo('#booking'); }}
                 >
                   Book Strategy Call
