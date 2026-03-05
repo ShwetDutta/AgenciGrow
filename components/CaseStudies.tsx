@@ -27,7 +27,7 @@ const CaseStudies: React.FC = () => {
           <motion.span 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            className="text-[#C63AFF] font-black text-xs uppercase tracking-[0.4em] mb-4 block"
+            className="text-[#d62cab] font-black text-xs uppercase tracking-[0.4em] mb-4 block"
           >
             The Results Vault
           </motion.span>
@@ -53,20 +53,20 @@ const CaseStudies: React.FC = () => {
               viewport={{ once: true }}
               className="group cursor-pointer"
             >
-              <div className="relative rounded-2xl overflow-hidden bg-[#0F0F14] aspect-[16/10] mb-10 border border-white/5 group-hover:shadow-[0_0_40px_rgba(198,58,255,0.1)] transition-all duration-700">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#C63AFF]/10 to-[#0B0B0E] opacity-60 group-hover:opacity-80 transition-opacity"></div>
+              <div className="relative rounded-2xl overflow-hidden bg-[#0F0F14] aspect-[16/10] mb-10 border border-white/5 group-hover:shadow-[0_0_40px_rgba(214,44,171,0.1)] transition-all duration-700">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#d62cab]/10 to-[#0B0B0E] opacity-60 group-hover:opacity-80 transition-opacity"></div>
                 
                 <div className="absolute bottom-10 left-10 right-10 flex justify-between items-end">
                   <div>
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 rounded-lg bg-white/10 backdrop-blur-md flex items-center justify-center text-[#C63AFF]">
+                      <div className="w-10 h-10 rounded-lg bg-white/10 backdrop-blur-md flex items-center justify-center text-[#d62cab]">
                         {c.icon}
                       </div>
                       <span className="text-[#8E8E9F] text-sm font-bold uppercase tracking-widest">{c.industry}</span>
                     </div>
                     <h4 className="text-4xl font-black text-white">{c.client}</h4>
                   </div>
-                  <div className="w-14 h-14 bg-gradient-to-br from-[#C63AFF] to-[#7B4DFF] rounded-xl flex items-center justify-center transform group-hover:rotate-12 transition-transform shadow-xl text-white">
+                  <div className="w-14 h-14 bg-gradient-to-br from-[#d62cab] to-[#37052f] rounded-xl flex items-center justify-center transform group-hover:rotate-12 transition-transform shadow-xl text-white">
                     <ArrowUpRight size={24} />
                   </div>
                 </div>
@@ -77,10 +77,10 @@ const CaseStudies: React.FC = () => {
                   <h5 className="text-white font-black text-lg">The Challenge</h5>
                   <p className="text-[#B5B5C0] leading-relaxed text-base font-light">{c.challenge}</p>
                 </div>
-                <div className="p-8 rounded-2xl bg-white/5 border border-white/10 flex flex-col gap-2 group-hover:bg-[#C63AFF]/5 transition-colors">
+                <div className="p-8 rounded-2xl bg-white/5 border border-white/10 flex flex-col gap-2 group-hover:bg-[#d62cab]/5 transition-colors">
                   <span className="text-[#8E8E9F] text-xs font-black uppercase tracking-widest">Key Metric</span>
                   <div className="flex items-center gap-3 text-white text-2xl font-black">
-                    <TrendingUp className="w-6 h-6 text-[#C63AFF]" />
+                    <TrendingUp className="w-6 h-6 text-[#d62cab]" />
                     <span>{c.results}</span>
                   </div>
                 </div>

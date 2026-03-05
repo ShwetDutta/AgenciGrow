@@ -12,7 +12,7 @@ const Booking: React.FC = () => {
               <motion.span 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
-                className="text-[#C63AFF] font-black text-xs uppercase tracking-[0.4em] mb-6 block"
+                className="text-[#d62cab] font-black text-xs uppercase tracking-[0.4em] mb-6 block"
               >
                 Take Action
               </motion.span>
@@ -21,29 +21,29 @@ const Booking: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 className="text-5xl md:text-7xl font-black text-white mb-8 leading-[0.95] tracking-tighter"
               >
-                Map Your <br /><span className="text-[#C63AFF]">Growth Blueprint.</span>
+                Map Your <br /><span className="text-[#d62cab]">Growth Roadmap.</span>
               </motion.h3>
               <p className="text-xl text-[#B5B5C0] font-light leading-relaxed mb-8">
-                A 30-minute high-impact session to dissect your current acquisition channels and identify your untapped profit margins. No fluff, just technical strategy.
+                A 30-minute discovery session to identify your bottlenecks and architect a custom growth system for predictable scale.
               </p>
             </div>
 
             <div className="space-y-6">
               <div className="p-10 rounded-2xl bg-white/5 border border-white/10 shadow-sm">
                 <h4 className="text-xl font-black text-white mb-8 flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-[#C63AFF]/10 flex items-center justify-center text-[#C63AFF]">
+                  <div className="w-10 h-10 rounded-lg bg-[#d62cab]/10 flex items-center justify-center text-[#d62cab]">
                     <Check className="w-6 h-6" />
                   </div>
-                  Ideal for Brands that:
+                  Our Two-Step Process:
                 </h4>
                 <ul className="space-y-6">
                   {[
-                    "Have a validated product/market fit",
-                    "Are generating $20k+ monthly recurring revenue",
-                    "Seek data-backed clarity on their scale potential"
+                    "Step 1: Discovery Meeting - Deep dive into your goals and bottlenecks",
+                    "Step 2: Custom Growth Roadmap - A tailored proposal for predictable scale",
+                    "Systems-First Approach - Custom-built strategies, not one-size-fits-all"
                   ].map((item, i) => (
                     <li key={i} className="text-[#B5B5C0] flex items-start gap-4 font-medium">
-                      <div className="w-2 h-2 rounded-full bg-[#C63AFF] mt-2.5 flex-shrink-0"></div>
+                      <div className="w-2 h-2 rounded-full bg-[#d62cab] mt-2.5 flex-shrink-0"></div>
                       {item}
                     </li>
                   ))}
@@ -51,7 +51,7 @@ const Booking: React.FC = () => {
               </div>
 
               <div className="flex items-center gap-3 text-[#8E8E9F] font-bold px-4">
-                <div className="text-[#C63AFF]"><Info className="w-5 h-5" /></div>
+                <div className="text-[#d62cab]"><Info className="w-5 h-5" /></div>
                 <span className="text-xs uppercase tracking-widest">Limited to 4 strategy sessions per week.</span>
               </div>
             </div>

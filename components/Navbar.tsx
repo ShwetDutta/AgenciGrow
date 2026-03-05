@@ -6,13 +6,37 @@ export const Logo = () => (
   <div className="flex items-center gap-2 group cursor-pointer select-none">
     <div className="flex items-center">
       <span className="text-2xl font-extrabold tracking-tight">
-        <span style={{ color: '#C63AFF' }}>Agenci</span>
-        <span className="text-[#FFFFFF]">Grow</span>
+        <span style={{ 
+          background: 'linear-gradient(90deg, #d62cab, #37052f)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          display: 'inline-block'
+        }}>
+          Agenci
+        </span>
+        <span style={{ 
+          background: 'linear-gradient(90deg, #444141, #fffefe)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          display: 'inline-block'
+        }}>
+          Grow
+        </span>
       </span>
       <div className="ml-1 flex items-center translate-y-[2px]">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M13 11L18 6M18 6H13M18 6V11" stroke="#C63AFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M7 17L12 12M12 12H7M12 12V17" stroke="#7B4DFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.6"/>
+          <defs>
+            <linearGradient id="pinkGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#d62cab" />
+              <stop offset="100%" stopColor="#37052f" />
+            </linearGradient>
+            <linearGradient id="greyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#444141" />
+              <stop offset="100%" stopColor="#fffefe" />
+            </linearGradient>
+          </defs>
+          <path d="M13 11L18 6M18 6H13M18 6V11" stroke="url(#pinkGradient)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M7 17L12 12M12 12H7M12 12V17" stroke="url(#greyGradient)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.8"/>
         </svg>
       </div>
     </div>
@@ -76,7 +100,7 @@ const Navbar: React.FC = () => {
               href={link.href}
               onClick={(e) => { e.preventDefault(); scrollTo(link.href); }}
               className={`text-[11px] font-black uppercase tracking-[0.2em] transition-all hover:translate-y-[-1px] ${
-                scrolled ? 'text-[#B5B5C0] hover:text-[#C63AFF]' : 'text-white/70 hover:text-[#C63AFF]'
+                scrolled ? 'text-[#B5B5C0] hover:text-[#d62cab]' : 'text-white/70 hover:text-[#d62cab]'
               }`}
             >
               {link.name}
@@ -85,7 +109,7 @@ const Navbar: React.FC = () => {
           <a
             href="#booking"
             onClick={(e) => { e.preventDefault(); scrollTo('#booking'); }}
-            className={`px-8 py-3 rounded-sm text-[11px] font-black uppercase tracking-[0.15em] transition-all shadow-lg bg-gradient-to-r from-[#C63AFF] to-[#7B4DFF] text-white hover:brightness-110`}
+            className={`px-8 py-3 rounded-sm text-[11px] font-black uppercase tracking-[0.15em] transition-all shadow-lg bg-gradient-to-r from-[#d62cab] to-[#37052f] text-white hover:brightness-110`}
           >
             Book Strategy Call
           </a>
@@ -119,7 +143,7 @@ const Navbar: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.05 }}
                   href={link.href}
-                  className="text-4xl text-white font-black tracking-tighter hover:text-[#C63AFF] transition-colors"
+                  className="text-4xl text-white font-black tracking-tighter hover:text-[#d62cab] transition-colors"
                   onClick={(e) => { e.preventDefault(); scrollTo(link.href); }}
                 >
                   {link.name}
@@ -134,7 +158,7 @@ const Navbar: React.FC = () => {
               >
                 <a
                   href="#booking"
-                  className="px-10 py-5 bg-gradient-to-r from-[#C63AFF] to-[#7B4DFF] text-white font-black text-lg rounded-sm shadow-2xl hover:brightness-110 transition-all uppercase tracking-widest"
+                  className="px-10 py-5 bg-gradient-to-r from-[#d62cab] to-[#37052f] text-white font-black text-lg rounded-sm shadow-2xl hover:brightness-110 transition-all uppercase tracking-widest"
                   onClick={(e) => { e.preventDefault(); scrollTo('#booking'); }}
                 >
                   Book Strategy Call

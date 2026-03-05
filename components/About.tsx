@@ -11,7 +11,7 @@ const About: React.FC = () => {
             <motion.span 
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              className="text-[#C63AFF] font-black text-xs uppercase tracking-[0.4em] mb-6 block"
+              className="text-[#d62cab] font-black text-xs uppercase tracking-[0.4em] mb-6 block"
             >
               The Philosophy
             </motion.span>
@@ -20,18 +20,18 @@ const About: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               className="text-5xl lg:text-7xl font-black text-white mb-12 tracking-tighter leading-[0.95]"
             >
-              Capital Efficiency <br /> over <span className="text-[#C63AFF]">Vanity Metrics.</span>
+              Systems over Clicks. <br /> Your <span className="text-[#d62cab]">Growth Partner.</span>
             </motion.h2>
             <div className="space-y-8 text-xl text-[#B5B5C0] font-light leading-relaxed">
               <p>
-                The digital marketplace is flooded with "experts" selling clicks. At AgenciGrow, we sell outcomes. Every strategy we deploy is designed to maximize the spread between acquisition cost and lifetime value.
+                Most businesses don't have a marketing problem—they have a systems problem. At AgenciGrow, we build the systems behind your marketing and operations so growth becomes predictable and scalable.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
                 {[
-                  'Zero-Waste Media Buying',
-                  'Topic Authority Moats',
-                  'Unit-Economic Focused',
-                  'Technical SEO Integrity'
+                  'Predictable Lead Generation',
+                  'Automated Follow-ups',
+                  'Eliminated Ad Waste',
+                  'Custom Growth Roadmap'
                 ].map((item, i) => (
                   <motion.div 
                     key={item}
@@ -40,7 +40,7 @@ const About: React.FC = () => {
                     transition={{ delay: i * 0.1 }}
                     className="flex items-center gap-4 py-4 px-6 bg-white/5 border border-white/10 rounded-xl"
                   >
-                    <CheckCircle2 className="text-[#C63AFF] w-5 h-5" />
+                    <CheckCircle2 className="text-[#d62cab] w-5 h-5" />
                     <span className="text-white text-sm font-bold uppercase tracking-widest">{item}</span>
                   </motion.div>
                 ))}
@@ -61,7 +61,7 @@ const About: React.FC = () => {
               />
               <div className="absolute inset-0 bg-[#0B0B0E]/40 transition-all"></div>
             </motion.div>
-            <div className="absolute -top-12 -right-12 w-64 h-64 bg-[#C63AFF]/10 rounded-full blur-[60px] -z-0"></div>
+            <div className="absolute -top-12 -right-12 w-64 h-64 bg-[#d62cab]/10 rounded-full blur-[60px] -z-0"></div>
           </div>
         </div>
       </div>

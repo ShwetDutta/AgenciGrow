@@ -1,5 +1,5 @@
 import React from 'react';
-import { Linkedin, Github, Calendar } from 'lucide-react';
+import { Linkedin, Instagram, Calendar } from 'lucide-react';
 import { Logo } from './Navbar';
 
 const Footer: React.FC = () => {
@@ -21,32 +21,30 @@ const Footer: React.FC = () => {
               Next-gen growth engineering for category-defining brands. We turn marketing into a compounding investment.
             </p>
             <div className="flex space-x-6">
-              {/* LinkedIn Placeholder */}
               <a 
-                href="https://linkedin.com/company/YOUR_COMPANY_ID" 
+                href="https://www.linkedin.com/company/agencigrow/?viewAsMember=true" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center hover:bg-[#C63AFF] hover:text-white transition-all"
+                className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center hover:bg-[#d62cab] hover:text-white transition-all"
                 title="Follow us on LinkedIn"
               >
                 <Linkedin size={20} />
               </a>
 
-              {/* GitHub Placeholder */}
               <a 
-                href="https://github.com/YOUR_GITHUB_USERNAME" 
+                href="https://www.instagram.com/agencigrow?igsh=Mzh2cTVvejh1Y25x" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center hover:bg-[#C63AFF] hover:text-white transition-all"
-                title="Follow us on GitHub"
+                className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center hover:bg-[#d62cab] hover:text-white transition-all"
+                title="Follow us on Instagram"
               >
-                <Github size={20} />
+                <Instagram size={20} />
               </a>
             </div>
           </div>
 
           <div>
-            <h4 className="text-[#C63AFF] font-black uppercase tracking-[0.4em] text-[10px] mb-10">Solutions</h4>
+            <h4 className="text-[#d62cab] font-black uppercase tracking-[0.4em] text-[10px] mb-10">Solutions</h4>
             <ul className="space-y-6 text-[#B5B5C0] text-xs font-black uppercase tracking-widest">
               <li><a href="#services" className="hover:text-white transition-colors">Search Dominance</a></li>
               <li><a href="#services" className="hover:text-white transition-colors">Performance Media</a></li>
@@ -56,7 +54,7 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h4 className="text-[#C63AFF] font-black uppercase tracking-[0.4em] text-[10px] mb-10">Company</h4>
+            <h4 className="text-[#d62cab] font-black uppercase tracking-[0.4em] text-[10px] mb-10">Company</h4>
             <ul className="space-y-6 text-[#B5B5C0] text-xs font-black uppercase tracking-widest">
               <li><a href="#about" className="hover:text-white transition-colors">Our Method</a></li>
               <li><a href="#case-studies" className="hover:text-white transition-colors">The Vault</a></li>
@@ -73,7 +71,7 @@ const Footer: React.FC = () => {
             <a 
               href="#booking" 
               onClick={scrollToBooking}
-              className="flex items-center justify-between gap-4 w-full bg-gradient-to-r from-[#C63AFF] to-[#7B4DFF] text-white py-6 px-8 rounded-lg font-black text-[14px] uppercase tracking-[0.05em] hover:brightness-110 transition-all shadow-xl group text-left leading-tight"
+              className="flex items-center justify-between gap-4 w-full bg-gradient-to-r from-[#d62cab] to-[#37052f] text-white py-6 px-8 rounded-lg font-black text-[14px] uppercase tracking-[0.05em] hover:brightness-110 transition-all shadow-xl group text-left leading-tight"
             >
               <span>
                 BOOK<br />
@@ -91,8 +89,8 @@ const Footer: React.FC = () => {
             © {new Date().getFullYear()} AgenciGrow. Engineered Growth.
           </p>
           <div className="flex gap-12 text-[10px] font-black text-[#8E8E9F] uppercase tracking-[0.4em]">
-            <a href="#" className="hover:text-[#C63AFF] transition-colors">Privacy Moat</a>
-            <a href="#" className="hover:text-[#C63AFF] transition-colors">Legal Framework</a>
+            <a href="#" className="hover:text-[#d62cab] transition-colors">Privacy Moat</a>
+            <a href="#" className="hover:text-[#d62cab] transition-colors">Legal Framework</a>
           </div>
         </div>
       </div>

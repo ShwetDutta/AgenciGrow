@@ -4,22 +4,22 @@ import { Search, MousePointer2, Layers } from 'lucide-react';
 
 const services = [
   {
-    icon: <Search size={28} />,
-    title: 'Topical SEO',
-    desc: 'Architecting authoritative content moats that define market leadership and drive cost-free customer acquisition.',
-    tag: 'Long-term Equity'
-  },
-  {
     icon: <MousePointer2 size={28} />,
-    title: 'Precision Paid',
-    desc: 'Algorithmic media deployment focused on unit economics. We optimize for margin, not just clicks.',
-    tag: 'Immediate Velocity'
+    title: 'High-Intent Acquisition',
+    desc: 'Strategic Google and Meta Ads campaigns designed to attract customers actively searching for your services and ready to convert.',
+    tag: 'Predictable Traffic'
   },
   {
     icon: <Layers size={28} />,
-    title: 'Conversion Systems',
-    desc: 'Full-funnel optimization to eliminate drop-off. Turning high-intent traffic into compounding revenue.',
-    tag: 'Operational Alpha'
+    title: 'Conversion Architecture',
+    desc: 'Custom landing pages and sales funnel designs that eliminate drop-off and turn high-intent traffic into compounding revenue.',
+    tag: 'Revenue Systems'
+  },
+  {
+    icon: <Search size={28} />,
+    title: 'Growth Infrastructure',
+    desc: 'End-to-end CRM tracking, WhatsApp automation, and real-time analytics to eliminate wasted spend and follow-up gaps.',
+    tag: 'Scalable Operations'
   }
 ];
 
@@ -31,7 +31,7 @@ const Services: React.FC = () => {
           <motion.span 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            className="text-[#C63AFF] font-black text-xs uppercase tracking-[0.4em] mb-4 block"
+            className="text-[#d62cab] font-black text-xs uppercase tracking-[0.4em] mb-4 block"
           >
             Core Competencies
           </motion.span>
@@ -40,11 +40,11 @@ const Services: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             className="text-5xl lg:text-7xl font-black text-white mb-8 leading-[1]"
           >
-            Growth is a Science, <br /> 
-            <span className="text-[#C63AFF]">Not an Accident.</span>
+            Growth is a System, <br /> 
+            <span className="text-[#d62cab]">Not a Guessing Game.</span>
           </motion.h2>
           <p className="text-[#B5B5C0] text-xl font-light leading-relaxed">
-            Our methodology is modular yet integrated. We deploy growth architectures designed to be managed like a high-yield investment portfolio.
+            Most businesses don't have a marketing problem—they have a systems problem. We build the infrastructure that turns attention into predictable revenue.
           </p>
         </div>
 
@@ -56,9 +56,9 @@ const Services: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
               viewport={{ once: true }}
-              className="group p-12 bg-white/5 rounded-2xl border border-white/10 hover:border-[#C63AFF]/50 hover:shadow-[0_0_30px_rgba(198,58,255,0.15)] transition-all duration-500 relative overflow-hidden"
+              className="group p-12 bg-white/5 rounded-2xl border border-white/10 hover:border-[#d62cab]/50 hover:shadow-[0_0_30px_rgba(214,44,171,0.15)] transition-all duration-500 relative overflow-hidden"
             >
-              <div className="w-16 h-16 bg-[#0B0B0E] text-[#C63AFF] rounded-xl flex items-center justify-center mb-10 group-hover:bg-[#C63AFF] group-hover:text-white transition-all">
+              <div className="w-16 h-16 bg-[#0B0B0E] text-[#d62cab] rounded-xl flex items-center justify-center mb-10 group-hover:bg-[#d62cab] group-hover:text-white transition-all">
                 {s.icon}
               </div>
               
