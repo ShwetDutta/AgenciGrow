@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { MessageSquare, Map } from 'lucide-react';
+import LiquidEther from './LiquidEther';
 
 const steps = [
   {
@@ -20,8 +21,20 @@ const About: React.FC = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="process" className="py-28 bg-[#0A0A0B] relative z-10 scroll-mt-12">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+    <section id="process" className="py-28 bg-[#0A0A0B] relative z-10 scroll-mt-12 overflow-hidden">
+      {/* Premium Liquid Ether Background */}
+      <div className="absolute inset-0 z-0 opacity-55 pointer-events-none">
+        <LiquidEther
+          colors={['#5227FF', '#FF9FFC', '#B497CF']}
+          mouseForce={18}
+          cursorSize={110}
+          autoDemo={true}
+          autoSpeed={0.35}
+          autoIntensity={2.0}
+        />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
         
         {/* Header Block */}
         <div className="max-w-3xl mb-20">
