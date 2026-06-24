@@ -22,7 +22,7 @@ const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         
         {/* Main Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 pb-20 border-b border-white/5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 pb-8">
           
           {/* Brand Column */}
           <div className="space-y-6 pt-2">
@@ -110,14 +110,10 @@ const Footer: React.FC = () => {
         </div>
         
         {/* Footer Bottom */}
-        <div className="pt-10 flex flex-col sm:flex-row justify-between items-center gap-6 relative z-10">
+        <div className="pt-2 flex flex-col sm:flex-row justify-between items-center gap-6 relative z-10">
           <p className="text-[#8B8F96] text-xs font-body font-light">
             © 2026 AgenciGrow.
           </p>
-          <div className="flex gap-8 text-xs font-body font-light text-[#8B8F96]">
-            <a href="#" className="hover:text-[#F5F5F2] transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-[#F5F5F2] transition-colors">Terms of Service</a>
-          </div>
         </div>
 
       </div>
