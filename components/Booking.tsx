@@ -1,6 +1,7 @@
 import React from 'react';
 import { Check, Info } from 'lucide-react';
 import { motion } from 'framer-motion';
+import BorderGlow from './BorderGlow';
 
 const Booking: React.FC = () => {
   return (
@@ -32,51 +33,58 @@ const Booking: React.FC = () => {
             </div>
 
             <div className="space-y-6">
-              <div 
-                className="p-8 rounded-2xl liquid-glass border border-white/5"
-                style={{ background: 'rgba(201, 205, 211, 0.02)' }}
+              <BorderGlow
+                borderRadius={24}
+                glowColor="262 70 65"
+                backgroundColor="#0C0C0E"
+                glowRadius={40}
+                edgeSensitivity={30}
+                colors={['#5227FF', '#B497CF', '#F5F5F2']}
+                className="w-full"
               >
-                <h4 className="text-lg font-medium text-[#F5F5F2] mb-6 flex items-center gap-3 font-body">
-                  <div 
-                    className="w-8 h-8 rounded-lg flex items-center justify-center liquid-glass border border-white/10 text-[#C9CDD3]"
-                    style={{ background: 'rgba(201, 205, 211, 0.05)' }}
-                  >
-                    <Check className="w-4 h-4 stroke-[2.5]" />
-                  </div>
-                  <span>Our 3-Step Process:</span>
-                </h4>
-                
-                <ul className="space-y-6">
-                  {[
-                    {
-                      title: "Discovery Meeting",
-                      desc: "Deep dive into your goals and bottlenecks to understand what is keeping growth stuck."
-                    },
-                    {
-                      title: "Custom Growth Roadmap",
-                      desc: "A tailored proposal mapping out the exact systems you need, in what order, and why."
-                    },
-                    {
-                      title: "Systems-First Approach",
-                      desc: "We build and execute custom roadmap systems built around how your business actually works."
-                    }
-                  ].map((item, idx) => (
-                    <li key={idx} className="flex items-start gap-4">
-                      <div className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center text-xs text-[#C9CDD3] mt-1 flex-shrink-0 border border-white/10 font-body">
-                        {idx + 1}
-                      </div>
-                      <div>
-                        <h5 className="text-sm font-medium text-[#F5F5F2] mb-1 font-body">
-                          {item.title}
-                        </h5>
-                        <p className="text-xs text-[#8B8F96] font-light leading-relaxed font-body">
-                          {item.desc}
-                        </p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                <div className="p-8">
+                  <h4 className="text-lg font-medium text-[#F5F5F2] mb-6 flex items-center gap-3 font-body">
+                    <div 
+                      className="w-8 h-8 rounded-lg flex items-center justify-center liquid-glass border border-white/10 text-[#C9CDD3]"
+                      style={{ background: 'rgba(201, 205, 211, 0.05)' }}
+                    >
+                      <Check className="w-4 h-4 stroke-[2.5]" />
+                    </div>
+                    <span>Our 3-Step Process:</span>
+                  </h4>
+                  
+                  <ul className="space-y-6">
+                    {[
+                      {
+                        title: "Discovery Meeting",
+                        desc: "Deep dive into your goals and bottlenecks to understand what is keeping growth stuck."
+                      },
+                      {
+                        title: "Custom Growth Roadmap",
+                        desc: "A tailored proposal mapping out the exact systems you need, in what order, and why."
+                      },
+                      {
+                        title: "Systems-First Approach",
+                        desc: "We build and execute custom roadmap systems built around how your business actually works."
+                      }
+                    ].map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-4">
+                        <div className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center text-xs text-[#C9CDD3] mt-1 flex-shrink-0 border border-white/10 font-body">
+                          {idx + 1}
+                        </div>
+                        <div>
+                          <h5 className="text-sm font-medium text-[#F5F5F2] mb-1 font-body">
+                            {item.title}
+                          </h5>
+                          <p className="text-xs text-[#8B8F96] font-light leading-relaxed font-body">
+                            {item.desc}
+                          </p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </BorderGlow>
 
               <div className="flex items-center gap-3 text-[#8B8F96] px-4 font-body">
                 <div className="text-[#C9CDD3]"><Info className="w-4 h-4" /></div>
@@ -85,10 +93,15 @@ const Booking: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: Calendly embed inside liquid glass container */}
-          <div 
-            className="rounded-3xl shadow-2xl border border-white/5 overflow-hidden relative min-h-[600px] md:min-h-[700px] liquid-glass p-1"
-            style={{ background: 'rgba(201, 205, 211, 0.02)' }}
+          {/* Right Column: Calendly embed inside BorderGlow container */}
+          <BorderGlow
+            borderRadius={24}
+            glowColor="262 70 65"
+            backgroundColor="#0C0C0E"
+            glowRadius={40}
+            edgeSensitivity={30}
+            colors={['#5227FF', '#B497CF', '#F5F5F2']}
+            className="w-full relative overflow-hidden min-h-[600px] md:min-h-[700px] p-1"
           >
             <iframe 
               src="https://calendly.com/shwetdutta/30min" 
@@ -99,7 +112,7 @@ const Booking: React.FC = () => {
               className="w-full rounded-2xl bg-transparent opacity-90"
               style={{ filter: "invert(1) hue-rotate(180deg) brightness(0.9) contrast(1.1)" }} // Keeps Calendly widget dark & premium!
             ></iframe>
-          </div>
+          </BorderGlow>
 
         </div>
       </div>
