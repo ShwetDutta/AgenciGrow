@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MetallicLogo } from './MetallicLogo';
 
 export const LogoArrow = ({ size = 20 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -53,40 +54,7 @@ const Navbar: React.FC = () => {
           onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
           className="flex items-center gap-2 z-20 group hover:opacity-90 transition-opacity duration-200"
         >
-          <span className="text-lg md:text-xl font-bold tracking-tight bg-gradient-to-r from-[#4E5156] via-[#A8ABB1] to-[#F5F5F2] bg-clip-text text-transparent font-body select-none">
-            AgenciGrow
-          </span>
-          <div className="flex items-center -mt-0.5">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="transform transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-              <defs>
-                <linearGradient id="logoArrowGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#3A3D40" />
-                  <stop offset="50%" stopColor="#9CA3AF" />
-                  <stop offset="100%" stopColor="#FFFFFF" />
-                </linearGradient>
-              </defs>
-              {/* Small arrow (bottom left) */}
-              <path 
-                d="M4 18 L12 10 M12 10 H8 M12 10 V14" 
-                stroke="url(#logoArrowGrad)" 
-                strokeWidth="2.5" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-                opacity="0.8"
-              />
-              <polygon points="12,10 8,10 12,14" fill="url(#logoArrowGrad)" opacity="0.8" />
-              
-              {/* Large arrow (top right) */}
-              <path 
-                d="M10 12 L20 2 M20 2 H14 M20 2 V8" 
-                stroke="url(#logoArrowGrad)" 
-                strokeWidth="3" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-              />
-              <polygon points="20,2 14,2 20,8" fill="url(#logoArrowGrad)" />
-            </svg>
-          </div>
+          <MetallicLogo size="sm" />
         </a>
 
         {/* Center: Desktop liquid-glass pill with text links - Absolutely centered */}

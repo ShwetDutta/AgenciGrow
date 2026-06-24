@@ -1,6 +1,6 @@
 import React from 'react';
 import { Linkedin, Instagram, ArrowUpRight } from 'lucide-react';
-import { LogoArrow } from './Navbar';
+import { MetallicLogo } from './MetallicLogo';
 
 const Footer: React.FC = () => {
   const scrollToSection = (e: React.MouseEvent, id: string) => {
@@ -18,23 +18,14 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-[#0A0A0B] text-[#F5F5F2] pt-24 pb-12 border-t border-white/5 relative z-10">
+    <footer className="bg-[#0A0A0B] text-[#F5F5F2] pt-24 pb-16 border-t border-white/5 relative z-10 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         
         {/* Main Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 pb-20 border-b border-white/5">
           
           {/* Brand Column */}
-          <div className="space-y-6">
-            <div className="flex items-center gap-2">
-              <div 
-                className="w-8 h-8 rounded-full flex items-center justify-center liquid-glass border border-white/10"
-                style={{ background: 'rgba(201, 205, 211, 0.05)' }}
-              >
-                <LogoArrow size={18} />
-              </div>
-              <span className="text-lg font-heading text-[#F5F5F2]">AgenciGrow</span>
-            </div>
+          <div className="space-y-6 pt-2">
             
             <p className="text-[#8B8F96] text-xs font-body font-light leading-relaxed max-w-xs">
               We are a founder-led growth partner. We build predictable marketing and operations systems to grow your business on autopilot.
@@ -119,7 +110,7 @@ const Footer: React.FC = () => {
         </div>
         
         {/* Footer Bottom */}
-        <div className="pt-10 flex flex-col sm:flex-row justify-between items-center gap-6">
+        <div className="pt-10 flex flex-col sm:flex-row justify-between items-center gap-6 relative z-10">
           <p className="text-[#8B8F96] text-xs font-body font-light">
             © 2026 AgenciGrow.
           </p>
@@ -130,6 +121,9 @@ const Footer: React.FC = () => {
         </div>
 
       </div>
+      
+      {/* Giant Metallic Display Logo */}
+      <MetallicLogo size="footer" />
     </footer>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { MessageSquare, Map } from 'lucide-react';
-import LiquidEther from './LiquidEther';
+import SideRays from './SideRays';
 
 const steps = [
   {
@@ -22,15 +22,20 @@ const About: React.FC = () => {
 
   return (
     <section id="process" className="py-28 bg-[#0A0A0B] relative z-10 scroll-mt-12 overflow-hidden">
-      {/* Premium Liquid Ether Background */}
-      <div className="absolute inset-0 z-0 opacity-55 pointer-events-none">
-        <LiquidEther
-          colors={['#5227FF', '#FF9FFC', '#B497CF']}
-          mouseForce={18}
-          cursorSize={110}
-          autoDemo={true}
-          autoSpeed={0.35}
-          autoIntensity={2.0}
+      {/* Premium Side Rays Background */}
+      <div className="absolute inset-0 z-0 opacity-45 pointer-events-none">
+        <SideRays
+          speed={1.5}
+          rayColor1="#5227FF"
+          rayColor2="#B497CF"
+          intensity={1.5}
+          spread={2.5}
+          origin="top-right"
+          tilt={10}
+          saturation={1.5}
+          blend={0.6}
+          falloff={1.4}
+          opacity={1.0}
         />
       </div>
 
