@@ -1,78 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import React, { useState } from 'react';
+import { Menu, X, ArrowUpRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export const Logo = () => (
-  <div className="flex items-center gap-2 group cursor-pointer select-none">
-    <div className="flex items-center">
-      <span className="text-2xl font-extrabold tracking-tight">
-        <span style={{ 
-          background: 'linear-gradient(90deg, #d62cab, #37052f)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          display: 'inline-block'
-        }}>
-          Agenci
-        </span>
-        <span style={{ 
-          background: 'linear-gradient(90deg, #444141, #fffefe)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          display: 'inline-block'
-        }}>
-          Grow
-        </span>
-      </span>
-      <div className="ml-1 flex items-center translate-y-[2px]">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="pinkGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#d62cab" />
-              <stop offset="100%" stopColor="#37052f" />
-            </linearGradient>
-            <linearGradient id="greyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#444141" />
-              <stop offset="100%" stopColor="#fffefe" />
-            </linearGradient>
-          </defs>
-          <path d="M13 11L18 6M18 6H13M18 6V11" stroke="url(#pinkGradient)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M7 17L12 12M12 12H7M12 12V17" stroke="url(#greyGradient)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.8"/>
-        </svg>
-      </div>
-    </div>
-  </div>
+export const LogoArrow = ({ size = 20 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="navPinkGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#d62cab" />
+        <stop offset="100%" stopColor="#37052f" />
+      </linearGradient>
+      <linearGradient id="navGreyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#444141" />
+        <stop offset="100%" stopColor="#fffefe" />
+      </linearGradient>
+    </defs>
+    <path d="M13 11L18 6M18 6H13M18 6V11" stroke="url(#navPinkGradient)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M7 17L12 12M12 12H7M12 12V17" stroke="url(#navGreyGradient)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.8"/>
+  </svg>
 );
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Lock body scroll when menu is open
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-  }, [isOpen]);
 
   const navLinks = [
     { name: 'Services', href: '#services' },
+    { name: 'Process', href: '#process' },
     { name: 'About', href: '#about' },
-    { name: 'Results', href: '#case-studies' },
     { name: 'Contact', href: '#contact' },
   ];
 
   const scrollTo = (id: string) => {
     const el = document.getElementById(id.replace('#', ''));
     if (el) {
-      const offset = 80;
+      const offset = 100;
       const elementPosition = el.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - offset;
       window.scrollTo({
@@ -84,87 +44,118 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${
-      scrolled || isOpen ? 'nav-glass py-4' : 'bg-transparent py-8'
-    }`}>
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 flex justify-between items-center relative z-[110]">
-        <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
-          <Logo />
+    <nav className="fixed top-4 left-0 right-0 z-50 px-4 md:px-8 lg:px-16 transition-all duration-300">
+      <div className="max-w-7xl mx-auto flex items-center justify-between relative h-12">
+        
+        {/* Left Side: Premium AgenciGrow Logo with Gradient Text and Dual Metallic Arrows */}
+        <a 
+          href="#" 
+          onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+          className="flex items-center gap-2 z-20 group hover:opacity-90 transition-opacity duration-200"
+        >
+          <span className="text-lg md:text-xl font-bold tracking-tight bg-gradient-to-r from-[#4E5156] via-[#A8ABB1] to-[#F5F5F2] bg-clip-text text-transparent font-body select-none">
+            AgenciGrow
+          </span>
+          <div className="flex items-center -mt-0.5">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="transform transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+              <defs>
+                <linearGradient id="logoArrowGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#3A3D40" />
+                  <stop offset="50%" stopColor="#9CA3AF" />
+                  <stop offset="100%" stopColor="#FFFFFF" />
+                </linearGradient>
+              </defs>
+              {/* Small arrow (bottom left) */}
+              <path 
+                d="M4 18 L12 10 M12 10 H8 M12 10 V14" 
+                stroke="url(#logoArrowGrad)" 
+                strokeWidth="2.5" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+                opacity="0.8"
+              />
+              <polygon points="12,10 8,10 12,14" fill="url(#logoArrowGrad)" opacity="0.8" />
+              
+              {/* Large arrow (top right) */}
+              <path 
+                d="M10 12 L20 2 M20 2 H14 M20 2 V8" 
+                stroke="url(#logoArrowGrad)" 
+                strokeWidth="3" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+              />
+              <polygon points="20,2 14,2 20,8" fill="url(#logoArrowGrad)" />
+            </svg>
+          </div>
         </a>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center space-x-12">
-          {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              onClick={(e) => { e.preventDefault(); scrollTo(link.href); }}
-              className={`text-[11px] font-black uppercase tracking-[0.2em] transition-all hover:translate-y-[-1px] ${
-                scrolled ? 'text-[#B5B5C0] hover:text-[#d62cab]' : 'text-white/70 hover:text-[#d62cab]'
-              }`}
-            >
-              {link.name}
-            </a>
-          ))}
+        {/* Center: Desktop liquid-glass pill with text links - Absolutely centered */}
+        <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center liquid-glass-border py-1.5 px-6 z-10" style={{ background: 'rgba(201, 205, 211, 0.03)' }}>
+          <div className="flex items-center space-x-8">
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                onClick={(e) => { e.preventDefault(); scrollTo(link.href); }}
+                className="text-[13px] font-medium tracking-wide text-[#C9CDD3] hover:text-[#F5F5F2] transition-colors font-body duration-200 py-1"
+              >
+                {link.name}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        {/* Right Side: White pill button Book a Call + Arrow icon */}
+        <div className="hidden md:block z-10">
           <a
             href="#booking"
             onClick={(e) => { e.preventDefault(); scrollTo('#booking'); }}
-            className={`px-8 py-3 rounded-sm text-[11px] font-black uppercase tracking-[0.15em] transition-all shadow-lg bg-gradient-to-r from-[#d62cab] to-[#37052f] text-white hover:brightness-110`}
+            className="inline-flex items-center gap-2 px-6 py-3 bg-[#F5F5F2] hover:bg-[#C9CDD3] text-[#0A0A0B] rounded-full text-xs font-semibold tracking-wider uppercase transition-all duration-300 transform hover:translate-y-[-1px] shadow-lg"
           >
-            Book Strategy Call
+            <span>Book a Call</span>
+            <ArrowUpRight size={14} className="stroke-[2.5]" />
           </a>
         </div>
 
-        {/* Mobile Toggle Button */}
-        <button 
-          onClick={() => setIsOpen(!isOpen)} 
-          className="md:hidden p-2 text-white hover:text-[#C63AFF] transition-colors"
-          aria-label="Toggle Menu"
+        {/* Mobile menu toggle */}
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="md:hidden w-11 h-11 rounded-full flex items-center justify-center liquid-glass-border text-[#C9CDD3] hover:text-[#F5F5F2] transition-colors"
+          style={{ background: 'rgba(201, 205, 211, 0.05)' }}
         >
-          {isOpen ? <X size={32} /> : <Menu size={32} />}
+          {isOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
+
       </div>
 
-      {/* Full Screen Mobile Menu */}
+      {/* Mobile expanded menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden fixed inset-0 bg-[#0B0B0E] z-[90] h-screen w-screen flex flex-col justify-center items-center overflow-y-auto px-6"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden mt-3 p-6 rounded-2xl liquid-glass border border-white/10 flex flex-col gap-4"
           >
-            <div className="flex flex-col items-center gap-10 py-20">
-              {navLinks.map((link, idx) => (
-                <motion.a
-                  key={link.name}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.05 }}
-                  href={link.href}
-                  className="text-4xl text-white font-black tracking-tighter hover:text-[#d62cab] transition-colors"
-                  onClick={(e) => { e.preventDefault(); scrollTo(link.href); }}
-                >
-                  {link.name}
-                </motion.a>
-              ))}
-              
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: navLinks.length * 0.05 }}
-                className="mt-6"
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                onClick={(e) => { e.preventDefault(); scrollTo(link.href); }}
+                className="text-base font-medium text-[#C9CDD3] hover:text-[#F5F5F2] py-2 transition-colors border-b border-white/5"
               >
-                <a
-                  href="#booking"
-                  className="px-10 py-5 bg-gradient-to-r from-[#d62cab] to-[#37052f] text-white font-black text-lg rounded-sm shadow-2xl hover:brightness-110 transition-all uppercase tracking-widest"
-                  onClick={(e) => { e.preventDefault(); scrollTo('#booking'); }}
-                >
-                  Book Strategy Call
-                </a>
-              </motion.div>
-            </div>
+                {link.name}
+              </a>
+            ))}
+            <a
+              href="#booking"
+              onClick={(e) => { e.preventDefault(); scrollTo('#booking'); }}
+              className="mt-2 w-full text-center py-3 bg-[#F5F5F2] text-[#0A0A0B] rounded-full text-sm font-semibold tracking-wider uppercase inline-flex items-center justify-center gap-2"
+            >
+              <span>Book a Call</span>
+              <ArrowUpRight size={14} />
+            </a>
           </motion.div>
         )}
       </AnimatePresence>

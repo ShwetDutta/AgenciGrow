@@ -1,98 +1,134 @@
 import React from 'react';
-import { Linkedin, Instagram, Calendar } from 'lucide-react';
-import { Logo } from './Navbar';
+import { Linkedin, Instagram, ArrowUpRight } from 'lucide-react';
+import { LogoArrow } from './Navbar';
 
 const Footer: React.FC = () => {
-  const scrollToBooking = (e: React.MouseEvent) => {
+  const scrollToSection = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
-    const bookingSection = document.getElementById('booking');
-    if (bookingSection) {
-      bookingSection.scrollIntoView({ behavior: 'smooth' });
+    const el = document.getElementById(id);
+    if (el) {
+      const offset = 100;
+      const elementPosition = el.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
     }
   };
 
   return (
-    <footer className="bg-[#0B0B0E] text-white pt-32 pb-16 border-t border-white/5">
+    <footer className="bg-[#0A0A0B] text-[#F5F5F2] pt-24 pb-12 border-t border-white/5 relative z-10">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-20 pb-24 border-b border-white/5">
-          <div className="space-y-10">
-            <Logo />
-            <p className="text-[#B5B5C0] text-sm leading-relaxed font-medium max-w-xs">
-              Next-gen growth engineering for category-defining brands. We turn marketing into a compounding investment.
+        
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 pb-20 border-b border-white/5">
+          
+          {/* Brand Column */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-2">
+              <div 
+                className="w-8 h-8 rounded-full flex items-center justify-center liquid-glass border border-white/10"
+                style={{ background: 'rgba(201, 205, 211, 0.05)' }}
+              >
+                <LogoArrow size={18} />
+              </div>
+              <span className="text-lg font-heading text-[#F5F5F2]">AgenciGrow</span>
+            </div>
+            
+            <p className="text-[#8B8F96] text-xs font-body font-light leading-relaxed max-w-xs">
+              We are a founder-led growth partner. We build predictable marketing and operations systems to grow your business on autopilot.
             </p>
-            <div className="flex space-x-6">
+
+            <div className="flex space-x-4">
               <a 
                 href="https://www.linkedin.com/company/agencigrow/?viewAsMember=true" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center hover:bg-[#d62cab] hover:text-white transition-all"
+                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#F5F5F2] hover:text-[#0A0A0B] transition-colors duration-200"
                 title="Follow us on LinkedIn"
               >
-                <Linkedin size={20} />
+                <Linkedin size={15} />
               </a>
 
               <a 
                 href="https://www.instagram.com/agencigrow?igsh=Mzh2cTVvejh1Y25x" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center hover:bg-[#d62cab] hover:text-white transition-all"
+                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#F5F5F2] hover:text-[#0A0A0B] transition-colors duration-200"
                 title="Follow us on Instagram"
               >
-                <Instagram size={20} />
+                <Instagram size={15} />
               </a>
             </div>
           </div>
 
+          {/* Solutions Column */}
           <div>
-            <h4 className="text-[#d62cab] font-black uppercase tracking-[0.4em] text-[10px] mb-10">Solutions</h4>
-            <ul className="space-y-6 text-[#B5B5C0] text-xs font-black uppercase tracking-widest">
-              <li><a href="#services" className="hover:text-white transition-colors">Search Dominance</a></li>
-              <li><a href="#services" className="hover:text-white transition-colors">Performance Media</a></li>
-              <li><a href="#services" className="hover:text-white transition-colors">Funnel Architecture</a></li>
-              <li><a href="#services" className="hover:text-white transition-colors">Alpha Audits</a></li>
+            <h4 className="text-[#C9CDD3] font-semibold text-xs tracking-wider uppercase mb-6 font-body">Solutions</h4>
+            <ul className="space-y-4 text-xs font-body font-light text-[#8B8F96]">
+              <li>
+                <a href="#services" onClick={(e) => scrollToSection(e, 'services')} className="hover:text-[#F5F5F2] transition-colors">Paid Ads</a>
+              </li>
+              <li>
+                <a href="#services" onClick={(e) => scrollToSection(e, 'services')} className="hover:text-[#F5F5F2] transition-colors">Landing Pages</a>
+              </li>
+              <li>
+                <a href="#services" onClick={(e) => scrollToSection(e, 'services')} className="hover:text-[#F5F5F2] transition-colors">CRM & WhatsApp Automation</a>
+              </li>
             </ul>
           </div>
 
+          {/* Company Column */}
           <div>
-            <h4 className="text-[#d62cab] font-black uppercase tracking-[0.4em] text-[10px] mb-10">Company</h4>
-            <ul className="space-y-6 text-[#B5B5C0] text-xs font-black uppercase tracking-widest">
-              <li><a href="#about" className="hover:text-white transition-colors">Our Method</a></li>
-              <li><a href="#case-studies" className="hover:text-white transition-colors">The Vault</a></li>
-              <li><a href="#booking" className="hover:text-white transition-colors">Strategy Call</a></li>
-              <li><a href="#contact" className="hover:text-white transition-colors">Careers</a></li>
+            <h4 className="text-[#C9CDD3] font-semibold text-xs tracking-wider uppercase mb-6 font-body">Company</h4>
+            <ul className="space-y-4 text-xs font-body font-light text-[#8B8F96]">
+              <li>
+                <a href="#process" onClick={(e) => scrollToSection(e, 'process')} className="hover:text-[#F5F5F2] transition-colors">How We Work</a>
+              </li>
+              <li>
+                <a href="#booking" onClick={(e) => scrollToSection(e, 'booking')} className="hover:text-[#F5F5F2] transition-colors">Book a Call</a>
+              </li>
             </ul>
           </div>
 
-          <div className="bg-white/5 p-10 border border-white/5 rounded-2xl flex flex-col justify-between">
+          {/* CTA Box Column */}
+          <div 
+            className="p-8 border border-white/5 rounded-2xl flex flex-col justify-between liquid-glass"
+            style={{ background: 'rgba(201, 205, 211, 0.02)' }}
+          >
             <div>
-              <h4 className="text-white font-black text-2xl mb-6 leading-tight">Ready to Scale? <br /> Let's Talk Growth.</h4>
-              <p className="text-[#B5B5C0] mb-10 text-[11px] font-medium leading-relaxed">Stop guessing and start engineering your revenue. Secure your dedicated strategy call with our lead growth architects below.</p>
+              <h4 className="text-lg font-medium text-[#F5F5F2] mb-3 font-heading leading-tight">
+                Ready to scale?<br />Let's talk growth.
+              </h4>
+              <p className="text-[#8B8F96] text-[11px] font-body font-light leading-relaxed mb-6">
+                Stop guessing and start engineering. Secure your dedicated strategy call.
+              </p>
             </div>
+            
             <a 
               href="#booking" 
-              onClick={scrollToBooking}
-              className="flex items-center justify-between gap-4 w-full bg-gradient-to-r from-[#d62cab] to-[#37052f] text-white py-6 px-8 rounded-lg font-black text-[14px] uppercase tracking-[0.05em] hover:brightness-110 transition-all shadow-xl group text-left leading-tight"
+              onClick={(e) => scrollToSection(e, 'booking')}
+              className="liquid-glass-strong w-full py-3.5 text-center text-xs font-semibold tracking-wider uppercase text-[#F5F5F2] inline-flex items-center justify-center gap-2"
             >
-              <span>
-                BOOK<br />
-                YOUR<br />
-                STRATEGY<br />
-                CALL
-              </span>
-              <Calendar size={24} className="group-hover:scale-110 transition-transform opacity-80" />
+              <span>Book a Call</span>
+              <ArrowUpRight size={13} />
             </a>
           </div>
+
         </div>
         
-        <div className="pt-16 flex flex-col md:flex-row justify-between items-center gap-10">
-          <p className="text-[#8E8E9F] text-[10px] font-black tracking-[0.4em] uppercase">
-            © {new Date().getFullYear()} AgenciGrow. Engineered Growth.
+        {/* Footer Bottom */}
+        <div className="pt-10 flex flex-col sm:flex-row justify-between items-center gap-6">
+          <p className="text-[#8B8F96] text-xs font-body font-light">
+            © 2026 AgenciGrow.
           </p>
-          <div className="flex gap-12 text-[10px] font-black text-[#8E8E9F] uppercase tracking-[0.4em]">
-            <a href="#" className="hover:text-[#d62cab] transition-colors">Privacy Moat</a>
-            <a href="#" className="hover:text-[#d62cab] transition-colors">Legal Framework</a>
+          <div className="flex gap-8 text-xs font-body font-light text-[#8B8F96]">
+            <a href="#" className="hover:text-[#F5F5F2] transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-[#F5F5F2] transition-colors">Terms of Service</a>
           </div>
         </div>
+
       </div>
     </footer>
   );

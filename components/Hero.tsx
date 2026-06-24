@@ -1,142 +1,155 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ArrowRight, Target } from 'lucide-react';
+import React, { useEffect, useRef } from 'react';
+import { motion, useAnimation, useInView } from 'framer-motion';
+import { ArrowRight, ChevronDown } from 'lucide-react';
+import FadingVideo from './FadingVideo';
+
+// BlurText component for word-by-word reveal
+export const BlurText: React.FC<{ text: string; className?: string }> = ({ text, className = "" }) => {
+  const words = text.split(' ');
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  return (
+    <span ref={ref} className={`${className} flex flex-wrap justify-center gap-x-4 gap-y-2`}>
+      {words.map((word, index) => (
+        <motion.span
+          key={index}
+          initial={{ filter: 'blur(12px)', opacity: 0, y: 15 }}
+          animate={isInView ? { filter: 'blur(0px)', opacity: 1, y: 0 } : {}}
+          transition={{
+            duration: 0.8,
+            delay: index * 0.08,
+            ease: [0.215, 0.61, 0.355, 1],
+          }}
+          className="inline-block"
+        >
+          {word}
+        </motion.span>
+      ))}
+    </span>
+  );
+};
 
 const Hero: React.FC = () => {
-  const scrollToContact = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const contactSection = document.getElementById('contact');
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth' });
+  const arrowControls = useAnimation();
+  const heroRef = useRef(null);
+
+  useEffect(() => {
+    // Traces the arrow line once on load
+    arrowControls.start({
+      strokeDashoffset: 0,
+      transition: { duration: 1.8, ease: [0.25, 1, 0.5, 1] }
+    });
+  }, [arrowControls]);
+
+  const scrollToSection = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      const offset = 100;
+      const elementPosition = el.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
     }
   };
 
   return (
-    <section className="relative min-h-screen flex items-center pt-32 bg-[#0B0B0E] overflow-hidden">
-      {/* Refined Animated Accents */}
-      <motion.div 
-        animate={{ 
-          scale: [1, 1.1, 1],
-          opacity: [0.1, 0.15, 0.1]
-        }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        className="blob w-[800px] h-[800px] bg-[#d62cab] top-[-20%] right-[-10%] blur-[120px]"
-      />
-      <motion.div 
-        animate={{ 
-          scale: [1, 1.2, 1],
-          opacity: [0.05, 0.08, 0.05]
-        }}
-        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-        className="blob w-[600px] h-[600px] bg-[#37052f] bottom-[-10%] left-[-10%] blur-[100px]"
+    <section 
+      ref={heroRef}
+      className="relative min-h-screen flex items-center justify-center bg-[#0A0A0B] overflow-hidden pt-32 pb-24"
+    >
+      {/* Background Cinematic Video with custom JS crossfade */}
+      <FadingVideo 
+        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260418_080021_d598092b-c4c2-4e53-8e46-94cf9064cd50.mp4"
+        className="absolute left-1/2 top-0 -translate-x-1/2 object-cover object-top z-0 select-none pointer-events-none"
+        style={{ width: "120%", height: "120%", opacity: 0 }}
       />
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10 w-full">
-        <div className="flex flex-col lg:flex-row items-center gap-20">
-          <div className="flex-[1.2]">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="inline-flex items-center gap-4 mb-8"
-            >
-              <span className="w-12 h-[1px] bg-[#d62cab]"></span>
-              <span className="text-[#d62cab] text-[11px] font-black uppercase tracking-[0.4em]">Growth Systems Agency</span>
-            </motion.div>
-            
-            <h1 className="text-6xl md:text-[6.5rem] font-black text-white tracking-tighter leading-[0.9] mb-10">
-              <motion.span 
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="block"
-              >
-                Systems-First
-              </motion.span>
-              <motion.span 
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="block text-[#d62cab]"
-              >
-                Engineered
-              </motion.span>
-              <motion.span 
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="block flex items-center gap-4"
-              >
-                Growth <div className="h-[2px] w-24 bg-[#d62cab] hidden md:block"></div>
-              </motion.span>
-            </h1>
-            
-            <motion.p 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="text-xl text-[#B5B5C0] font-light leading-relaxed max-w-2xl mb-14"
-            >
-              We build the systems behind your marketing and operations so your business grows on autopilot. Turn attention into predictable revenue with structured growth engineering.
-            </motion.p>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="flex flex-wrap items-center gap-8"
-            >
-              <a
-                href="#contact"
-                onClick={scrollToContact}
-                className="btn-premium px-12 py-6 bg-gradient-to-r from-[#d62cab] to-[#37052f] text-white rounded-sm font-black text-sm uppercase tracking-[0.1em] flex items-center gap-4 shadow-2xl"
-              >
-                SEND US A MESSAGE
-                <ArrowRight size={20} />
-              </a>
-              <div className="flex items-center gap-4 text-[#B5B5C0]">
-                <div className="flex flex-col">
-                  <span className="text-xl font-black text-white">ROI</span>
-                  <span className="text-[10px] font-black uppercase tracking-widest">Focused Systems</span>
-                </div>
-                <div className="w-[1px] h-10 bg-white/10"></div>
-                <div className="flex flex-col">
-                  <span className="text-xl font-black text-white">Scale</span>
-                  <span className="text-[10px] font-black uppercase tracking-widest">On Autopilot</span>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.6, type: "spring" }}
-            className="flex-1 relative"
-          >
-            <div className="relative z-10 p-4 border border-white/5 bg-white/5 backdrop-blur-2xl rounded-2xl shadow-2xl">
-              <img 
-                src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=2426" 
-                alt="Growth Metrics" 
-                className="w-full h-auto rounded-xl grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-700"
-              />
-              <div className="absolute top-10 -right-10 bg-[#d62cab] p-6 rounded-lg shadow-2xl animate-bounce-slow text-white">
-                <Target className="w-8 h-8" />
-              </div>
-            </div>
-            <div className="absolute -bottom-10 -left-10 w-40 h-40 border-l border-b border-[#d62cab]/20 -z-10"></div>
-          </motion.div>
-        </div>
+      {/* Signature Element: A thin metallic-silver line, shaped like the arrow, traces itself in once on page load */}
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[500px] lg:w-[700px] h-[300px] md:h-[500px] lg:h-[700px] opacity-[0.16] pointer-events-none select-none z-0">
+        <svg viewBox="0 0 100 100" className="w-full h-full text-[#C9CDD3]" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <motion.path
+            d="M 15,85 L 80,20 M 80,20 H 40 M 80,20 V 60"
+            stroke="currentColor"
+            strokeWidth="1.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            initial={{ strokeDasharray: "300", strokeDashoffset: "300" }}
+            animate={arrowControls}
+          />
+          <motion.path
+            d="M 30,85 L 85,30 M 85,30 H 55 M 85,30 V 60"
+            stroke="currentColor"
+            strokeWidth="0.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            opacity="0.6"
+            initial={{ strokeDasharray: "300", strokeDashoffset: "300" }}
+            animate={arrowControls}
+          />
+        </svg>
       </div>
 
-      <style>{`
-        .animate-bounce-slow {
-          animation: bounce-slow 4s infinite;
-        }
-        @keyframes bounce-slow {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-20px); }
-        }
-      `}</style>
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 w-full relative z-10">
+        <div className="max-w-4xl flex flex-col items-center text-center mx-auto">
+          
+          {/* Badge */}
+          <motion.div
+            initial={{ filter: 'blur(10px)', opacity: 0, y: 20 }}
+            animate={{ filter: 'blur(0px)', opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+            className="mb-8"
+          >
+            <span className="font-heading italic text-xl md:text-2xl text-[#C9CDD3] tracking-wide pb-1.5 border-b border-[#C9CDD3]/30">
+              Growth Partner, Not Just an Agency
+            </span>
+          </motion.div>
+
+          {/* Headline (BlurText word-by-word reveal, font-heading, no italics) */}
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading text-[#F5F5F2] tracking-tight leading-[1.08] mb-8">
+            <BlurText text="Most businesses don't have a marketing problem. They have no system." />
+          </h1>
+
+          {/* Subheading */}
+          <motion.p
+            initial={{ filter: 'blur(10px)', opacity: 0, y: 20 }}
+            animate={{ filter: 'blur(0px)', opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
+            className="text-base md:text-xl text-[#E2E4E9] font-body italic font-light leading-relaxed max-w-2xl mb-12"
+          >
+            We build the roadmap first, then the ads, automation, and pages to run it, built around how your business actually works, not a template.
+          </motion.p>
+
+          {/* CTAs */}
+          <motion.div
+            initial={{ filter: 'blur(10px)', opacity: 0, y: 20 }}
+            animate={{ filter: 'blur(0px)', opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.1, ease: "easeOut" }}
+            className="flex flex-col sm:flex-row items-center gap-6 justify-center"
+          >
+            <a
+              href="#booking"
+              onClick={(e) => { e.preventDefault(); scrollToSection('booking'); }}
+              className="liquid-glass-strong px-8 py-4 text-xs font-semibold tracking-wider uppercase text-[#F5F5F2] inline-flex items-center gap-2"
+            >
+              <span>Book a Free Discovery Call</span>
+              <ArrowRight size={14} />
+            </a>
+
+            <button
+              onClick={() => scrollToSection('services')}
+              className="text-xs font-semibold tracking-wider uppercase text-[#8B8F96] hover:text-[#F5F5F2] inline-flex items-center gap-1.5 transition-colors duration-200"
+            >
+              <span>See How It Works</span>
+              <ChevronDown size={14} className="animate-bounce" />
+            </button>
+          </motion.div>
+
+
+        </div>
+      </div>
     </section>
   );
 };

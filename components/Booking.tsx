@@ -4,69 +4,103 @@ import { motion } from 'framer-motion';
 
 const Booking: React.FC = () => {
   return (
-    <section id="booking" className="py-32 bg-[#0F0F14] scroll-mt-24">
+    <section id="booking" className="py-28 bg-[#0A0A0B] relative z-10 scroll-mt-12">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
-          <div className="space-y-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+          
+          {/* Left Column: 3-step Checklist */}
+          <div className="space-y-10">
             <div>
-              <motion.span 
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                className="text-[#d62cab] font-black text-xs uppercase tracking-[0.4em] mb-6 block"
+              <motion.p 
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="text-[11px] font-semibold tracking-[0.25em] uppercase text-[#8B8F96] mb-4"
               >
-                Take Action
-              </motion.span>
+                // Take Action
+              </motion.p>
               <motion.h3 
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                className="text-5xl md:text-7xl font-black text-white mb-8 leading-[0.95] tracking-tighter"
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.1 }}
+                className="text-4xl md:text-5xl lg:text-6xl font-heading text-[#F5F5F2] tracking-tight leading-[1.12]"
               >
-                Map Your <br /><span className="text-[#d62cab]">Growth Roadmap.</span>
+                Map your growth roadmap.
               </motion.h3>
-              <p className="text-xl text-[#B5B5C0] font-light leading-relaxed mb-8">
-                A 30-minute discovery session to identify your bottlenecks and architect a custom growth system for predictable scale.
-              </p>
             </div>
 
             <div className="space-y-6">
-              <div className="p-10 rounded-2xl bg-white/5 border border-white/10 shadow-sm">
-                <h4 className="text-xl font-black text-white mb-8 flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-[#d62cab]/10 flex items-center justify-center text-[#d62cab]">
-                    <Check className="w-6 h-6" />
+              <div 
+                className="p-8 rounded-2xl liquid-glass border border-white/5"
+                style={{ background: 'rgba(201, 205, 211, 0.02)' }}
+              >
+                <h4 className="text-lg font-medium text-[#F5F5F2] mb-6 flex items-center gap-3 font-body">
+                  <div 
+                    className="w-8 h-8 rounded-lg flex items-center justify-center liquid-glass border border-white/10 text-[#C9CDD3]"
+                    style={{ background: 'rgba(201, 205, 211, 0.05)' }}
+                  >
+                    <Check className="w-4 h-4 stroke-[2.5]" />
                   </div>
-                  Our Two-Step Process:
+                  <span>Our 3-Step Process:</span>
                 </h4>
+                
                 <ul className="space-y-6">
                   {[
-                    "Step 1: Discovery Meeting - Deep dive into your goals and bottlenecks",
-                    "Step 2: Custom Growth Roadmap - A tailored proposal for predictable scale",
-                    "Systems-First Approach - Custom-built strategies, not one-size-fits-all"
-                  ].map((item, i) => (
-                    <li key={i} className="text-[#B5B5C0] flex items-start gap-4 font-medium">
-                      <div className="w-2 h-2 rounded-full bg-[#d62cab] mt-2.5 flex-shrink-0"></div>
-                      {item}
+                    {
+                      title: "Discovery Meeting",
+                      desc: "Deep dive into your goals and bottlenecks to understand what is keeping growth stuck."
+                    },
+                    {
+                      title: "Custom Growth Roadmap",
+                      desc: "A tailored proposal mapping out the exact systems you need, in what order, and why."
+                    },
+                    {
+                      title: "Systems-First Approach",
+                      desc: "We build and execute custom roadmap systems built around how your business actually works."
+                    }
+                  ].map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-4">
+                      <div className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center text-xs text-[#C9CDD3] mt-1 flex-shrink-0 border border-white/10 font-body">
+                        {idx + 1}
+                      </div>
+                      <div>
+                        <h5 className="text-sm font-medium text-[#F5F5F2] mb-1 font-body">
+                          {item.title}
+                        </h5>
+                        <p className="text-xs text-[#8B8F96] font-light leading-relaxed font-body">
+                          {item.desc}
+                        </p>
+                      </div>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="flex items-center gap-3 text-[#8E8E9F] font-bold px-4">
-                <div className="text-[#d62cab]"><Info className="w-5 h-5" /></div>
-                <span className="text-xs uppercase tracking-widest">Limited to 4 strategy sessions per week.</span>
+              <div className="flex items-center gap-3 text-[#8B8F96] px-4 font-body">
+                <div className="text-[#C9CDD3]"><Info className="w-4 h-4" /></div>
+                <span className="text-[11px] uppercase tracking-widest font-medium">Limited to 4 strategy sessions per week.</span>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-3xl shadow-2xl border border-white/10 overflow-hidden relative min-h-[750px]">
+          {/* Right Column: Calendly embed inside liquid glass container */}
+          <div 
+            className="rounded-3xl shadow-2xl border border-white/5 overflow-hidden relative min-h-[600px] md:min-h-[700px] liquid-glass p-1"
+            style={{ background: 'rgba(201, 205, 211, 0.02)' }}
+          >
             <iframe 
               src="https://calendly.com/shwetdutta/30min" 
               width="100%" 
-              height="750" 
+              height="650" 
               frameBorder="0"
               title="Calendly Booking"
-              className="w-full"
+              className="w-full rounded-2xl bg-transparent opacity-90"
+              style={{ filter: "invert(1) hue-rotate(180deg) brightness(0.9) contrast(1.1)" }} // Keeps Calendly widget dark & premium!
             ></iframe>
           </div>
+
         </div>
       </div>
     </section>
