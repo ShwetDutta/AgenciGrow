@@ -76,7 +76,7 @@ const ContactForm: React.FC = () => {
           colors={['#5227FF', '#B497CF', '#F5F5F2']}
           className="w-full"
         >
-          <div className="p-8 md:p-16 flex flex-col lg:flex-row gap-16 text-[#F5F5F2]">
+          <div className="p-6 sm:p-10 md:p-16 flex flex-col lg:flex-row gap-16 text-[#F5F5F2]">
             
             {/* Left Column */}
             <div className="flex-1 relative z-10 flex flex-col justify-between">
@@ -94,7 +94,7 @@ const ContactForm: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8 }}
-                  className="text-4xl md:text-5xl lg:text-6xl font-heading text-[#F5F5F2] tracking-tight leading-[1.12] mb-8"
+                  className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading text-[#F5F5F2] tracking-tight leading-[1.12] mb-8"
                 >
                   Let's build your<br />
                   growth engine.
@@ -113,7 +113,7 @@ const ContactForm: React.FC = () => {
                 </div>
                 <div className="flex flex-col">
                   <span className="text-[10px] font-semibold text-[#8B8F96] uppercase tracking-[0.25em] mb-0.5 font-body">Direct Line</span>
-                  <span className="text-sm md:text-base font-medium text-[#F5F5F2] font-body">agencigrowofficial@gmail.com</span>
+                  <span className="text-sm md:text-base font-medium text-[#F5F5F2] font-body break-all">agencigrowofficial@gmail.com</span>
                 </div>
               </div>
             </div>
@@ -132,7 +132,7 @@ const ContactForm: React.FC = () => {
                       value={formData.name} 
                       onChange={handleChange} 
                       placeholder="" 
-                      className="w-full px-5 py-3.5 rounded-xl bg-white/[0.02] border border-white/10 text-sm text-[#F5F5F2] focus:outline-none focus:border-[#C9CDD3] focus:bg-white/[0.04] transition-all font-body font-light" 
+                      className="w-full px-5 py-3.5 rounded-xl bg-white/[0.02] border border-white/10 text-sm text-[#F5F5F2] focus:outline-none focus:border-[#C9CDD3] focus:ring-2 focus:ring-[#C9CDD3]/20 focus:bg-white/[0.04] transition-all font-body font-light" 
                     />
                   </div>
                   <div>
@@ -144,7 +144,7 @@ const ContactForm: React.FC = () => {
                       value={formData.email} 
                       onChange={handleChange} 
                       placeholder="" 
-                      className="w-full px-5 py-3.5 rounded-xl bg-white/[0.02] border border-white/10 text-sm text-[#F5F5F2] focus:outline-none focus:border-[#C9CDD3] focus:bg-white/[0.04] transition-all font-body font-light" 
+                      className="w-full px-5 py-3.5 rounded-xl bg-white/[0.02] border border-white/10 text-sm text-[#F5F5F2] focus:outline-none focus:border-[#C9CDD3] focus:ring-2 focus:ring-[#C9CDD3]/20 focus:bg-white/[0.04] transition-all font-body font-light" 
                     />
                   </div>
                 </div>
@@ -158,7 +158,7 @@ const ContactForm: React.FC = () => {
                     value={formData.company} 
                     onChange={handleChange} 
                     placeholder="" 
-                    className="w-full px-5 py-3.5 rounded-xl bg-white/[0.02] border border-white/10 text-sm text-[#F5F5F2] focus:outline-none focus:border-[#C9CDD3] focus:bg-white/[0.04] transition-all font-body font-light" 
+                    className="w-full px-5 py-3.5 rounded-xl bg-white/[0.02] border border-white/10 text-sm text-[#F5F5F2] focus:outline-none focus:border-[#C9CDD3] focus:ring-2 focus:ring-[#C9CDD3]/20 focus:bg-white/[0.04] transition-all font-body font-light" 
                   />
                 </div>
 
@@ -171,7 +171,7 @@ const ContactForm: React.FC = () => {
                     onChange={handleChange} 
                     rows={4} 
                     placeholder="" 
-                    className="w-full px-5 py-3.5 rounded-xl bg-white/[0.02] border border-white/10 text-sm text-[#F5F5F2] focus:outline-none focus:border-[#C9CDD3] focus:bg-white/[0.04] transition-all resize-none font-body font-light"
+                    className="w-full px-5 py-3.5 rounded-xl bg-white/[0.02] border border-white/10 text-sm text-[#F5F5F2] focus:outline-none focus:border-[#C9CDD3] focus:ring-2 focus:ring-[#C9CDD3]/20 focus:bg-white/[0.04] transition-all resize-none font-body font-light"
                   />
                 </div>
 

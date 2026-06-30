@@ -81,11 +81,12 @@ const InteractiveCard3D: React.FC<{
   service: ServiceItem;
   isActive: boolean;
   style?: React.CSSProperties;
-}> = ({ service, isActive, style }) => {
+  isMobile?: boolean;
+}> = ({ service, isActive, style, isMobile = false }) => {
   const cardRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!isActive || !cardRef.current) return;
+    if (isMobile || !isActive || !cardRef.current) return;
     const card = cardRef.current;
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -103,7 +104,7 @@ const InteractiveCard3D: React.FC<{
   };
 
   const handleMouseLeave = () => {
-    if (!cardRef.current) return;
+    if (isMobile || !cardRef.current) return;
     const card = cardRef.current;
     // Clear custom style properties set by mouse move so they fall back to react style props
     card.style.transform = '';
@@ -111,7 +112,14 @@ const InteractiveCard3D: React.FC<{
     card.style.boxShadow = '';
   };
 
-  const defaultStyle: React.CSSProperties = {
+  const defaultStyle: React.CSSProperties = isMobile ? {
+    opacity: 1,
+    transform: 'none',
+    borderColor: 'rgba(255, 255, 255, 0.15)',
+    boxShadow: '0 10px 30px rgba(0,0,0,0.6)',
+    filter: 'none',
+    zIndex: 1
+  } : {
     opacity: isActive ? 1 : 0.35,
     transform: isActive 
       ? 'perspective(1000px) rotateX(8deg) rotateY(-8deg) translateZ(40px) scale(1.02)' 
@@ -127,7 +135,7 @@ const InteractiveCard3D: React.FC<{
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={`w-full max-w-[500px] rounded-[24px] p-8 flex flex-col justify-between border select-none transition-all duration-500 ease-out ${
+      className={`w-full max-w-[500px] rounded-[24px] p-6 sm:p-8 flex flex-col justify-between border select-none transition-all duration-500 ease-out ${
         isActive 
           ? 'border-white/15' 
           : 'pointer-events-none'
@@ -136,8 +144,8 @@ const InteractiveCard3D: React.FC<{
         background: 'rgba(12, 12, 13, 0.85)',
         backdropFilter: 'blur(24px)',
         WebkitBackdropFilter: 'blur(24px)',
-        height: '240px',
-        willChange: 'transform, opacity, filter',
+        height: isMobile ? 'auto' : '240px',
+        willChange: isMobile ? 'none' : 'transform, opacity, filter',
         transitionProperty: 'opacity, scale, border-color, filter',
         ...defaultStyle,
         ...style
@@ -174,7 +182,12 @@ const Services: React.FC = () => {
   const leftColRef = useRef<HTMLDivElement>(null);
   const rightColRef = useRef<HTMLDivElement>(null);
   const bgTextRef = useRef<HTMLHeadingElement>(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth < 1024;
+    }
+    return false;
+  });
   const [scrollProgress, setScrollProgress] = useState(0);
   const [dimensions, setDimensions] = useState({ startY: 0, focusY: 0 });
 
@@ -204,36 +217,37 @@ const Services: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (isMobile) return;
+    if (isMobile || window.innerWidth < 1024) return;
 
-    // Reset background text style
-    gsap.set(bgTextRef.current, { scale: 0.95, opacity: 0.1 });
+    const ctx = gsap.context(() => {
+      // Reset background text style
+      gsap.set(bgTextRef.current, { scale: 0.95, opacity: 0.1 });
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: "top top",
-        end: "+=2200", // Compact and smooth pinning scroll length
-        pin: true,
-        scrub: 1,
-        anticipatePin: 1,
-        onUpdate: (self) => {
-          // Progress goes from 0 to 1; we map it to 0..5 with a beautiful hold at the last card
-          setScrollProgress(Math.min(5, self.progress * 5.4));
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: "+=2200", // Compact and smooth pinning scroll length
+          pin: true,
+          scrub: 1,
+          anticipatePin: 1,
+          onUpdate: (self) => {
+            // Progress goes from 0 to 1; we map it to 0..5 with a beautiful hold at the last card
+            setScrollProgress(Math.min(5, self.progress * 5.4));
+          }
         }
-      }
-    });
+      });
 
-    // Animate Background text scale & opacity
-    tl.to(bgTextRef.current, {
-      scale: 1.05,
-      opacity: 0.28,
-      ease: "power1.inOut"
-    }, 0);
+      // Animate Background text scale & opacity
+      tl.to(bgTextRef.current, {
+        scale: 1.05,
+        opacity: 0.28,
+        ease: "power1.inOut"
+      }, 0);
+    }, sectionRef);
 
     return () => {
-      if (tl.scrollTrigger) tl.scrollTrigger.kill();
-      tl.kill();
+      ctx.revert();
     };
   }, [isMobile]);
 
@@ -281,6 +295,7 @@ const Services: React.FC = () => {
                 <InteractiveCard3D 
                   service={service} 
                   isActive={true} 
+                  isMobile={true}
                 />
               </div>
             ))}

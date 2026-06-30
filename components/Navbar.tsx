@@ -45,8 +45,8 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="fixed top-4 left-0 right-0 z-50 px-4 md:px-8 lg:px-16 transition-all duration-300">
-      <div className="max-w-7xl mx-auto flex items-center justify-between relative h-12">
+    <nav className="fixed top-2 sm:top-4 left-0 right-0 z-50 px-3 sm:px-4 md:px-8 lg:px-16 transition-all duration-300">
+      <div className="max-w-7xl mx-auto flex items-center justify-between relative h-10 sm:h-12">
         
         {/* Left Side: Premium AgenciGrow Logo with Gradient Text and Dual Metallic Arrows */}
         <a 
@@ -88,10 +88,10 @@ const Navbar: React.FC = () => {
         {/* Mobile menu toggle */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden w-11 h-11 rounded-full flex items-center justify-center liquid-glass-border text-[#C9CDD3] hover:text-[#F5F5F2] transition-colors"
+          className="md:hidden w-10 h-10 rounded-full flex items-center justify-center liquid-glass-border text-[#C9CDD3] hover:text-[#F5F5F2] transition-colors"
           style={{ background: 'rgba(201, 205, 211, 0.05)' }}
         >
-          {isOpen ? <X size={20} /> : <Menu size={20} />}
+          {isOpen ? <X size={18} /> : <Menu size={18} />}
         </button>
 
       </div>
@@ -104,14 +104,14 @@ const Navbar: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden mt-3 p-6 rounded-2xl liquid-glass border border-white/10 flex flex-col gap-4"
+            className="md:hidden mt-2 p-5 rounded-2xl liquid-glass border border-white/10 flex flex-col gap-3"
           >
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
                 onClick={(e) => { e.preventDefault(); scrollTo(link.href); }}
-                className="text-base font-medium text-[#C9CDD3] hover:text-[#F5F5F2] py-2 transition-colors border-b border-white/5"
+                className="text-sm font-medium text-[#C9CDD3] hover:text-[#F5F5F2] py-2 transition-colors border-b border-white/5 font-body"
               >
                 {link.name}
               </a>
@@ -119,7 +119,7 @@ const Navbar: React.FC = () => {
             <a
               href="#booking"
               onClick={(e) => { e.preventDefault(); scrollTo('#booking'); }}
-              className="mt-2 w-full text-center py-3 bg-[#F5F5F2] text-[#0A0A0B] rounded-full text-sm font-semibold tracking-wider uppercase inline-flex items-center justify-center gap-2"
+              className="mt-1 w-full text-center py-3 bg-[#F5F5F2] text-[#0A0A0B] rounded-full text-xs font-semibold tracking-wider uppercase inline-flex items-center justify-center gap-2 font-body"
             >
               <span>Book a Call</span>
               <ArrowUpRight size={14} />

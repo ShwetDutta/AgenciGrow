@@ -26,7 +26,7 @@ const Booking: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.1 }}
-                className="text-4xl md:text-5xl lg:text-6xl font-heading text-[#F5F5F2] tracking-tight leading-[1.12]"
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading text-[#F5F5F2] tracking-tight leading-[1.12]"
               >
                 Map your growth roadmap.
               </motion.h3>
@@ -42,7 +42,7 @@ const Booking: React.FC = () => {
                 colors={['#5227FF', '#B497CF', '#F5F5F2']}
                 className="w-full"
               >
-                <div className="p-8">
+                <div className="p-6 sm:p-8">
                   <h4 className="text-lg font-medium text-[#F5F5F2] mb-6 flex items-center gap-3 font-body">
                     <div 
                       className="w-8 h-8 rounded-lg flex items-center justify-center liquid-glass border border-white/10 text-[#C9CDD3]"
@@ -87,8 +87,8 @@ const Booking: React.FC = () => {
               </BorderGlow>
 
               <div className="flex items-center gap-3 text-[#8B8F96] px-4 font-body">
-                <div className="text-[#C9CDD3]"><Info className="w-4 h-4" /></div>
-                <span className="text-[11px] uppercase tracking-widest font-medium">Limited to 4 strategy sessions per week.</span>
+                <div className="text-[#C9CDD3] flex-shrink-0"><Info className="w-4 h-4" /></div>
+                <span className="text-[10px] sm:text-[11px] uppercase tracking-widest font-medium">Limited to 4 strategy sessions per week.</span>
               </div>
             </div>
           </div>
@@ -101,7 +101,7 @@ const Booking: React.FC = () => {
             glowRadius={40}
             edgeSensitivity={30}
             colors={['#5227FF', '#B497CF', '#F5F5F2']}
-            className="w-full relative overflow-hidden min-h-[600px] md:min-h-[700px] p-1"
+            className="w-full relative overflow-hidden min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] p-1"
           >
             <iframe 
               src="https://calendly.com/shwetdutta/30min" 
@@ -109,7 +109,7 @@ const Booking: React.FC = () => {
               height="650" 
               frameBorder="0"
               title="Calendly Booking"
-              className="w-full rounded-2xl bg-transparent opacity-90"
+              className="w-full rounded-2xl bg-transparent opacity-90 min-h-[500px] sm:min-h-[600px]"
               style={{ filter: "invert(1) hue-rotate(180deg) brightness(0.9) contrast(1.1)" }} // Keeps Calendly widget dark & premium!
             ></iframe>
           </BorderGlow>

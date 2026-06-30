@@ -68,7 +68,7 @@ const Hero: React.FC = () => {
       />
 
       {/* Signature Element: A thin metallic-silver line, shaped like the arrow, traces itself in once on page load */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[500px] lg:w-[700px] h-[300px] md:h-[500px] lg:h-[700px] opacity-[0.16] pointer-events-none select-none z-0">
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] sm:w-[380px] md:w-[500px] lg:w-[700px] h-[250px] sm:h-[380px] md:h-[500px] lg:h-[700px] opacity-[0.14] pointer-events-none select-none z-0">
         <svg viewBox="0 0 100 100" className="w-full h-full text-[#C9CDD3]" fill="none" xmlns="http://www.w3.org/2000/svg">
           <motion.path
             d="M 15,85 L 80,20 M 80,20 H 40 M 80,20 V 60"
@@ -102,13 +102,13 @@ const Hero: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
             className="mb-8"
           >
-            <span className="font-heading italic text-xl md:text-2xl text-[#C9CDD3] tracking-wide pb-1.5 border-b border-[#C9CDD3]/30">
+            <span className="font-heading italic text-lg sm:text-xl md:text-2xl text-[#C9CDD3] tracking-wide pb-1.5 border-b border-[#C9CDD3]/30">
               Growth Partner, Not Just an Agency
             </span>
           </motion.div>
 
           {/* Headline (BlurText word-by-word reveal, font-heading, no italics) */}
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading text-[#F5F5F2] tracking-tight leading-[1.08] mb-8">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-heading text-[#F5F5F2] tracking-tight leading-[1.1] mb-8">
             <BlurText text="Most businesses don't have a marketing problem. They have no system." />
           </h1>
 
@@ -117,7 +117,7 @@ const Hero: React.FC = () => {
             initial={{ filter: 'blur(10px)', opacity: 0, y: 20 }}
             animate={{ filter: 'blur(0px)', opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
-            className="text-base md:text-xl text-[#E2E4E9] font-body italic font-light leading-relaxed max-w-2xl mb-12"
+            className="text-sm sm:text-base md:text-lg lg:text-xl text-[#E2E4E9] font-body italic font-light leading-relaxed max-w-2xl mb-12"
           >
             We build the roadmap first, then the ads, automation, and pages to run it, built around how your business actually works, not a template.
           </motion.p>
@@ -127,12 +127,12 @@ const Hero: React.FC = () => {
             initial={{ filter: 'blur(10px)', opacity: 0, y: 20 }}
             animate={{ filter: 'blur(0px)', opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.1, ease: "easeOut" }}
-            className="flex flex-col sm:flex-row items-center gap-6 justify-center"
+            className="flex flex-col sm:flex-row items-center gap-6 justify-center w-full sm:w-auto px-4"
           >
             <a
               href="#booking"
               onClick={(e) => { e.preventDefault(); scrollToSection('booking'); }}
-              className="liquid-glass-strong px-8 py-4 text-xs font-semibold tracking-wider uppercase text-[#F5F5F2] inline-flex items-center gap-2"
+              className="liquid-glass-strong w-full sm:w-auto px-8 py-4 text-xs font-semibold tracking-wider uppercase text-[#F5F5F2] inline-flex items-center justify-center gap-2"
             >
               <span>Book a Free Discovery Call</span>
               <ArrowRight size={14} />
@@ -140,7 +140,7 @@ const Hero: React.FC = () => {
 
             <button
               onClick={() => scrollToSection('services')}
-              className="text-xs font-semibold tracking-wider uppercase text-[#8B8F96] hover:text-[#F5F5F2] inline-flex items-center gap-1.5 transition-colors duration-200"
+              className="text-xs font-semibold tracking-wider uppercase text-[#8B8F96] hover:text-[#F5F5F2] inline-flex items-center gap-1.5 transition-colors duration-200 py-3"
             >
               <span>See How It Works</span>
               <ChevronDown size={14} className="animate-bounce" />
