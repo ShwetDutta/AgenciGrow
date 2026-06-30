@@ -64,12 +64,11 @@ const getCardStyle = (dist: number) => {
   const opacity = 0.35 + easeF * 0.65;
   const scale = 0.9 + easeF * 0.1;
   const translateZ = easeF * 60;
-  const blur = (1 - easeF) * 1.5; // subtle blur for unfocused cards
 
   return {
     opacity,
     transform: `perspective(1000px) rotateX(8deg) rotateY(-8deg) translateZ(${translateZ}px) scale(${scale})`,
-    filter: blur > 0.1 ? `blur(${blur}px)` : 'none',
+    filter: 'none', // Omit dynamic blur filters completely to maximize GPU scrolling performance
     borderColor: `rgba(255, 255, 255, ${0.05 + easeF * 0.17})`,
     boxShadow: `0 15px 45px rgba(0,0,0,${0.6 + easeF * 0.25})`,
     zIndex: easeF > 0.5 ? 20 : 5
@@ -126,7 +125,7 @@ const InteractiveCard3D: React.FC<{
       : 'perspective(1000px) rotateX(8deg) rotateY(-8deg) translateZ(0px) scale(0.9)',
     borderColor: isActive ? 'rgba(255, 255, 255, 0.15)' : 'rgba(255, 255, 255, 0.05)',
     boxShadow: isActive ? '0 20px 40px rgba(0,0,0,0.8)' : '0 10px 30px rgba(0,0,0,0.6)',
-    filter: isActive ? 'none' : 'blur(1.5px)',
+    filter: 'none',
     zIndex: isActive ? 10 : 1
   };
 
@@ -135,18 +134,18 @@ const InteractiveCard3D: React.FC<{
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={`w-full max-w-[500px] rounded-[24px] p-6 sm:p-8 flex flex-col justify-between border select-none transition-all duration-500 ease-out ${
+      className={`w-full max-w-[500px] rounded-[24px] p-6 sm:p-8 flex flex-col justify-between border select-none transition-all duration-300 ease-out ${
         isActive 
           ? 'border-white/15' 
           : 'pointer-events-none'
       }`}
       style={{
-        background: 'rgba(12, 12, 13, 0.85)',
-        backdropFilter: 'blur(24px)',
-        WebkitBackdropFilter: 'blur(24px)',
+        background: 'rgba(12, 12, 13, 0.92)',
+        backdropFilter: isMobile ? 'none' : 'blur(10px)',
+        WebkitBackdropFilter: isMobile ? 'none' : 'blur(10px)',
         height: isMobile ? 'auto' : '240px',
-        willChange: isMobile ? 'none' : 'transform, opacity, filter',
-        transitionProperty: 'opacity, scale, border-color, filter',
+        willChange: isMobile ? 'none' : 'transform, opacity',
+        transitionProperty: isMobile ? 'all' : 'border-color, background-color', // Disable transform transition on desktop to prevent scroll stutter
         ...defaultStyle,
         ...style
       }}
