@@ -21,7 +21,7 @@ const Booking: React.FC = () => {
               >
                 // Take Action
               </motion.p>
-              <motion.h3 
+              <motion.h2 
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -29,7 +29,7 @@ const Booking: React.FC = () => {
                 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading text-[#F5F5F2] tracking-tight leading-[1.12]"
               >
                 Map your growth roadmap.
-              </motion.h3>
+              </motion.h2>
             </div>
 
             <div className="space-y-6">

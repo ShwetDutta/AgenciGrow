@@ -2,7 +2,7 @@
   "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/((?!robots\\.txt|sitemap\\.xml|site\\.webmanifest|Favicon\\.png).*)",
       "destination": "/index.html"
     }
   ]

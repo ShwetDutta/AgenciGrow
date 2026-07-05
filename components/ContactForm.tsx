@@ -149,8 +149,9 @@ const ContactForm: React.FC = () => {
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-[10px] font-medium text-[#8B8F96] uppercase mb-2 tracking-wider font-body">Full Name</label>
+                    <label htmlFor="form-fullname" className="block text-[10px] font-medium text-[#8B8F96] uppercase mb-2 tracking-wider font-body">Full Name</label>
                     <input 
+                      id="form-fullname"
                       required 
                       type="text" 
                       name="name" 
@@ -161,8 +162,9 @@ const ContactForm: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-medium text-[#8B8F96] uppercase mb-2 tracking-wider font-body">Work Email</label>
+                    <label htmlFor="form-workemail" className="block text-[10px] font-medium text-[#8B8F96] uppercase mb-2 tracking-wider font-body">Work Email</label>
                     <input 
+                      id="form-workemail"
                       required 
                       type="email" 
                       name="email" 
@@ -175,8 +177,9 @@ const ContactForm: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-medium text-[#8B8F96] uppercase mb-2 tracking-wider font-body">Company</label>
+                  <label htmlFor="form-company" className="block text-[10px] font-medium text-[#8B8F96] uppercase mb-2 tracking-wider font-body">Company</label>
                   <input 
+                    id="form-company"
                     required 
                     type="text" 
                     name="company" 
@@ -188,8 +191,9 @@ const ContactForm: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-medium text-[#8B8F96] uppercase mb-2 tracking-wider font-body">What's the current state of your marketing / what's not working?</label>
+                  <label htmlFor="form-message" className="block text-[10px] font-medium text-[#8B8F96] uppercase mb-2 tracking-wider font-body">What's the current state of your marketing / what's not working?</label>
                   <textarea 
+                    id="form-message"
                     required 
                     name="message" 
                     value={formData.message} 
