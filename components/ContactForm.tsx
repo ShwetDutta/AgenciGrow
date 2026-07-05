@@ -27,16 +27,41 @@ const ContactForm: React.FC = () => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const handleMailtoFallback = () => {
+    const subject = encodeURIComponent(`AgenciGrow Inquiry - ${formData.name || 'Growth Engine'}`);
+    const body = encodeURIComponent(
+      `Name: ${formData.name || 'N/A'}\n` +
+      `Email: ${formData.email || 'N/A'}\n` +
+      `Company: ${formData.company || 'N/A'}\n\n` +
+      `Message:\n${formData.message || ''}`
+    );
+    window.location.href = `mailto:agencigrowofficial@gmail.com?subject=${subject}&body=${body}`;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('sending');
     try {
-      const response = await emailjs.send(SERVICE_ID, TEMPLATE_ID, formData, PUBLIC_KEY);
-      if (response.status === 200) {
+      // Defensively provide common EmailJS parameter variations
+      const templateParams = {
+        name: formData.name,
+        from_name: formData.name,
+        email: formData.email,
+        from_email: formData.email,
+        reply_to: formData.email,
+        company: formData.company,
+        message: formData.message,
+      };
+
+      const response = await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
+      if (response.status === 200 || response.text === 'OK') {
         setStatus('success');
         setFormData({ name: '', email: '', company: '', message: '' });
+      } else {
+        throw new Error(`EmailJS failed with status: ${response.status} (${response.text})`);
       }
     } catch (err) {
+      console.error('EmailJS submission failed, falling back:', err);
       setStatus('error');
     }
   };
@@ -176,7 +201,19 @@ const ContactForm: React.FC = () => {
                 </div>
 
                 {status === 'error' && (
-                  <p className="text-xs text-red-400 font-body">Something went wrong. Please check your network and try again.</p>
+                  <div className="p-5 rounded-xl border border-red-500/20 bg-red-500/[0.03] space-y-3">
+                    <p className="text-xs text-red-400 font-body leading-relaxed">
+                      Instant form delivery is temporarily unavailable. Don't worry—you can instantly forward these details to us via your mail application instead with one click:
+                    </p>
+                    <button
+                      type="button"
+                      onClick={handleMailtoFallback}
+                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#F5F5F2] hover:bg-[#C9CDD3] text-[#0A0A0B] text-xs font-semibold uppercase tracking-wider transition-all duration-200"
+                    >
+                      <span>Send via Mail App</span>
+                      <Send size={11} className="rotate-45" />
+                    </button>
+                  </div>
                 )}
 
                 <button 

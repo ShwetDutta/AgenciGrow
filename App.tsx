@@ -24,7 +24,7 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0A0A0B] text-[#F5F5F2] selection:bg-[#A88B91] selection:text-[#0A0A0B] overflow-x-hidden relative">
+    <div className="min-h-screen flex flex-col bg-[#000000] text-[#F5F5F2] selection:bg-[#A88B91] selection:text-[#000000] overflow-x-hidden relative">
       
       {/* Thin vertical scroll-progress indicator down the right edge, filled in metallic silver */}
       <div className="scroll-progress-container">
