@@ -7,12 +7,12 @@ const steps = [
   {
     icon: <MessageSquare className="w-5 h-5 text-[#C9CDD3]" />,
     title: 'Discovery Call',
-    body: 'A free 30-minute session to map your goals, your current bottlenecks, and where growth is actually stuck.'
+    body: 'A comprehensive, free 30-minute growth assessment where we analyze your current marketing challenges, sales pipelines, and conversion barriers. Together, we will pinpoint exactly where your client acquisition is hitting a ceiling, evaluate your digital search engine optimization (SEO) visibility, and outline a clear direction to unlock predictable revenue on autopilot.'
   },
   {
     icon: <Map className="w-5 h-5 text-[#C9CDD3]" />,
     title: 'Custom Growth Roadmap',
-    body: 'A tailored plan covering exactly which systems you need, in what order, and why — before anything gets built.'
+    body: 'A bespoke, detailed digital growth plan built specifically for your business model. This strategic roadmap maps out the essential marketing funnels, search engine optimization frameworks, conversion-first custom landing pages, and automated CRM workflows you need to implement, detailed with clear timelines and key performance indicators.'
   }
 ];
 
@@ -68,7 +68,7 @@ const About: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-base md:text-lg text-[#8B8F96] font-body font-light leading-relaxed max-w-2xl"
           >
-            We're early — and that's exactly why we work harder on yours. No account managers, no outsourced execution. The people building your growth system are the people you talk to.
+            We are a highly dedicated growth partner committed to engineering predictable marketing and operations systems for your business. By avoiding generic templates and layers of corporate account management, we work directly as a hand-on extension of your team. From custom-coded web designs and technical SEO to multi-stage high-intent ad funnels, we build every asset from the ground up. The senior growth strategists who architect your roadmap are the same specialists who write the copy, optimize the landing pages, integrate your CRM pipelines, and scale your automated campaigns.
           </motion.p>
         </div>
 

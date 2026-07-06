@@ -39,7 +39,7 @@ const WhoWeAre: React.FC = () => {
           >
             <span className="text-xs font-semibold text-[#8B8F96] uppercase tracking-[0.2em] font-body block opacity-40">01 / GENUINE STRATEGY</span>
             <p className="text-sm md:text-base text-[#C9CDD3] font-body font-light leading-relaxed">
-              AgenciGrow started because most "growth agencies" sell the same three tactics to every client and call it strategy. We didn't want to build that.
+              AgenciGrow was founded to disrupt the traditional digital marketing paradigm. Instead of selling cookie-cutter templates or generic tactics, we engineer custom systems. We combine technical SEO, custom web design, and precise paid traffic funnels to capture high-intent search queries and transform them into predictable business growth.
             </p>
           </motion.div>
 
@@ -52,7 +52,7 @@ const WhoWeAre: React.FC = () => {
           >
             <span className="text-xs font-semibold text-[#8B8F96] uppercase tracking-[0.2em] font-body block opacity-40">02 / FOUNDER-LED</span>
             <p className="text-sm md:text-base text-[#C9CDD3] font-body font-light leading-relaxed">
-              We're a small, founder-led team — which means decisions get made fast, and nothing gets diluted by layers of management before it reaches you.
+              We are a dedicated, founder-led team of digital growth specialists. This structure guarantees that senior strategists are directly crafting your marketing channels, writing copy, and building systems. Decisions are made fast, communications are crystal clear, and your systems are never diluted by layers of corporate management.
             </p>
           </motion.div>
 
@@ -65,7 +65,7 @@ const WhoWeAre: React.FC = () => {
           >
             <span className="text-xs font-semibold text-[#8B8F96] uppercase tracking-[0.2em] font-body block opacity-40">03 / UNIFIED FOCUS</span>
             <p className="text-sm md:text-base text-[#C9CDD3] font-body font-light leading-relaxed">
-              Being early means we don't have a hundred clients pulling our attention in different directions. Right now, we have room to actually understand your business before we touch a single ad or page — and we'd rather earn that trust properly than fake a track record we don't have yet.
+              By limiting our active client roster, we provide unparalleled attention to your brand. We dedicate ourselves to thoroughly understanding your business model, customer touchpoints, and conversion bottlenecks before launching a single paid campaign. This exhaustive preparation ensures we build genuine trust and long-term search authority.
             </p>
           </motion.div>
         </div>

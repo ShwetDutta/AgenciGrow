@@ -19,37 +19,37 @@ const serviceList: ServiceItem[] = [
     icon: <Search className="w-5 h-5 text-[#C9CDD3]" />,
     category: 'Paid Search',
     title: 'Demand Capture & SEO',
-    body: 'Capturing high-intent search traffic exactly when customers need your solution. Engineered to drive premium bookings and direct sales.'
+    body: 'Capture high-intent search traffic with technical SEO, keyword targeting, and Google Ads. Engineered to attract qualified leads actively searching for your services and drive direct sales.'
   },
   {
     icon: <Target className="w-5 h-5 text-[#C9CDD3]" />,
     category: 'Meta Ads',
     title: 'Social Scaling & Funnels',
-    body: 'Feed-disrupting visual campaigns on Instagram and Meta. Optimized to capture attention, build brand desire, and convert scrollers.'
+    body: 'Scale your brand on Instagram and Facebook using feed-disrupting visual campaigns. We optimize creative assets and retargeting funnels to capture attention and convert passive scrollers into customers.'
   },
   {
     icon: <Layers className="w-5 h-5 text-[#C9CDD3]" />,
     category: 'Landing Pages',
     title: 'Conversion-First Design',
-    body: 'Bespoke high-performance landing pages. Blazing-fast loading speeds combined with sleek liquid-glass aesthetics built to convert visitors.'
+    body: 'Sleek, high-performance landing pages custom-coded in React and styled with Tailwind CSS. Designed with blazing-fast speeds and high-converting copy to turn clicks into valuable customer actions.'
   },
   {
     icon: <TrendingUp className="w-5 h-5 text-[#C9CDD3]" />,
     category: 'Funnels',
     title: 'Pre-Qualification Pathways',
-    body: 'Multi-stage digital funnels designed to pre-qualify and educate prospects. Turn cold traffic into warm, ready-to-buy relationships.'
+    body: 'Multi-stage digital pathways designed to systematically qualify and educate prospects. Turn cold traffic into warm, high-value client relationships by resolving objections and building trust automatically.'
   },
   {
     icon: <Database className="w-5 h-5 text-[#C9CDD3]" />,
     category: 'CRM',
     title: 'Pipeline & Automation Architecture',
-    body: 'Complete integration of HubSpot, CRM tools, and workflows. Full conversion attribution, custom automations, and absolute visibility.'
+    body: 'Streamline your sales pipeline with customized CRM tools, email workflows, and integrations. We construct automated workflows and marketing analytics to give you full attribution and clear growth visibility.'
   },
   {
     icon: <MessageSquare className="w-5 h-5 text-[#C9CDD3]" />,
     category: 'WhatsApp Automation',
     title: 'Conversational Lead Nurturing',
-    body: 'Instant automated WhatsApp triggers and qualify-flows. Connect with prospects instantly and capture inbound opportunities 24/7.'
+    body: 'Nurture leads 24/7 with instant automated WhatsApp triggers and interactive chat pathways. Engage with prospects instantly, qualify incoming opportunities, and schedule strategy calls on autopilot.'
   }
 ];
 
