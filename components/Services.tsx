@@ -78,8 +78,8 @@ const ServiceCard: React.FC<{ service: ServiceItem }> = ({ service }) => {
     offset: ['start end', 'end start'],
   });
 
-  // Smooth vertical parallax movement (increased capacity)
-  const y = useTransform(scrollYProgress, [0, 1], ['-22%', '22%']);
+  // Subtle vertical parallax movement
+  const y = useTransform(scrollYProgress, [0, 1], ['-7%', '7%']);
 
   const scrollToContact = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -104,11 +104,11 @@ const ServiceCard: React.FC<{ service: ServiceItem }> = ({ service }) => {
           : 'col-span-12 lg:col-span-6 min-h-[440px] sm:min-h-[500px] lg:min-h-[540px]'
       }`}
     >
-      {/* Media with Parallax - Increased headroom for deeper motion */}
+      {/* Media with Parallax - Subtle motion headroom */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           style={{ y }}
-          className="absolute -top-[22.5%] -bottom-[22.5%] left-0 right-0 w-full h-[145%]"
+          className="absolute -top-[8%] -bottom-[8%] left-0 right-0 w-full h-[116%]"
         >
           {service.mediaType === 'video' ? (
             <video
