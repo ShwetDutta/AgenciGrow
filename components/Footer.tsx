@@ -33,7 +33,7 @@ const Footer: React.FC = () => {
           <div className="relative min-h-[480px] sm:min-h-[540px] lg:min-h-[600px] rounded-[28px] sm:rounded-[36px] overflow-hidden flex flex-col justify-between p-8 sm:p-12 lg:p-14 group border border-white/10 shadow-2xl">
             {/* Background Image */}
             <img 
-              src="public/Photos/billboard_agencigrow.png" 
+              src="/Photos/billboard-agencigrow.png" 
               alt="AgenciGrow Billboard"
               referrerPolicy="no-referrer"
               className="absolute inset-0 w-full h-full object-cover object-center z-0 transition-transform duration-700 group-hover:scale-105"
@@ -62,7 +62,7 @@ const Footer: React.FC = () => {
           <div className="relative min-h-[480px] sm:min-h-[540px] lg:min-h-[600px] rounded-[28px] sm:rounded-[36px] overflow-hidden flex flex-col justify-between p-8 sm:p-12 lg:p-14 group border border-white/10 shadow-2xl">
             {/* Background Image */}
             <img 
-              src="public/Photos/Agencigrow instagram page.png" 
+              src="/Photos/instagram-page.png" 
               alt="AgenciGrow Instagram"
               referrerPolicy="no-referrer"
               className="absolute inset-0 w-full h-full object-cover object-center z-0 transition-transform duration-700 group-hover:scale-105"
