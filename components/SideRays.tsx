@@ -90,13 +90,35 @@ const SideRays: React.FC<SideRaysProps> = ({
 
       if (!containerRef.current) return;
 
-      const renderer = new Renderer({
-        dpr: Math.min(window.devicePixelRatio, 2),
-        alpha: true
-      });
+      let renderer: Renderer;
+      try {
+        renderer = new Renderer({
+          dpr: Math.min(window.devicePixelRatio, 2),
+          alpha: true
+        });
+      } catch (e) {
+        console.warn('SideRays: WebGL context creation failed or is unsupported.', e);
+        return;
+      }
+
+      if (!renderer || !renderer.gl) {
+        console.warn('SideRays: WebGL gl context is null.');
+        return;
+      }
+
       rendererRef.current = renderer;
 
       const gl = renderer.gl;
+      const handleContextLost = (e: Event) => {
+        e.preventDefault();
+        if (animationIdRef.current) {
+          cancelAnimationFrame(animationIdRef.current);
+          animationIdRef.current = null;
+        }
+      };
+      if (gl.canvas) {
+        gl.canvas.addEventListener('webglcontextlost', handleContextLost, false);
+      }
       gl.canvas.style.width = '100%';
       gl.canvas.style.height = '100%';
 

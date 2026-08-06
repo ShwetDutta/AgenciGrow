@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { motion, useAnimation, useInView } from 'framer-motion';
 import { ArrowRight, ChevronDown } from 'lucide-react';
-import FadingVideo from './FadingVideo';
+import Silk from './Silk';
 
 // BlurText component for word-by-word reveal
 export const BlurText: React.FC<{ text: string; className?: string }> = ({ text, className = "" }) => {
@@ -60,12 +60,16 @@ const Hero: React.FC = () => {
       ref={heroRef}
       className="relative min-h-screen flex items-center justify-center bg-[#0A0A0B] overflow-hidden pt-32 pb-24"
     >
-      {/* Background Cinematic Video with custom JS crossfade */}
-      <FadingVideo 
-        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260418_080021_d598092b-c4c2-4e53-8e46-94cf9064cd50.mp4"
-        className="absolute left-1/2 top-0 -translate-x-1/2 object-cover object-top z-0 select-none pointer-events-none"
-        style={{ width: "120%", height: "120%", opacity: 0 }}
-      />
+      {/* Silk Background Animation */}
+      <div className="absolute inset-0 w-full h-full z-0 pointer-events-none opacity-70 overflow-hidden">
+        <Silk
+          speed={5}
+          scale={1}
+          color="#7B7481"
+          noiseIntensity={1.5}
+          rotation={0}
+        />
+      </div>
 
       {/* Signature Element: A thin metallic-silver line, shaped like the arrow, traces itself in once on page load */}
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] sm:w-[380px] md:w-[500px] lg:w-[700px] h-[250px] sm:h-[380px] md:h-[500px] lg:h-[700px] opacity-[0.14] pointer-events-none select-none z-0">

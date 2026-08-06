@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import Services from './components/Services';
-import WhoWeAre from './components/WhoWeAre';
+import TrustBar from './components/TrustBar';
 import About from './components/About';
-import Booking from './components/Booking';
-import ContactForm from './components/ContactForm';
+import Services from './components/Services';
+import Process from './components/Process';
+import Work from './components/Work';
+import FAQ from './components/FAQ';
+import BookingAndContact from './components/BookingAndContact';
 import Footer from './components/Footer';
 
 const App: React.FC = () => {
@@ -26,7 +28,7 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-[#000000] text-[#F5F5F2] selection:bg-[#A88B91] selection:text-[#000000] overflow-x-hidden relative">
       
-      {/* Thin vertical scroll-progress indicator down the right edge, filled in metallic silver */}
+      {/* Scroll Progress indicator down the right edge */}
       <div className="scroll-progress-container">
         <div 
           className="scroll-progress-bar h-full" 
@@ -34,15 +36,36 @@ const App: React.FC = () => {
         />
       </div>
 
+      {/* 1. Navbar */}
       <Navbar />
+
       <main className="flex-grow">
+        {/* 2. Hero */}
         <Hero />
-        <Services />
-        <WhoWeAre />
+
+        {/* 3. Trust / Stats bar */}
+        <TrustBar />
+
+        {/* 4. About / Why AgenciGrow */}
         <About />
-        <Booking />
-        <ContactForm />
+
+        {/* 5. Services */}
+        <Services />
+
+        {/* 6. Process */}
+        <Process />
+
+        {/* 7. Work (light version) */}
+        <Work />
+
+        {/* 8. FAQ */}
+        <FAQ />
+
+        {/* 9. Contact + Book a Meeting */}
+        <BookingAndContact />
       </main>
+
+      {/* 10. Footer */}
       <Footer />
     </div>
   );
