@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { motion, useAnimation, useInView } from 'framer-motion';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 import Silk from './Silk';
+import { openBookingModal } from './CalendlyModal';
 
 // BlurText component for word-by-word reveal
 export const BlurText: React.FC<{ text: string; className?: string }> = ({ text, className = "" }) => {
@@ -133,14 +134,13 @@ const Hero: React.FC = () => {
             transition={{ duration: 0.8, delay: 1.1, ease: "easeOut" }}
             className="flex flex-col sm:flex-row items-center gap-6 justify-center w-full sm:w-auto px-4"
           >
-            <a
-              href="#booking"
-              onClick={(e) => { e.preventDefault(); scrollToSection('booking'); }}
-              className="liquid-glass-strong w-full sm:w-auto px-8 py-4 text-xs font-semibold tracking-wider uppercase text-[#F5F5F2] inline-flex items-center justify-center gap-2"
+            <button
+              onClick={openBookingModal}
+              className="liquid-glass-strong w-full sm:w-auto px-8 py-4 text-xs font-semibold tracking-wider uppercase text-[#F5F5F2] inline-flex items-center justify-center gap-2 cursor-pointer hover:scale-[1.02] transition-transform"
             >
               <span>Book a Free Discovery Call</span>
               <ArrowRight size={14} />
-            </a>
+            </button>
 
             <button
               onClick={() => scrollToSection('services')}

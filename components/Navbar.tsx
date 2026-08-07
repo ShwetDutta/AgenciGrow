@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Plus, X, ArrowUpRight, Menu, Minus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MetallicLogo } from './MetallicLogo';
+import { openBookingModal } from './CalendlyModal';
 
 const Navbar: React.FC = () => {
   const [isHeroCardOpen, setIsHeroCardOpen] = useState(false);
@@ -51,6 +52,10 @@ const Navbar: React.FC = () => {
   const scrollTo = (href: string) => {
     setIsHeroCardOpen(false);
     setIsFullMenuOpen(false);
+    if (href === '#contact' || href === '#booking') {
+      openBookingModal();
+      return;
+    }
     if (href === '#hero') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
@@ -99,21 +104,17 @@ const Navbar: React.FC = () => {
             {/* Separate "Book a Call" CTA Button (Visible at top when NOT scrolled) */}
             <AnimatePresence>
               {!isScrolled && (
-                <motion.a
-                  href="#contact"
+                <motion.button
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 20 }}
                   transition={{ duration: 0.3 }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollTo('#contact');
-                  }}
+                  onClick={openBookingModal}
                   className="inline-flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-gray-200 text-black rounded-full text-xs font-semibold tracking-wider uppercase transition-all duration-300 shadow-xl font-body cursor-pointer transform hover:scale-[1.03]"
                 >
                   <span>Book a call</span>
                   <ArrowUpRight className="w-4 h-4 stroke-[2.5]" />
-                </motion.a>
+                </motion.button>
               )}
             </AnimatePresence>
 

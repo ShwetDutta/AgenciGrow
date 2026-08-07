@@ -44,9 +44,9 @@ const FAQ: React.FC = () => {
     <section id="faq" className="py-24 sm:py-32 bg-[#000000] text-[#F5F5F2] relative z-10 scroll-mt-12 border-t border-white/10 font-body">
       <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12">
         
-        {/* Header Row - Matching uploaded image layout */}
-        <div className="flex items-center justify-between gap-6 mb-12 sm:mb-16">
-          <h2 className="text-4xl sm:text-6xl md:text-7xl font-body font-normal tracking-[-0.03em] text-white">
+        {/* Header Row - Editorial Serif Font */}
+        <div className="flex items-center justify-between gap-6 mb-12 sm:mb-16 font-heading font-serif">
+          <h2 className="text-4xl sm:text-6xl md:text-7xl font-normal uppercase tracking-tighter text-white leading-tight">
             Frequently Asked Questions
           </h2>
 

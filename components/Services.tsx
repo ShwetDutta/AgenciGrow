@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
+import { openBookingModal } from './CalendlyModal';
 
 interface ServiceItem {
   id: string;
@@ -83,16 +84,7 @@ const ServiceCard: React.FC<{ service: ServiceItem }> = ({ service }) => {
 
   const scrollToContact = (e: React.MouseEvent) => {
     e.preventDefault();
-    const el = document.getElementById('contact');
-    if (el) {
-      const offset = 80;
-      const elementPosition = el.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth',
-      });
-    }
+    openBookingModal();
   };
 
   return (
@@ -173,9 +165,9 @@ const Services: React.FC = () => {
       className="py-24 sm:py-32 bg-[#000000] text-[#F5F5F2] relative z-10 scroll-mt-12 border-t border-white/10 font-body"
     >
       <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12">
-        {/* Header - Matching FAQ section exact font style */}
-        <div className="mb-12 sm:mb-20">
-          <h2 className="text-4xl sm:text-6xl md:text-7xl font-body font-normal tracking-[-0.03em] text-white">
+        {/* Header - Matching editorial serif font style */}
+        <div className="mb-12 sm:mb-20 font-heading font-serif">
+          <h2 className="text-5xl sm:text-7xl md:text-8xl font-normal uppercase tracking-tighter text-white leading-none">
             Services
           </h2>
         </div>

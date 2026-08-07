@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import { ArrowRight, X } from 'lucide-react';
+import { openBookingModal } from './CalendlyModal';
 
 const Footer: React.FC = () => {
   const [activeModal, setActiveModal] = useState<'privacy' | 'terms' | null>(null);
 
   const scrollToSection = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
+    if (id === 'contact' || id === 'booking') {
+      openBookingModal();
+      return;
+    }
     if (id === 'top') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
