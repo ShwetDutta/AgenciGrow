@@ -1,161 +1,158 @@
-import React, { useEffect, useRef } from 'react';
-import { motion, useAnimation, useInView } from 'framer-motion';
-import { ArrowRight, ChevronDown } from 'lucide-react';
-import Silk from './Silk';
-import { openBookingModal } from './CalendlyModal';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
-// BlurText component for word-by-word reveal
-export const BlurText: React.FC<{ text: string; className?: string }> = ({ text, className = "" }) => {
-  const words = text.split(' ');
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  return (
-    <span ref={ref} className={`${className} flex flex-wrap justify-center gap-x-4 gap-y-2`}>
-      {words.map((word, index) => (
-        <motion.span
-          key={index}
-          initial={{ filter: 'blur(12px)', opacity: 0, y: 15 }}
-          animate={isInView ? { filter: 'blur(0px)', opacity: 1, y: 0 } : {}}
-          transition={{
-            duration: 0.8,
-            delay: index * 0.08,
-            ease: [0.215, 0.61, 0.355, 1],
-          }}
-          className="inline-block"
-        >
-          {word}
-        </motion.span>
-      ))}
-    </span>
-  );
-};
+const editorialServices = ['STRATEGY', 'SYSTEMS', 'AUTOMATION', 'WEB', 'PAID MEDIA'];
 
 const Hero: React.FC = () => {
-  const arrowControls = useAnimation();
-  const heroRef = useRef(null);
+  const containerRef = useRef<HTMLElement>(null);
 
-  useEffect(() => {
-    // Traces the arrow line once on load
-    arrowControls.start({
-      strokeDashoffset: 0,
-      transition: { duration: 1.8, ease: [0.25, 1, 0.5, 1] }
-    });
-  }, [arrowControls]);
+  // Parallax scroll controls
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end start']
+  });
 
-  const scrollToSection = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      const offset = 100;
-      const elementPosition = el.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth"
-      });
-    }
-  };
+  const headlineY = useTransform(scrollYProgress, [0, 1], ['0%', '-6%']);
+  const imageY = useTransform(scrollYProgress, [0, 1], ['0%', '10%']);
+  const bgTextX = useTransform(scrollYProgress, [0, 1], ['0%', '-6%']);
 
   return (
-    <section 
-      ref={heroRef}
-      className="relative min-h-screen flex items-center justify-center bg-[#0A0A0B] overflow-hidden pt-32 pb-24"
+    <section
+      id="hero"
+      ref={containerRef}
+      className="relative min-h-[100dvh] lg:h-[100dvh] flex flex-col justify-between bg-[#000000] text-[#F5F5F2] pt-20 sm:pt-24 lg:pt-22 pb-5 sm:pb-6 lg:pb-6 px-6 sm:px-10 lg:px-16 overflow-hidden z-10 select-none"
     >
-      {/* Silk Background Animation */}
-      <div className="absolute inset-0 w-full h-full z-0 pointer-events-none opacity-70 overflow-hidden">
-        <Silk
-          speed={5}
-          scale={1}
-          color="#7B7481"
-          noiseIntensity={1.5}
-          rotation={0}
-        />
-      </div>
+      {/* Subtle Oversized Background Typography */}
+      <motion.div
+        aria-hidden="true"
+        style={{ x: bgTextX }}
+        className="absolute inset-0 pointer-events-none overflow-hidden z-0 flex items-center justify-center"
+      >
+        <span
+          className="
+            text-[23vw]
+            font-heading
+            font-serif
+            uppercase
+            tracking-[-0.07em]
+            leading-none
+            text-white/[0.09]
+            whitespace-nowrap
+            select-none
+            translate-y-[-2%]"
+        >
+          AGENCIGROW
+        </span>
+      </motion.div>
 
-      {/* Signature Element: A thin metallic-silver line, shaped like the arrow, traces itself in once on page load */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] sm:w-[380px] md:w-[500px] lg:w-[700px] h-[250px] sm:h-[380px] md:h-[500px] lg:h-[700px] opacity-[0.14] pointer-events-none select-none z-0">
-        <svg viewBox="0 0 100 100" className="w-full h-full text-[#C9CDD3]" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <motion.path
-            d="M 15,85 L 80,20 M 80,20 H 40 M 80,20 V 60"
-            stroke="currentColor"
-            strokeWidth="1.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            initial={{ strokeDasharray: "300", strokeDashoffset: "300" }}
-            animate={arrowControls}
-          />
-          <motion.path
-            d="M 30,85 L 85,30 M 85,30 H 55 M 85,30 V 60"
-            stroke="currentColor"
-            strokeWidth="0.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            opacity="0.6"
-            initial={{ strokeDasharray: "300", strokeDashoffset: "300" }}
-            animate={arrowControls}
-          />
-        </svg>
-      </div>
+      {/* Hero Content Wrapper */}
+      <div className="max-w-7xl mx-auto w-full relative z-10 flex flex-col justify-between flex-1 h-full">
+        
+        {/* Top Editorial Metadata Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="flex items-center justify-between pb-3 sm:pb-4 border-b border-white/10 text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-gray-400 mb-2 sm:mb-4 lg:mb-4"
+        >
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-white/80 animate-pulse" />
+            <span>CHENNAI • INDIA</span>
+          </div>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 w-full relative z-10">
-        <div className="max-w-4xl flex flex-col items-center text-center mx-auto">
+          <div className="hidden sm:block text-gray-500 tracking-[0.4em] text-[9px] sm:text-[10px]">
+            STRATEGY / SYSTEMS / SCALE
+          </div>
+
+          <div className="flex items-center gap-4 sm:gap-6 text-gray-500">
+            <span>EST. 2026</span>
+          </div>
+        </motion.div>
+
+        {/* Main Editorial Headline & Integrated Image Composition */}
+        <div className="relative my-auto py-2 sm:py-3">
           
-          {/* Badge */}
-          <motion.div
-            initial={{ filter: 'blur(10px)', opacity: 0, y: 20 }}
-            animate={{ filter: 'blur(0px)', opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-            className="mb-8"
-          >
-            <span className="font-heading italic text-lg sm:text-xl md:text-2xl text-[#C9CDD3] tracking-wide pb-1.5 border-b border-[#C9CDD3]/30">
-              Growth Partner, Not Just an Agency
-            </span>
+          {/* Main Headline Stack with Layered Composition */}
+          <motion.div style={{ y: headlineY }} className="relative z-20 space-y-0.5 sm:space-y-1">
+            
+            {/* Line 1: BUILD */}
+            <div className="overflow-hidden">
+              <motion.h1
+                initial={{ y: '100%', opacity: 0 }}
+                animate={{ y: '0%', opacity: 1 }}
+                transition={{ duration: 0.85, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="text-5xl sm:text-7xl md:text-8xl lg:text-[5.5rem] xl:text-[6.8rem] 2xl:text-[7.6rem] font-heading font-serif font-normal uppercase tracking-tighter leading-[0.86] text-white"
+              >
+                BUILD
+              </motion.h1>
+            </div>
+
+            {/* Line 2: WHAT */}
+            <div className="overflow-hidden pl-6 sm:pl-16 md:pl-28 lg:pl-36">
+              <motion.h1
+                initial={{ y: '100%', opacity: 0 }}
+                animate={{ y: '0%', opacity: 1 }}
+                transition={{ duration: 0.85, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                className="text-4xl sm:text-6xl md:text-7xl lg:text-[4.8rem] xl:text-[6rem] 2xl:text-[6.8rem] font-heading font-serif font-normal uppercase italic tracking-tighter leading-[0.86] text-gray-400"
+              >
+                WHAT
+              </motion.h1>
+            </div>
+
+            {/* Line 3: COMPOUNDS. */}
+            <div className="overflow-hidden">
+              <motion.h1
+                initial={{ y: '100%', opacity: 0 }}
+                animate={{ y: '0%', opacity: 1 }}
+                transition={{ duration: 0.85, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                className="text-5xl sm:text-7xl md:text-8xl lg:text-[5.5rem] xl:text-[6.8rem] 2xl:text-[7.6rem] font-heading font-serif font-normal uppercase tracking-tighter leading-[0.86] text-white"
+              >
+                COMPOUNDS.
+              </motion.h1>
+            </div>
+
           </motion.div>
 
-          {/* Headline (BlurText word-by-word reveal, font-heading, no italics) */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-heading text-[#F5F5F2] tracking-tight leading-[1.1] mb-8">
-            <BlurText text="Most businesses don't have a marketing problem. They have no system." />
-          </h1>
-
-          {/* Subheading */}
-          <motion.p
-            initial={{ filter: 'blur(10px)', opacity: 0, y: 20 }}
-            animate={{ filter: 'blur(0px)', opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
-            className="text-sm sm:text-base md:text-lg lg:text-xl text-[#E2E4E9] font-body italic font-light leading-relaxed max-w-2xl mb-12"
-          >
-            We build the roadmap first, then the ads, automation, and pages to run it, built around how your business actually works, not a template.
-          </motion.p>
-
-          {/* CTAs */}
+          {/* Substantially Larger Editorial Image Layered Over Typography */}
           <motion.div
-            initial={{ filter: 'blur(10px)', opacity: 0, y: 20 }}
-            animate={{ filter: 'blur(0px)', opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.1, ease: "easeOut" }}
-            className="flex flex-col sm:flex-row items-center gap-6 justify-center w-full sm:w-auto px-4"
+            style={{ y: imageY }}
+            initial={{ opacity: 0, scale: 0.94 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.9, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute top-1/2 -translate-y-[60%] sm:-translate-y-[88%] lg:-translate-y-[90%] right-0 sm:right-4 md:right-8 lg:right-12 xl:right-16 z-30 pointer-events-none"
           >
-            <button
-              onClick={openBookingModal}
-              className="liquid-glass-strong w-full sm:w-auto px-8 py-4 text-xs font-semibold tracking-wider uppercase text-[#F5F5F2] inline-flex items-center justify-center gap-2 cursor-pointer hover:scale-[1.02] transition-transform"
-            >
-              <span>Book a Free Discovery Call</span>
-              <ArrowRight size={14} />
-            </button>
-
-            <button
-              onClick={() => scrollToSection('services')}
-              className="text-xs font-semibold tracking-wider uppercase text-[#8B8F96] hover:text-[#F5F5F2] inline-flex items-center gap-1.5 transition-colors duration-200 py-3"
-            >
-              <span>See How It Works</span>
-              <ChevronDown size={14} className="animate-bounce" />
-            </button>
+            <div className="relative w-32 h-44 sm:w-48 sm:h-64 md:w-56 md:h-76 lg:w-64 lg:h-84 xl:w-72 xl:h-92 rounded-xs border border-white/15 bg-black shadow-[0_25px_60px_rgba(0,0,0,0.9)] overflow-hidden">
+              <img
+                src="/Photos/Hero-page-card.jpeg"
+                alt="AgenciGrow Strategy"
+                className="w-full h-full object-cover filter contrast-[1.05] brightness-[0.92]"
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-white/5 pointer-events-none" />
+            </div>
           </motion.div>
-
 
         </div>
+
+        {/* Bottom Editorial Service Labels */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="pt-4 sm:pt-5 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-gray-400 relative z-20"
+        >
+          {editorialServices.map((service, idx) => (
+            <React.Fragment key={service}>
+              <span className="hover:text-white transition-colors cursor-default">{service}</span>
+              {idx < editorialServices.length - 1 && <span className="text-gray-600 hidden sm:inline">•</span>}
+            </React.Fragment>
+          ))}
+        </motion.div>
+
       </div>
     </section>
   );
 };
 
 export default Hero;
+
