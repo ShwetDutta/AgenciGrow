@@ -196,7 +196,7 @@ const About: React.FC = () => {
             </motion.div>
 
             <div className="space-y-1 text-xs font-mono uppercase tracking-widest text-gray-400">
-              <span className="block text-white font-medium">[ FIG. 01 — EVERY MOVE MATTERS ]</span>
+              <span className="block text-white font-medium">[ EVERY MOVE MATTERS ]</span>
               <p className="text-[10px] text-gray-500 lowercase tracking-normal font-body">
                 interconnected execution across all growth touchpoints
               </p>
