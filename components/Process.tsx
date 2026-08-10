@@ -42,158 +42,178 @@ const processSteps: ProcessStep[] = [
   }
 ];
 
-const PARTICLE_COUNT = 2200;
+const WIRE_SEGMENTS_COUNT = 1400;
+
+interface LineSegment {
+  start: THREE.Vector3;
+  end: THREE.Vector3;
+}
 
 // ============================================================================
-// 3D THREE.JS PROCEDURAL GEOMETRY CREATION & SURFACE POINT SAMPLING
+// 3D THREE.JS PROCEDURAL GEOMETRY & WIREFRAME LINE SAMPLING SYSTEM
 // ============================================================================
 
-// Helper to sample surface & interior points uniformly from any Three.js Group/Mesh
-function samplePointsFromGroup(group: THREE.Group, totalPoints: number): THREE.Vector3[] {
+function sampleLineSegmentsFromGroup(group: THREE.Group, totalSegments: number): LineSegment[] {
   group.updateMatrixWorld(true);
 
-  interface TriInfo {
+  interface RawEdge {
     a: THREE.Vector3;
     b: THREE.Vector3;
-    c: THREE.Vector3;
-    cumArea: number;
+    len: number;
+    cumLen: number;
   }
 
-  const flatTriangles: TriInfo[] = [];
-  let grandTotalArea = 0;
+  const rawEdges: RawEdge[] = [];
+  let totalLength = 0;
 
   group.traverse((child) => {
     if ((child as THREE.Mesh).isMesh) {
       const mesh = child as THREE.Mesh;
-      const geometry = mesh.geometry.clone();
-      const posAttr = geometry.attributes.position;
+      if (!mesh.geometry) return;
+
+      const wireGeo = new THREE.WireframeGeometry(mesh.geometry);
+      const posAttr = wireGeo.attributes.position;
       if (!posAttr) return;
 
-      const indexAttr = geometry.index;
-      const getVertex = (i: number) => {
-        const v = new THREE.Vector3(
-          posAttr.getX(i),
-          posAttr.getY(i),
-          posAttr.getZ(i)
-        );
-        v.applyMatrix4(mesh.matrixWorld);
-        return v;
-      };
+      for (let i = 0; i < posAttr.count; i += 2) {
+        const a = new THREE.Vector3(posAttr.getX(i), posAttr.getY(i), posAttr.getZ(i));
+        const b = new THREE.Vector3(posAttr.getX(i + 1), posAttr.getY(i + 1), posAttr.getZ(i + 1));
 
-      if (indexAttr) {
-        for (let i = 0; i < indexAttr.count; i += 3) {
-          const a = getVertex(indexAttr.getX(i));
-          const b = getVertex(indexAttr.getX(i + 1));
-          const c = getVertex(indexAttr.getX(i + 2));
+        a.applyMatrix4(mesh.matrixWorld);
+        b.applyMatrix4(mesh.matrixWorld);
 
-          const edge1 = new THREE.Vector3().subVectors(b, a);
-          const edge2 = new THREE.Vector3().subVectors(c, a);
-          const area = 0.5 * new THREE.Vector3().crossVectors(edge1, edge2).length();
-
-          if (area > 0.000001) {
-            grandTotalArea += area;
-            flatTriangles.push({ a, b, c, cumArea: grandTotalArea });
-          }
-        }
-      } else {
-        for (let i = 0; i < posAttr.count; i += 3) {
-          const a = getVertex(i);
-          const b = getVertex(i + 1);
-          const c = getVertex(i + 2);
-
-          const edge1 = new THREE.Vector3().subVectors(b, a);
-          const edge2 = new THREE.Vector3().subVectors(c, a);
-          const area = 0.5 * new THREE.Vector3().crossVectors(edge1, edge2).length();
-
-          if (area > 0.000001) {
-            grandTotalArea += area;
-            flatTriangles.push({ a, b, c, cumArea: grandTotalArea });
-          }
+        const len = a.distanceTo(b);
+        if (len > 0.0001) {
+          totalLength += len;
+          rawEdges.push({ a, b, len, cumLen: totalLength });
         }
       }
+      wireGeo.dispose();
     }
   });
 
-  const points: THREE.Vector3[] = [];
-  if (grandTotalArea === 0 || flatTriangles.length === 0) {
-    for (let i = 0; i < totalPoints; i++) {
-      points.push(new THREE.Vector3((Math.random() - 0.5) * 1.5, (Math.random() - 0.5) * 1.5, (Math.random() - 0.5) * 1.5));
+  const segments: LineSegment[] = [];
+
+  if (rawEdges.length === 0 || totalLength === 0) {
+    for (let i = 0; i < totalSegments; i++) {
+      const p1 = new THREE.Vector3((Math.random() - 0.5) * 1.5, (Math.random() - 0.5) * 1.5, (Math.random() - 0.5) * 1.5);
+      const p2 = p1.clone().add(new THREE.Vector3((Math.random() - 0.5) * 0.2, (Math.random() - 0.5) * 0.2, (Math.random() - 0.5) * 0.2));
+      segments.push({ start: p1, end: p2 });
     }
-    return points;
+    return segments;
   }
 
-  for (let i = 0; i < totalPoints; i++) {
-    const r = Math.random() * grandTotalArea;
-    let low = 0;
-    let high = flatTriangles.length - 1;
-    let selectedIdx = 0;
+  // 1. If rawEdges fit inside totalSegments, take all and subdivide remaining
+  if (rawEdges.length <= totalSegments) {
+    for (let i = 0; i < rawEdges.length; i++) {
+      segments.push({ start: rawEdges[i].a.clone(), end: rawEdges[i].b.clone() });
+    }
 
-    while (low <= high) {
-      const mid = Math.floor((low + high) / 2);
-      if (flatTriangles[mid].cumArea >= r) {
-        selectedIdx = mid;
-        high = mid - 1;
-      } else {
-        low = mid + 1;
+    const remaining = totalSegments - segments.length;
+    for (let i = 0; i < remaining; i++) {
+      const r = Math.random() * totalLength;
+      let low = 0;
+      let high = rawEdges.length - 1;
+      let selectedIdx = 0;
+
+      while (low <= high) {
+        const mid = Math.floor((low + high) / 2);
+        if (rawEdges[mid].cumLen >= r) {
+          selectedIdx = mid;
+          high = mid - 1;
+        } else {
+          low = mid + 1;
+        }
       }
+
+      const edge = rawEdges[selectedIdx];
+      const t1 = Math.random() * 0.5;
+      const t2 = t1 + 0.5;
+      const p1 = new THREE.Vector3().lerpVectors(edge.a, edge.b, t1);
+      const p2 = new THREE.Vector3().lerpVectors(edge.a, edge.b, t2);
+      segments.push({ start: p1, end: p2 });
     }
-
-    const tri = flatTriangles[selectedIdx];
-    const r1 = Math.sqrt(Math.random());
-    const r2 = Math.random();
-
-    const u = 1 - r1;
-    const v = r1 * (1 - r2);
-    const w = r1 * r2;
-
-    const pt = new THREE.Vector3(
-      u * tri.a.x + v * tri.b.x + w * tri.c.x,
-      u * tri.a.y + v * tri.b.y + w * tri.c.y,
-      u * tri.a.z + v * tri.b.z + w * tri.c.z
-    );
-
-    // 12% subtle volumetric depth offset for rich tactile density
-    if (Math.random() < 0.12) {
-      const shrink = 0.70 + Math.random() * 0.28;
-      pt.multiplyScalar(shrink);
+  } else {
+    // Uniformly stride across rawEdges so EVERY child mesh (lens, rim, handle, rings, pommel) is represented
+    const step = rawEdges.length / totalSegments;
+    for (let i = 0; i < totalSegments; i++) {
+      const idx = Math.min(Math.floor(i * step), rawEdges.length - 1);
+      segments.push({ start: rawEdges[idx].a.clone(), end: rawEdges[idx].b.clone() });
     }
-
-    points.push(pt);
   }
 
-  return points;
+  return segments;
 }
 
-// 01: DISCOVERY & AUDIT — 3D Volumetric Magnifying Glass
+// 01: DISCOVERY & AUDIT — 3D Volumetric Optical Magnifying Glass
 function createMagnifyingGlassMesh(): THREE.Group {
   const group = new THREE.Group();
+  
+  // Position lens in upper-left quadrant so the handle extends down-right naturally centered
+  const lensCenter = new THREE.Vector3(-0.16, 0.20, 0);
 
-  // Outer Lens Torus Rim
-  const rimGeo = new THREE.TorusGeometry(0.58, 0.09, 24, 48);
-  const rimMesh = new THREE.Mesh(rimGeo);
-  rimMesh.position.set(-0.16, 0.16, 0);
-  group.add(rimMesh);
+  // 1. Primary Outer Torus Rim (Generates thick rounded 3D rim outline)
+  const rimOuter = new THREE.Mesh(new THREE.TorusGeometry(0.48, 0.065, 12, 28));
+  rimOuter.position.copy(lensCenter);
+  group.add(rimOuter);
 
-  // Glass Convex Disk Lens
-  const lensGeo = new THREE.CylinderGeometry(0.56, 0.56, 0.12, 36);
-  const lensMesh = new THREE.Mesh(lensGeo);
-  lensMesh.rotation.x = Math.PI / 2;
-  lensMesh.position.set(-0.16, 0.16, 0);
-  group.add(lensMesh);
+  // 2. Inner Aperture Bevel Ring (Defines inner lens frame edge)
+  const rimInner = new THREE.Mesh(new THREE.TorusGeometry(0.40, 0.03, 10, 28));
+  rimInner.position.copy(lensCenter);
+  group.add(rimInner);
 
-  // Handle Connector Ferrule
-  const connGeo = new THREE.CylinderGeometry(0.08, 0.08, 0.16, 20);
-  const connMesh = new THREE.Mesh(connGeo);
-  connMesh.position.set(0.24, -0.24, 0);
-  connMesh.rotation.z = -Math.PI / 4;
-  group.add(connMesh);
+  // 3. Outer Cylindrical Shell Wall (Provides 3D depth quads along Z-axis)
+  const frameCylOuter = new THREE.Mesh(new THREE.CylinderGeometry(0.545, 0.545, 0.13, 28, 2, true));
+  frameCylOuter.rotation.x = Math.PI / 2;
+  frameCylOuter.position.copy(lensCenter);
+  group.add(frameCylOuter);
 
-  // Main Cylindrical Handle
-  const handleGeo = new THREE.CylinderGeometry(0.07, 0.09, 0.85, 24);
-  const handleMesh = new THREE.Mesh(handleGeo);
-  handleMesh.position.set(0.60, -0.60, 0);
-  handleMesh.rotation.z = -Math.PI / 4;
-  group.add(handleMesh);
+  // 4. Inner Cylindrical Aperture Wall (Internal 3D depth quads)
+  const frameCylInner = new THREE.Mesh(new THREE.CylinderGeometry(0.395, 0.395, 0.13, 28, 2, true));
+  frameCylInner.rotation.x = Math.PI / 2;
+  frameCylInner.position.copy(lensCenter);
+  group.add(frameCylInner);
+
+  // 5. Connecting Ferrule Collar (-45 degree angle towards bottom right)
+  const angle = -Math.PI / 4;
+  const dir = new THREE.Vector3(Math.cos(angle), Math.sin(angle), 0); // (0.7071, -0.7071, 0)
+  
+  const ferrulePos = lensCenter.clone().add(dir.clone().multiplyScalar(0.48));
+  const ferruleCyl = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.18, 16, 2));
+  ferruleCyl.position.copy(ferrulePos);
+  ferruleCyl.rotation.z = angle + Math.PI / 2;
+  group.add(ferruleCyl);
+
+  const ferruleRing = new THREE.Mesh(new THREE.TorusGeometry(0.095, 0.02, 8, 16));
+  ferruleRing.position.copy(ferrulePos);
+  ferruleRing.rotation.z = angle + Math.PI / 2;
+  ferruleRing.rotation.x = Math.PI / 2;
+  group.add(ferruleRing);
+
+  // 6. Main Cylindrical Handle
+  const handleLength = 0.84;
+  const handlePos = ferrulePos.clone().add(dir.clone().multiplyScalar(0.09 + handleLength / 2));
+  const handleCyl = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.085, handleLength, 16, 6));
+  handleCyl.position.copy(handlePos);
+  handleCyl.rotation.z = angle + Math.PI / 2;
+  group.add(handleCyl);
+
+  // 7. Handle Structural Accent Rings & End Cap
+  const ringDistances = [0.25, 0.50, 0.75];
+  ringDistances.forEach((fraction) => {
+    const ringPos = ferrulePos.clone().add(dir.clone().multiplyScalar(0.09 + handleLength * fraction));
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.082, 0.015, 8, 16));
+    ring.position.copy(ringPos);
+    ring.rotation.z = angle + Math.PI / 2;
+    ring.rotation.x = Math.PI / 2;
+    group.add(ring);
+  });
+
+  const capPos = ferrulePos.clone().add(dir.clone().multiplyScalar(0.09 + handleLength));
+  const baseCap = new THREE.Mesh(new THREE.CylinderGeometry(0.085, 0.085, 0.04, 16));
+  baseCap.position.copy(capPos);
+  baseCap.rotation.z = angle + Math.PI / 2;
+  group.add(baseCap);
 
   return group;
 }
@@ -202,128 +222,191 @@ function createMagnifyingGlassMesh(): THREE.Group {
 function createChessKingMesh(): THREE.Group {
   const group = new THREE.Group();
 
-  // 1. Tiered Pedestal Base
-  const base1 = new THREE.Mesh(new THREE.CylinderGeometry(0.52, 0.58, 0.12, 36));
+  // Tiered Pedestal Base
+  const base1 = new THREE.Mesh(new THREE.CylinderGeometry(0.52, 0.58, 0.12, 28));
   base1.position.set(0, -0.68, 0);
   group.add(base1);
 
-  const base2 = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.48, 0.10, 36));
+  const base2 = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.48, 0.10, 28));
   base2.position.set(0, -0.57, 0);
   group.add(base2);
 
-  const base3 = new THREE.Mesh(new THREE.TorusGeometry(0.38, 0.05, 16, 36));
-  base3.rotation.x = Math.PI / 2;
-  base3.position.set(0, -0.50, 0);
-  group.add(base3);
+  const baseRing = new THREE.Mesh(new THREE.TorusGeometry(0.38, 0.04, 12, 28));
+  baseRing.rotation.x = Math.PI / 2;
+  baseRing.position.set(0, -0.50, 0);
+  group.add(baseRing);
 
-  // 2. Pedestal Waist (Concave body)
-  const pedestal = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.38, 0.32, 36));
-  pedestal.position.set(0, -0.30, 0);
-  group.add(pedestal);
+  // Pedestal Waist
+  const waist = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.38, 0.32, 28));
+  waist.position.set(0, -0.30, 0);
+  group.add(waist);
 
-  const midRing = new THREE.Mesh(new THREE.TorusGeometry(0.32, 0.045, 16, 36));
+  const midRing = new THREE.Mesh(new THREE.TorusGeometry(0.32, 0.04, 12, 28));
   midRing.rotation.x = Math.PI / 2;
   midRing.position.set(0, -0.12, 0);
   group.add(midRing);
 
-  // 3. Upper Torso Chest
-  const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.28, 0.34, 36));
+  // Torso Chest
+  const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.28, 0.34, 28));
   torso.position.set(0, 0.07, 0);
   group.add(torso);
 
-  const shoulderRing = new THREE.Mesh(new THREE.TorusGeometry(0.34, 0.045, 16, 36));
+  const shoulderRing = new THREE.Mesh(new THREE.TorusGeometry(0.34, 0.04, 12, 28));
   shoulderRing.rotation.x = Math.PI / 2;
   shoulderRing.position.set(0, 0.26, 0);
   group.add(shoulderRing);
 
-  // 4. Flared Crown Cup
-  const crownCup = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.26, 0.28, 36));
+  // Crown Cup & Dome
+  const crownCup = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.26, 0.28, 28));
   crownCup.position.set(0, 0.42, 0);
   group.add(crownCup);
 
-  const crownDome = new THREE.Mesh(new THREE.SphereGeometry(0.20, 24, 24));
+  const crownDome = new THREE.Mesh(new THREE.SphereGeometry(0.20, 20, 20));
   crownDome.position.set(0, 0.54, 0);
   group.add(crownDome);
 
-  // 5. Iconic King's Cross on Top
+  const crownRim = new THREE.Mesh(new THREE.TorusGeometry(0.22, 0.035, 12, 24));
+  crownRim.rotation.x = Math.PI / 2;
+  crownRim.position.set(0, 0.64, 0);
+  group.add(crownRim);
+
+  // Iconic King's 3D Cross
   const crossVert = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.24, 0.08));
-  crossVert.position.set(0, 0.74, 0);
+  crossVert.position.set(0, 0.77, 0);
   group.add(crossVert);
 
   const crossHoriz = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.08, 0.08));
-  crossHoriz.position.set(0, 0.78, 0);
+  crossHoriz.position.set(0, 0.81, 0);
   group.add(crossHoriz);
 
   return group;
 }
 
-// 03: SYSTEM BUILD & CREATIVE — 3D Interconnected Framework
+// 03: SYSTEM BUILD & CREATIVE — 3D Interconnected Architectural System
 function createArchitecturalSystemMesh(): THREE.Group {
   const group = new THREE.Group();
 
-  // Central Architectural Core Cube
-  const coreMesh = new THREE.Mesh(new THREE.BoxGeometry(0.44, 0.44, 0.44));
-  coreMesh.rotation.y = Math.PI / 4;
-  group.add(coreMesh);
+  // Central Core 3D Cube
+  const coreBox = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.42, 0.42));
+  coreBox.rotation.x = Math.PI / 6;
+  coreBox.rotation.y = Math.PI / 4;
+  group.add(coreBox);
 
-  // Outer Node Cubes & Spheres at 3D offsets
-  const nodeOffsets: [number, number, number, boolean][] = [
-    [-0.58, 0, 0, true], [0.58, 0, 0, true],
-    [0, -0.58, 0, true], [0, 0.58, 0, true],
-    [0, 0, -0.58, false], [0, 0, 0.58, false],
-    [-0.42, 0.42, 0.42, false], [0.42, 0.42, -0.42, false],
-    [-0.42, -0.42, -0.42, false], [0.42, -0.42, 0.42, false]
+  // Inner Core Sphere
+  const coreSphere = new THREE.Mesh(new THREE.SphereGeometry(0.20, 16, 16));
+  group.add(coreSphere);
+
+  // 6 Primary Axial Spherical Nodes
+  const axialNodes: THREE.Vector3[] = [
+    new THREE.Vector3(0.68, 0, 0),
+    new THREE.Vector3(-0.68, 0, 0),
+    new THREE.Vector3(0, 0.68, 0),
+    new THREE.Vector3(0, -0.68, 0),
+    new THREE.Vector3(0, 0, 0.68),
+    new THREE.Vector3(0, 0, -0.68)
   ];
 
-  nodeOffsets.forEach(([x, y, z, isBox]) => {
-    const nodeGeo = isBox ? new THREE.BoxGeometry(0.22, 0.22, 0.22) : new THREE.SphereGeometry(0.14, 18, 18);
-    const nodeMesh = new THREE.Mesh(nodeGeo);
-    nodeMesh.position.set(x, y, z);
-    group.add(nodeMesh);
+  // 8 Diagonal Corner Spherical Nodes
+  const cubeNodes: THREE.Vector3[] = [
+    new THREE.Vector3(0.42, 0.42, 0.42),
+    new THREE.Vector3(-0.42, 0.42, 0.42),
+    new THREE.Vector3(0.42, -0.42, 0.42),
+    new THREE.Vector3(-0.42, -0.42, 0.42),
+    new THREE.Vector3(0.42, 0.42, -0.42),
+    new THREE.Vector3(-0.42, 0.42, -0.42),
+    new THREE.Vector3(0.42, -0.42, -0.42),
+    new THREE.Vector3(-0.42, -0.42, -0.42)
+  ];
 
-    // Connector Beams to Core
-    const len = Math.sqrt(x*x + y*y + z*z);
-    const beamGeo = new THREE.CylinderGeometry(0.04, 0.04, len, 14);
-    const beamMesh = new THREE.Mesh(beamGeo);
-    beamMesh.position.set(x/2, y/2, z/2);
-    beamMesh.quaternion.setFromUnitVectors(
+  const allNodes = [...axialNodes, ...cubeNodes];
+
+  // Add Sphere meshes for each node
+  allNodes.forEach((pos) => {
+    const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.12, 14, 14));
+    sphere.position.copy(pos);
+    group.add(sphere);
+
+    // Beams connecting node to center
+    const len = pos.length();
+    const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, len, 10));
+    beam.position.copy(pos.clone().multiplyScalar(0.5));
+    beam.quaternion.setFromUnitVectors(
       new THREE.Vector3(0, 1, 0),
-      new THREE.Vector3(x, y, z).normalize()
+      pos.clone().normalize()
     );
-    group.add(beamMesh);
+    group.add(beam);
+  });
+
+  // Perimeter connecting beams between axial nodes
+  const outerBeams: [number, number][] = [
+    [0, 2], [0, 3], [0, 4], [0, 5],
+    [1, 2], [1, 3], [1, 4], [1, 5],
+    [2, 4], [2, 5], [3, 4], [3, 5]
+  ];
+
+  outerBeams.forEach(([i, j]) => {
+    const p1 = axialNodes[i];
+    const p2 = axialNodes[j];
+    const dir = new THREE.Vector3().subVectors(p2, p1);
+    const len = dir.length();
+    const mid = new THREE.Vector3().addVectors(p1, p2).multiplyScalar(0.5);
+
+    const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, len, 10));
+    beam.position.copy(mid);
+    beam.quaternion.setFromUnitVectors(
+      new THREE.Vector3(0, 1, 0),
+      dir.normalize()
+    );
+    group.add(beam);
   });
 
   return group;
 }
 
-// 04: PRECISION LAUNCH — 3D Rocket
+// 04: PRECISION LAUNCH — 3D Rocket with Porthole Window
 function createRocketMesh(): THREE.Group {
   const group = new THREE.Group();
 
-  // Streamlined Cylinder Fuselage
-  const bodyMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 0.85, 32));
+  // Cylindrical Fuselage
+  const bodyMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 0.85, 28));
   bodyMesh.position.set(0, -0.05, 0);
   group.add(bodyMesh);
 
   // Aerodynamic Nose Cone
-  const noseMesh = new THREE.Mesh(new THREE.ConeGeometry(0.28, 0.55, 32));
-  noseMesh.position.set(0, 0.65, 0);
+  const noseMesh = new THREE.Mesh(new THREE.ConeGeometry(0.28, 0.58, 28));
+  noseMesh.position.set(0, 0.665, 0);
   group.add(noseMesh);
 
+  // ICONIC PORTHOLE WINDOW
+  const portholeFrame = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.03, 12, 24));
+  portholeFrame.position.set(0, 0.15, 0.28);
+  group.add(portholeFrame);
+
+  const portholeGlass = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.04, 20));
+  portholeGlass.rotation.x = Math.PI / 2;
+  portholeGlass.position.set(0, 0.15, 0.27);
+  group.add(portholeGlass);
+
+  // Body Belt Ring
+  const bodyRing = new THREE.Mesh(new THREE.TorusGeometry(0.285, 0.025, 10, 28));
+  bodyRing.rotation.x = Math.PI / 2;
+  bodyRing.position.set(0, -0.15, 0);
+  group.add(bodyRing);
+
   // Engine Nozzle
-  const nozzleMesh = new THREE.Mesh(new THREE.ConeGeometry(0.22, 0.24, 24));
+  const nozzleMesh = new THREE.Mesh(new THREE.ConeGeometry(0.22, 0.26, 24));
   nozzleMesh.rotation.x = Math.PI;
-  nozzleMesh.position.set(0, -0.59, 0);
+  nozzleMesh.position.set(0, -0.60, 0);
   group.add(nozzleMesh);
 
-  // 4 Swept-back 3D Fins
+  // 4 Swept 3D Fins
   for (let i = 0; i < 4; i++) {
     const angle = (i * Math.PI) / 2;
     const finShape = new THREE.Shape();
     finShape.moveTo(0, 0);
-    finShape.lineTo(0.35, -0.28);
-    finShape.lineTo(0.35, -0.50);
-    finShape.lineTo(0, -0.35);
+    finShape.lineTo(0.38, -0.30);
+    finShape.lineTo(0.38, -0.52);
+    finShape.lineTo(0, -0.38);
     finShape.closePath();
 
     const finGeo = new THREE.ExtrudeGeometry(finShape, {
@@ -340,8 +423,8 @@ function createRocketMesh(): THREE.Group {
     group.add(finMesh);
   }
 
-  // Thruster Plume
-  const plumeMesh = new THREE.Mesh(new THREE.ConeGeometry(0.24, 0.48, 24));
+  // Thruster Plume Flame
+  const plumeMesh = new THREE.Mesh(new THREE.ConeGeometry(0.24, 0.48, 20));
   plumeMesh.rotation.x = Math.PI;
   plumeMesh.position.set(0, -0.92, 0);
   group.add(plumeMesh);
@@ -349,31 +432,36 @@ function createRocketMesh(): THREE.Group {
   return group;
 }
 
-// 05: OPTIMIZE & SCALE — 3D Upward Growth Arrow & Bar Chart
+// 05: OPTIMIZE & SCALE — 3D Exponential Growth Chart & Upward Arrow
 function createGrowthArrowMesh(): THREE.Group {
   const group = new THREE.Group();
 
-  // 4 3D Bar Chart Columns
-  const colXs = [-0.52, -0.25, 0.02, 0.29];
-  const colHeights = [0.28, 0.48, 0.68, 0.92];
+  // 5 Rising 3D Bar Chart Columns forming a curved graph
+  const colXs = [-0.58, -0.34, -0.10, 0.14, 0.38];
+  const colHeights = [0.18, 0.30, 0.48, 0.72, 1.02];
 
   colXs.forEach((cx, idx) => {
     const h = colHeights[idx];
-    const colMesh = new THREE.Mesh(new THREE.BoxGeometry(0.18, h, 0.18));
-    colMesh.position.set(cx, -0.52 + h / 2, 0);
+    const colMesh = new THREE.Mesh(new THREE.BoxGeometry(0.18, h, 0.22));
+    colMesh.position.set(cx, -0.58 + h / 2, 0);
     group.add(colMesh);
   });
 
+  // Base Foundation Plate
+  const basePlate = new THREE.Mesh(new THREE.BoxGeometry(1.24, 0.08, 0.30));
+  basePlate.position.set(-0.10, -0.62, 0);
+  group.add(basePlate);
+
   // 3D Angled Upward Arrow Shaft
-  const shaftMesh = new THREE.Mesh(new THREE.BoxGeometry(0.14, 1.45, 0.16));
-  shaftMesh.rotation.z = -Math.PI / 3.8;
-  shaftMesh.position.set(-0.02, 0.05, 0.14);
+  const shaftMesh = new THREE.Mesh(new THREE.BoxGeometry(0.16, 1.48, 0.20));
+  shaftMesh.rotation.z = -Math.PI / 3.6;
+  shaftMesh.position.set(-0.02, 0.08, 0.12);
   group.add(shaftMesh);
 
   // 3D Pyramid Arrowhead
-  const headMesh = new THREE.Mesh(new THREE.ConeGeometry(0.36, 0.58, 4));
-  headMesh.rotation.z = -Math.PI / 3.8;
-  headMesh.position.set(0.58, 0.62, 0.14);
+  const headMesh = new THREE.Mesh(new THREE.ConeGeometry(0.38, 0.62, 4));
+  headMesh.rotation.z = -Math.PI / 3.6;
+  headMesh.position.set(0.58, 0.64, 0.12);
   group.add(headMesh);
 
   return group;
@@ -387,17 +475,17 @@ const Process: React.FC = () => {
   const morphStartTimeRef = useRef<number>(0);
 
   // References to hold Three.js objects across renders
-  const targetPointSetsRef = useRef<THREE.Vector3[][]>([]);
+  const targetSegmentSetsRef = useRef<LineSegment[][]>([]);
   const startPositionsRef = useRef<Float32Array | null>(null);
 
-  // Pre-generate all 5 3D point target arrays once
-  if (targetPointSetsRef.current.length === 0) {
-    targetPointSetsRef.current = [
-      samplePointsFromGroup(createMagnifyingGlassMesh(), PARTICLE_COUNT),
-      samplePointsFromGroup(createChessKingMesh(), PARTICLE_COUNT),
-      samplePointsFromGroup(createArchitecturalSystemMesh(), PARTICLE_COUNT),
-      samplePointsFromGroup(createRocketMesh(), PARTICLE_COUNT),
-      samplePointsFromGroup(createGrowthArrowMesh(), PARTICLE_COUNT)
+  // Pre-generate all 5 3D wireframe line segment target sets once
+  if (targetSegmentSetsRef.current.length === 0) {
+    targetSegmentSetsRef.current = [
+      sampleLineSegmentsFromGroup(createMagnifyingGlassMesh(), WIRE_SEGMENTS_COUNT),
+      sampleLineSegmentsFromGroup(createChessKingMesh(), WIRE_SEGMENTS_COUNT),
+      sampleLineSegmentsFromGroup(createArchitecturalSystemMesh(), WIRE_SEGMENTS_COUNT),
+      sampleLineSegmentsFromGroup(createRocketMesh(), WIRE_SEGMENTS_COUNT),
+      sampleLineSegmentsFromGroup(createGrowthArrowMesh(), WIRE_SEGMENTS_COUNT)
     ];
   }
 
@@ -405,6 +493,14 @@ const Process: React.FC = () => {
   useEffect(() => {
     activeIndexRef.current = activeIndex;
     morphStartTimeRef.current = performance.now();
+  }, [activeIndex]);
+
+  // Optional automatic stage cycling every 7 seconds if untouched
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % processSteps.length);
+    }, 7000);
+    return () => clearInterval(timer);
   }, [activeIndex]);
 
   // Main Three.js Scene Setup & Render Loop
@@ -427,50 +523,46 @@ const Process: React.FC = () => {
 
     container.appendChild(renderer.domElement);
 
-    // 2. BufferGeometry Initialization
-    const initialPoints = targetPointSetsRef.current[0];
-    const positions = new Float32Array(PARTICLE_COUNT * 3);
-    const startPositions = new Float32Array(PARTICLE_COUNT * 3);
-    const sizes = new Float32Array(PARTICLE_COUNT);
-    const seeds = new Float32Array(PARTICLE_COUNT);
+    // 2. BufferGeometry Initialization for LineSegments
+    const initialSegments = targetSegmentSetsRef.current[0];
+    const positions = new Float32Array(WIRE_SEGMENTS_COUNT * 6);
+    const startPositions = new Float32Array(WIRE_SEGMENTS_COUNT * 6);
 
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      const pt = initialPoints[i];
-      positions[i * 3] = pt.x;
-      positions[i * 3 + 1] = pt.y;
-      positions[i * 3 + 2] = pt.z;
+    for (let i = 0; i < WIRE_SEGMENTS_COUNT; i++) {
+      const seg = initialSegments[i];
+      const idx = i * 6;
 
-      startPositions[i * 3] = pt.x;
-      startPositions[i * 3 + 1] = pt.y;
-      startPositions[i * 3 + 2] = pt.z;
+      positions[idx] = seg.start.x;
+      positions[idx + 1] = seg.start.y;
+      positions[idx + 2] = seg.start.z;
+      positions[idx + 3] = seg.end.x;
+      positions[idx + 4] = seg.end.y;
+      positions[idx + 5] = seg.end.z;
 
-      sizes[i] = 1.6 + Math.random() * 2.0;
-      seeds[i] = Math.random() * Math.PI * 2;
+      startPositions[idx] = seg.start.x;
+      startPositions[idx + 1] = seg.start.y;
+      startPositions[idx + 2] = seg.start.z;
+      startPositions[idx + 3] = seg.end.x;
+      startPositions[idx + 4] = seg.end.y;
+      startPositions[idx + 5] = seg.end.z;
     }
 
     startPositionsRef.current = startPositions;
 
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
 
-    // 3. Shader Material for Crisp Point-Cloud Particles
+    // 3. Shader Material for Elegant Minimal Wireframe Lines
     const material = new THREE.ShaderMaterial({
       uniforms: {
-        uPixelRatio: { value: Math.min(window.devicePixelRatio || 1, 2) },
-        uColor: { value: new THREE.Color('#F8F8F6') }
+        uColor: { value: new THREE.Color('#FFFFFF') }
       },
       vertexShader: `
-        uniform float uPixelRatio;
-        attribute float aSize;
         varying float vDepth;
 
         void main() {
           vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
           gl_Position = projectionMatrix * mvPosition;
-          
-          // Depth-aware size attenuation (~40% larger for clean continuous form)
-          gl_PointSize = aSize * uPixelRatio * (4.2 / -mvPosition.z);
           vDepth = mvPosition.z;
         }
       `,
@@ -479,14 +571,9 @@ const Process: React.FC = () => {
         varying float vDepth;
 
         void main() {
-          float dist = length(gl_PointCoord - vec2(0.5));
-          if (dist > 0.5) discard;
-          
-          float alpha = smoothstep(0.5, 0.08, dist);
-          
-          // Depth shading (closer = brighter, further = slightly softer)
-          float depthFactor = clamp((-vDepth - 1.2) / 3.0, 0.35, 1.0);
-          gl_FragColor = vec4(uColor, alpha * depthFactor * 0.95);
+          // Subtle depth shading (closer lines = crisp ~0.95, further lines = softer ~0.35)
+          float depthFactor = clamp((-vDepth - 1.0) / 3.2, 0.35, 0.95);
+          gl_FragColor = vec4(uColor, depthFactor);
         }
       `,
       transparent: true,
@@ -494,13 +581,13 @@ const Process: React.FC = () => {
       blending: THREE.AdditiveBlending
     });
 
-    const particleGroup = new THREE.Group();
-    // Slight pitch tilt (10 deg) so 3D depth and tops of objects are visible
-    particleGroup.rotation.x = 0.18;
+    const wireframeGroup = new THREE.Group();
+    // Subtle pitch tilt (10 deg) for optimal 3D perspective
+    wireframeGroup.rotation.x = 0.18;
 
-    const particleSystem = new THREE.Points(geometry, material);
-    particleGroup.add(particleSystem);
-    scene.add(particleGroup);
+    const lineSegmentsSystem = new THREE.LineSegments(geometry, material);
+    wireframeGroup.add(lineSegmentsSystem);
+    scene.add(wireframeGroup);
 
     // 4. Resize Handler
     const handleResize = () => {
@@ -510,7 +597,6 @@ const Process: React.FC = () => {
       camera.aspect = width / (height || 1);
       camera.updateProjectionMatrix();
       renderer.setSize(width, height);
-      material.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio || 1, 2);
     };
 
     handleResize();
@@ -518,7 +604,7 @@ const Process: React.FC = () => {
 
     // 5. Morphing & Render Loop
     let animId: number;
-    const MORPH_DURATION = 1400; // ms
+    const MORPH_DURATION = 1500; // ms
     let prevActiveIndex = 0;
 
     const render = (now: number) => {
@@ -527,7 +613,7 @@ const Process: React.FC = () => {
       // If stage index changed, snapshot current positions as startPositions
       if (currentActiveIndex !== prevActiveIndex) {
         const posAttr = geometry.attributes.position.array as Float32Array;
-        for (let i = 0; i < PARTICLE_COUNT * 3; i++) {
+        for (let i = 0; i < WIRE_SEGMENTS_COUNT * 6; i++) {
           startPositions[i] = posAttr[i];
         }
         prevActiveIndex = currentActiveIndex;
@@ -536,36 +622,40 @@ const Process: React.FC = () => {
       const elapsed = now - morphStartTimeRef.current;
       const morphProgress = Math.min(Math.max(elapsed / MORPH_DURATION, 0), 1);
       
-      // Smooth cubic ease out
-      const ease = 1 - Math.pow(1 - morphProgress, 3);
-      const transitAmount = Math.sin(morphProgress * Math.PI);
+      // Smooth cubic ease in-out
+      const ease = morphProgress < 0.5 
+        ? 4 * morphProgress * morphProgress * morphProgress 
+        : 1 - Math.pow(-2 * morphProgress + 2, 3) / 2;
 
       const posAttr = geometry.attributes.position.array as Float32Array;
-      const targetPoints = targetPointSetsRef.current[currentActiveIndex];
+      const targetSegments = targetSegmentSetsRef.current[currentActiveIndex];
 
-      for (let i = 0; i < PARTICLE_COUNT; i++) {
-        const idx3 = i * 3;
-        const targetPt = targetPoints[i];
+      for (let i = 0; i < WIRE_SEGMENTS_COUNT; i++) {
+        const idx6 = i * 6;
+        const targetSeg = targetSegments[i];
 
-        const startX = startPositions[idx3];
-        const startY = startPositions[idx3 + 1];
-        const startZ = startPositions[idx3 + 2];
+        const s1x = startPositions[idx6];
+        const s1y = startPositions[idx6 + 1];
+        const s1z = startPositions[idx6 + 2];
 
-        // Organic 3D fluid swirl offset during particle reorganization
-        const swirlAngle = seeds[i] + morphProgress * Math.PI * 2.2;
-        const swirlX = Math.sin(swirlAngle) * 0.08 * transitAmount;
-        const swirlY = Math.cos(swirlAngle) * 0.08 * transitAmount;
-        const swirlZ = Math.sin(swirlAngle * 1.4) * 0.08 * transitAmount;
+        const s2x = startPositions[idx6 + 3];
+        const s2y = startPositions[idx6 + 4];
+        const s2z = startPositions[idx6 + 5];
 
-        posAttr[idx3] = startX + (targetPt.x - startX) * ease + swirlX;
-        posAttr[idx3 + 1] = startY + (targetPt.y - startY) * ease + swirlY;
-        posAttr[idx3 + 2] = startZ + (targetPt.z - startZ) * ease + swirlZ;
+        posAttr[idx6] = s1x + (targetSeg.start.x - s1x) * ease;
+        posAttr[idx6 + 1] = s1y + (targetSeg.start.y - s1y) * ease;
+        posAttr[idx6 + 2] = s1z + (targetSeg.start.z - s1z) * ease;
+
+        posAttr[idx6 + 3] = s2x + (targetSeg.end.x - s2x) * ease;
+        posAttr[idx6 + 4] = s2y + (targetSeg.end.y - s2y) * ease;
+        posAttr[idx6 + 5] = s2z + (targetSeg.end.z - s2z) * ease;
       }
 
       geometry.attributes.position.needsUpdate = true;
 
-      // Smooth continuous 3D rotation around Y axis (1 full 360° turn every ~10 seconds)
-      particleGroup.rotation.y += 0.0085;
+      // Smooth continuous 3D compound rotation around Y and X axes
+      wireframeGroup.rotation.y += 0.007;
+      wireframeGroup.rotation.x = 0.18 + Math.sin(now * 0.0006) * 0.04;
 
       renderer.render(scene, camera);
       animId = requestAnimationFrame(render);
@@ -738,7 +828,7 @@ const Process: React.FC = () => {
               {/* Bottom Technical Subtitle Watermark */}
               <div className="flex items-center justify-between text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.2em] text-gray-500 z-10 pointer-events-none pt-2 border-t border-white/5">
                 <span>{processSteps[activeIndex].title}</span>
-                <span className="text-gray-600">2200 3D NODES // ROTATION ACTIVE</span>
+                <span className="text-gray-600">3D WIREFRAME SYSTEM // ROTATION ACTIVE</span>
               </div>
 
             </div>
