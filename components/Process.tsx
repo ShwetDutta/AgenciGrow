@@ -363,71 +363,111 @@ function createArchitecturalSystemMesh(): THREE.Group {
   return group;
 }
 
-// 04: PRECISION LAUNCH — 3D Rocket with Porthole Window
+// 04: PRECISION LAUNCH — 3D Rocket matching the uploaded blueprint
 function createRocketMesh(): THREE.Group {
   const group = new THREE.Group();
 
-  // Cylindrical Fuselage
-  const bodyMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 0.85, 28));
+  // 1. Aerodynamic Bullet/Ogive Nose Cone
+  const noseGeo = new THREE.ConeGeometry(0.34, 0.65, 20, 6);
+  const noseMesh = new THREE.Mesh(noseGeo);
+  noseMesh.position.set(0, 0.625, 0);
+  group.add(noseMesh);
+
+  // Nose Cone Seam Accent Rings
+  const noseRing1 = new THREE.Mesh(new THREE.TorusGeometry(0.18, 0.012, 8, 20));
+  noseRing1.rotation.x = Math.PI / 2;
+  noseRing1.position.set(0, 0.72, 0);
+  group.add(noseRing1);
+
+  const noseRing2 = new THREE.Mesh(new THREE.TorusGeometry(0.28, 0.015, 8, 20));
+  noseRing2.rotation.x = Math.PI / 2;
+  noseRing2.position.set(0, 0.48, 0);
+  group.add(noseRing2);
+
+  // 2. Main Cylindrical Fuselage Body
+  const bodyGeo = new THREE.CylinderGeometry(0.34, 0.34, 0.70, 20, 4);
+  const bodyMesh = new THREE.Mesh(bodyGeo);
   bodyMesh.position.set(0, -0.05, 0);
   group.add(bodyMesh);
 
-  // Aerodynamic Nose Cone
-  const noseMesh = new THREE.Mesh(new THREE.ConeGeometry(0.28, 0.58, 28));
-  noseMesh.position.set(0, 0.665, 0);
-  group.add(noseMesh);
+  // Body Belt Rings
+  const beltTop = new THREE.Mesh(new THREE.TorusGeometry(0.345, 0.018, 8, 20));
+  beltTop.rotation.x = Math.PI / 2;
+  beltTop.position.set(0, 0.22, 0);
+  group.add(beltTop);
 
-  // ICONIC PORTHOLE WINDOW
-  const portholeFrame = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.03, 12, 24));
-  portholeFrame.position.set(0, 0.15, 0.28);
-  group.add(portholeFrame);
+  const beltMid = new THREE.Mesh(new THREE.TorusGeometry(0.345, 0.018, 8, 20));
+  beltMid.rotation.x = Math.PI / 2;
+  beltMid.position.set(0, -0.12, 0);
+  group.add(beltMid);
 
-  const portholeGlass = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.04, 20));
-  portholeGlass.rotation.x = Math.PI / 2;
-  portholeGlass.position.set(0, 0.15, 0.27);
-  group.add(portholeGlass);
+  const beltBottom = new THREE.Mesh(new THREE.TorusGeometry(0.345, 0.018, 8, 20));
+  beltBottom.rotation.x = Math.PI / 2;
+  beltBottom.position.set(0, -0.38, 0);
+  group.add(beltBottom);
 
-  // Body Belt Ring
-  const bodyRing = new THREE.Mesh(new THREE.TorusGeometry(0.285, 0.025, 10, 28));
-  bodyRing.rotation.x = Math.PI / 2;
-  bodyRing.position.set(0, -0.15, 0);
-  group.add(bodyRing);
+  // 3. Iconic Double-Ringed Circular Porthole Window on Front Torso
+  const portholeOuter = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.025, 10, 20));
+  portholeOuter.position.set(0, 0.12, 0.34);
+  group.add(portholeOuter);
 
-  // Engine Nozzle
-  const nozzleMesh = new THREE.Mesh(new THREE.ConeGeometry(0.22, 0.26, 24));
-  nozzleMesh.rotation.x = Math.PI;
-  nozzleMesh.position.set(0, -0.60, 0);
-  group.add(nozzleMesh);
+  const portholeInner = new THREE.Mesh(new THREE.TorusGeometry(0.08, 0.018, 8, 16));
+  portholeInner.position.set(0, 0.12, 0.345);
+  group.add(portholeInner);
 
-  // 4 Swept 3D Fins
+  // 4. Multi-Stage Stepped Engine Thruster Nozzle Base
+  // Tier 1: Upper Neck Collar
+  const neckCyl = new THREE.Mesh(new THREE.CylinderGeometry(0.30, 0.26, 0.10, 20, 2));
+  neckCyl.position.set(0, -0.43, 0);
+  group.add(neckCyl);
+
+  // Tier 2: Mid Flared Thruster Bell
+  const bellGeo = new THREE.CylinderGeometry(0.24, 0.28, 0.12, 20, 2);
+  const bellMesh = new THREE.Mesh(bellGeo);
+  bellMesh.position.set(0, -0.53, 0);
+  group.add(bellMesh);
+
+  // Tier 3: Corrugated Thruster Ring
+  const thrusterRing = new THREE.Mesh(new THREE.TorusGeometry(0.28, 0.022, 8, 20));
+  thrusterRing.rotation.x = Math.PI / 2;
+  thrusterRing.position.set(0, -0.59, 0);
+  group.add(thrusterRing);
+
+  // Tier 4: Lower Nozzle Exit Cone
+  const exitNozzle = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.16, 0.14, 18, 2));
+  exitNozzle.position.set(0, -0.68, 0);
+  group.add(exitNozzle);
+
+  const exitLip = new THREE.Mesh(new THREE.TorusGeometry(0.165, 0.018, 8, 18));
+  exitLip.rotation.x = Math.PI / 2;
+  exitLip.position.set(0, -0.75, 0);
+  group.add(exitLip);
+
+  // 5. Four Symmetrical Swept Retro Fins with Internal Structural Struts
   for (let i = 0; i < 4; i++) {
     const angle = (i * Math.PI) / 2;
     const finShape = new THREE.Shape();
-    finShape.moveTo(0, 0);
-    finShape.lineTo(0.38, -0.30);
-    finShape.lineTo(0.38, -0.52);
-    finShape.lineTo(0, -0.38);
+    finShape.moveTo(0.32, 0.02);
+    finShape.quadraticCurveTo(0.52, -0.25, 0.68, -0.58);
+    finShape.lineTo(0.54, -0.70);
+    finShape.lineTo(0.32, -0.45);
     finShape.closePath();
 
     const finGeo = new THREE.ExtrudeGeometry(finShape, {
-      depth: 0.04,
+      depth: 0.03,
       bevelEnabled: true,
-      bevelSize: 0.015,
-      bevelThickness: 0.015
+      bevelSize: 0.01,
+      bevelThickness: 0.01
     });
     finGeo.center();
 
     const finMesh = new THREE.Mesh(finGeo);
-    finMesh.position.set(Math.cos(angle) * 0.30, -0.32, Math.sin(angle) * 0.30);
+    const radiusOffset = 0.50;
+    const finY = -0.34;
+    finMesh.position.set(Math.cos(angle) * radiusOffset, finY, Math.sin(angle) * radiusOffset);
     finMesh.rotation.y = -angle + Math.PI / 2;
     group.add(finMesh);
   }
-
-  // Thruster Plume Flame
-  const plumeMesh = new THREE.Mesh(new THREE.ConeGeometry(0.24, 0.48, 20));
-  plumeMesh.rotation.x = Math.PI;
-  plumeMesh.position.set(0, -0.92, 0);
-  group.add(plumeMesh);
 
   return group;
 }
