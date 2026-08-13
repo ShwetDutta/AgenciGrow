@@ -36,23 +36,21 @@ export const caseStudies: CaseStudy[] = [
     badge: "CLIENT PARTNER 01",
     logo: "/Photos/muscle-legacy-logo.png",
     logoAlt: "Muscle Legacy Brand Mark",
-    description: "Muscle Legacy required a modern, high-converting client acquisition infrastructure to systematically scale membership trials, replace manual WhatsApp & phone follow-up workflows, and dominate high-intent local fitness search traffic.",
+    description: "Built a custom, high-converting website for Muscle Legacy and managing their complete Instagram presence—handling end-to-end content strategy, on-site filming, post-production editing, and consistent posting.",
     scope: [
-      "Custom high-converting React landing page",
-      "Meta Ads creative strategy & targeting funnel",
-      "Lead capture / inquiry flow",
-      "Conversion-focused website architecture",
-      "Automated follow-up system",
-      "Instant 24/7 WhatsApp CRM lead nurturing pathway",
-      "Automated appointment scheduling workflow"
+      "Custom high-converting website build",
+      "Full-service Instagram management",
+      "On-site content filming & video production",
+      "Post-production video editing & grading",
+      "Strategic content planning & posting",
+      "Brand aesthetics & digital experience"
     ],
     outcomes: [
-      { metric: "3.4x", label: "Increase in Trial Bookings" },
-      { metric: "<2 min", label: "Average Automated Response Time" },
-      { metric: "85%", label: "Lead Qualification Rate" }
+      { metric: "3.4x", label: "Increase in Online Inquiries & Reach" },
+      { metric: "Full-Service", label: "Filming, Editing & Daily Management" },
+      { metric: "100%", label: "Custom Conversion-Focused Website" }
     ],
-    images: [], // Supports project images/screenshots; fallback is an intentional system architecture visual
-    url: "https://musclelegacy.in"
+    images: [] // Supports project images/screenshots; fallback is an intentional system architecture visual
   }
 ];
 
@@ -264,7 +262,7 @@ const CaseStudyCard: React.FC<{ caseStudy: CaseStudy }> = ({ caseStudy }) => {
                 {/* Blueprint Top Tag */}
                 <div className="relative z-10 flex items-center justify-between text-[10px] font-mono text-[#8B8F96]">
                   <span className="bg-white/5 px-2 py-0.5 rounded border border-white/10 text-[#C9CDD3]">
-                    REACT 19 + META ADS + WHATSAPP CRM
+                    CUSTOM WEBSITE + INSTAGRAM MANAGEMENT
                   </span>
                   <ShieldCheck className="w-4 h-4 text-emerald-400/80" />
                 </div>
@@ -272,19 +270,19 @@ const CaseStudyCard: React.FC<{ caseStudy: CaseStudy }> = ({ caseStudy }) => {
                 {/* Center Funnel Visualization Mockup */}
                 <div className="relative z-10 my-auto py-2 grid grid-cols-3 gap-2 text-center">
                   <div className="p-2.5 rounded-lg bg-white/[0.03] border border-white/10 flex flex-col items-center">
-                    <Sparkles className="w-4 h-4 text-[#C9CDD3] mb-1" />
-                    <span className="text-[10px] font-body text-[#F5F5F2] font-medium">Meta Ads</span>
-                    <span className="text-[9px] text-[#8B8F96] mt-0.5">High Intent</span>
+                    <Zap className="w-4 h-4 text-[#C9CDD3] mb-1" />
+                    <span className="text-[10px] font-body text-[#F5F5F2] font-medium">Custom Web</span>
+                    <span className="text-[9px] text-[#8B8F96] mt-0.5">High Convert</span>
                   </div>
                   <div className="p-2.5 rounded-lg bg-white/[0.03] border border-white/10 flex flex-col items-center">
-                    <Zap className="w-4 h-4 text-[#C9CDD3] mb-1" />
-                    <span className="text-[10px] font-body text-[#F5F5F2] font-medium">React LP</span>
-                    <span className="text-[9px] text-[#8B8F96] mt-0.5">Instant Load</span>
+                    <Sparkles className="w-4 h-4 text-[#C9CDD3] mb-1" />
+                    <span className="text-[10px] font-body text-[#F5F5F2] font-medium">Film & Edit</span>
+                    <span className="text-[9px] text-[#8B8F96] mt-0.5">High Quality</span>
                   </div>
                   <div className="p-2.5 rounded-lg bg-white/[0.03] border border-white/10 flex flex-col items-center">
                     <Check className="w-4 h-4 text-emerald-400 mb-1" />
-                    <span className="text-[10px] font-body text-[#F5F5F2] font-medium">CRM Funnel</span>
-                    <span className="text-[9px] text-[#8B8F96] mt-0.5">&lt;2min Reply</span>
+                    <span className="text-[10px] font-body text-[#F5F5F2] font-medium">IG Growth</span>
+                    <span className="text-[9px] text-[#8B8F96] mt-0.5">Daily Posting</span>
                   </div>
                 </div>
 
