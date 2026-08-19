@@ -37,16 +37,16 @@ const About: React.FC = () => {
 
   // Layered parallax transformations
   const bgTextX = useTransform(scrollYProgress, [0, 1], ['0%', '-8%']);
-  const vintageImageY = useTransform(scrollYProgress, [0, 1], ['-15%', '15%']);
-  const heroChessY = useTransform(scrollYProgress, [0, 1], ['-10%', '20%']);
-  const heroChessRotate = useTransform(scrollYProgress, [0, 1], [-3, 5]);
-  const boardPhotoY = useTransform(scrollYProgress, [0, 1], ['5%', '-10%']);
+  const vintageImageY = useTransform(scrollYProgress, [0, 1], ['-10%', '10%']);
+  const heroChessY = useTransform(scrollYProgress, [0, 1], ['-6%', '14%']);
+  const heroChessRotate = useTransform(scrollYProgress, [0, 1], [-2, 4]);
+  const boardPhotoY = useTransform(scrollYProgress, [0, 1], ['3%', '-6%']);
 
   return (
     <section
       id="about"
       ref={containerRef}
-      className="relative py-32 sm:py-44 md:py-56 bg-[#000000] text-[#F5F5F2] overflow-hidden scroll-mt-12 border-t border-white/10 z-10 select-none"
+      className="relative py-20 sm:py-32 md:py-44 bg-[#000000] text-[#F5F5F2] overflow-hidden scroll-mt-12 border-t border-white/10 z-10 select-none"
     >
       {/* 1. OVERSIZED BACKGROUND TYPOGRAPHY: STRATEGY (6-8% Opacity) */}
       <motion.div
@@ -61,13 +61,14 @@ const About: React.FC = () => {
             right-0
             top-1/2
             -translate-y-1/2
-            text-[21vw]
+            text-[18vw]
+            sm:text-[21vw]
             font-heading
             font-serif
             uppercase
             tracking-[-0.06em]
             leading-none
-            text-white/[0.07]
+            text-white/[0.06]
             whitespace-nowrap
             text-center
           "
@@ -80,7 +81,7 @@ const About: React.FC = () => {
       <motion.div
         style={{ y: vintageImageY }}
         aria-hidden="true"
-        className="absolute -top-12 -right-16 sm:-right-24 w-[36rem] sm:w-[48rem] md:w-[56rem] aspect-square pointer-events-none z-0 opacity-15 filter grayscale contrast-150 mix-blend-screen overflow-hidden"
+        className="absolute -top-12 -right-16 sm:-right-24 w-[24rem] sm:w-[36rem] md:w-[48rem] aspect-square pointer-events-none z-0 opacity-15 filter grayscale contrast-150 mix-blend-screen overflow-hidden"
       >
         <img
           src="/Photos/vintage-chess.jpeg"
@@ -89,16 +90,16 @@ const About: React.FC = () => {
         />
       </motion.div>
 
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 relative z-10">
         
         {/* EDITORIAL HEADER LINE: Magazine Metadata */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-16 sm:pb-20 border-b border-white/10 text-[10px] sm:text-xs font-mono uppercase tracking-[0.35em] text-gray-400">
-          <div className="flex items-center gap-3">
-            <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-8 sm:pb-16 border-b border-white/10 text-[9px] sm:text-xs font-mono uppercase tracking-[0.25em] sm:tracking-[0.35em] text-gray-400">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <span className="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-white animate-pulse" />
             <span>WHY AGENCIGROW</span>
           </div>
 
-          <div className="flex items-center gap-6 text-gray-500">
+          <div className="flex items-center gap-4 sm:gap-6 text-gray-500">
             <span>CHENNAI • INDIA</span>
             <span className="hidden sm:inline">•</span>
             <span>EST. 2026</span>
@@ -106,19 +107,19 @@ const About: React.FC = () => {
         </div>
 
         {/* ASYMMETRICAL EDITORIAL HERO COMPOSITION */}
-        <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-start pt-16 sm:pt-24 pb-20 sm:pb-32">
+        <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center pt-10 sm:pt-20 pb-12 sm:pb-24">
           
           {/* Left/Center Column: High Fashion Serif Headline & Narrow Paragraph */}
-          <div className="lg:col-span-8 z-20 space-y-14 sm:space-y-16">
+          <div className="lg:col-span-8 z-20 space-y-8 sm:space-y-14">
             
             {/* Headline revealed line-by-line */}
-            <div className="space-y-1 sm:space-y-3 overflow-hidden font-heading font-serif">
+            <div className="space-y-1 sm:space-y-2 overflow-hidden font-heading font-serif">
               <motion.div
                 initial={{ y: '100%', opacity: 0 }}
                 whileInView={{ y: '0%', opacity: 1 }}
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-                className="text-6xl sm:text-8xl md:text-9xl lg:text-[7.5rem] xl:text-[9rem] font-normal uppercase tracking-tighter leading-[0.85] text-white"
+                className="text-[2.75rem] xs:text-5xl sm:text-7xl md:text-8xl lg:text-[7rem] xl:text-[8.5rem] font-normal uppercase tracking-tighter leading-[0.88] text-white"
               >
                 GROWTH
               </motion.div>
@@ -128,7 +129,7 @@ const About: React.FC = () => {
                 whileInView={{ y: '0%', opacity: 1 }}
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ duration: 0.9, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
-                className="text-6xl sm:text-8xl md:text-9xl lg:text-[7.5rem] xl:text-[9rem] font-normal uppercase tracking-tighter leading-[0.85] text-gray-400 pl-6 sm:pl-16 italic"
+                className="text-[2.75rem] xs:text-5xl sm:text-7xl md:text-8xl lg:text-[7rem] xl:text-[8.5rem] font-normal uppercase tracking-tighter leading-[0.88] text-gray-400 pl-4 sm:pl-16 italic"
               >
                 IS
               </motion.div>
@@ -138,7 +139,7 @@ const About: React.FC = () => {
                 whileInView={{ y: '0%', opacity: 1 }}
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ duration: 0.9, delay: 0.24, ease: [0.16, 1, 0.3, 1] }}
-                className="text-6xl sm:text-8xl md:text-9xl lg:text-[7.5rem] xl:text-[9rem] font-normal uppercase tracking-tighter leading-[0.85] text-white"
+                className="text-[2.75rem] xs:text-5xl sm:text-7xl md:text-8xl lg:text-[7rem] xl:text-[8.5rem] font-normal uppercase tracking-tighter leading-[0.88] text-white"
               >
                 DESIGNED.
               </motion.div>
@@ -150,9 +151,9 @@ const About: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.85, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="max-w-md sm:max-w-lg pt-4 pl-4 sm:pl-8 border-l border-white/20 space-y-4"
+              className="max-w-md sm:max-w-lg pt-2 sm:pt-4 pl-4 sm:pl-8 border-l border-white/20 space-y-4"
             >
-              <p className="text-base sm:text-xl font-light font-body text-gray-300 leading-relaxed tracking-tight">
+              <p className="text-sm sm:text-lg lg:text-xl font-light font-body text-gray-300 leading-relaxed tracking-tight">
                 Growth isn't accidental. It's built through thoughtful strategy, connected systems, and consistent execution. At AgenciGrow, every website, automation, campaign, and decision works together to create sustainable business growth instead of short term wins.
               </p>
             </motion.div>
@@ -161,12 +162,12 @@ const About: React.FC = () => {
           {/* Right Floating Visual: IMAGE 1 - CHESS-PIECE (Hero Visual) */}
           <motion.div
             style={{ y: heroChessY, rotate: heroChessRotate }}
-            className="lg:col-span-4 relative flex items-center justify-center lg:justify-end min-h-[400px] sm:min-h-[520px] lg:min-h-[620px] -mt-8 lg:-mt-16 z-20"
+            className="lg:col-span-4 relative flex items-center justify-center lg:justify-end min-h-[260px] sm:min-h-[400px] lg:min-h-[580px] z-20"
           >
             <motion.div
-              animate={{ y: [0, -16, 0] }}
+              animate={{ y: [0, -12, 0] }}
               transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut' }}
-              className="relative w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl aspect-square flex items-center justify-center"
+              className="relative w-full max-w-[260px] sm:max-w-sm md:max-w-md lg:max-w-xl aspect-square flex items-center justify-center"
             >
               <img
                 src="/Photos/chess-piece.jpg"
@@ -180,13 +181,13 @@ const About: React.FC = () => {
         </div>
 
         {/* INTERMEDIATE EDITORIAL STRIP: IMAGE 3 - CHESS-BOARD (Small Tightly Cropped Accent) */}
-        <div className="my-16 sm:my-24 py-12 border-y border-white/10 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+        <div className="my-8 sm:my-16 py-8 sm:py-12 border-y border-white/10 grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-center">
           
-          <div className="md:col-span-5 flex items-center gap-6">
+          <div className="md:col-span-6 flex items-center gap-4 sm:gap-6">
             {/* Tightly cropped small editorial photo accent */}
             <motion.div
               style={{ y: boardPhotoY }}
-              className="w-28 h-28 sm:w-36 sm:h-36 flex-shrink-0 overflow-hidden rounded-sm grayscale contrast-125 border border-white/20 p-1 bg-black"
+              className="w-20 h-20 sm:w-32 sm:h-32 flex-shrink-0 overflow-hidden rounded-sm grayscale contrast-125 border border-white/20 p-1 bg-black"
             >
               <img
                 src="/Photos/chess-board.jpeg"
@@ -204,7 +205,7 @@ const About: React.FC = () => {
           </div>
 
           {/* Magazine Capabilities Tags */}
-          <div className="md:col-span-7 flex flex-wrap items-center justify-start md:justify-end gap-x-6 gap-y-3 text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-gray-400">
+          <div className="md:col-span-6 flex flex-wrap items-center justify-start md:justify-end gap-x-4 sm:gap-x-6 gap-y-2 text-[9px] sm:text-xs font-mono uppercase tracking-[0.2em] sm:tracking-[0.3em] text-gray-400">
             {editorialLabels.map((label, idx) => (
               <React.Fragment key={label}>
                 <span className="hover:text-white transition-colors cursor-default">{label}</span>
@@ -215,41 +216,41 @@ const About: React.FC = () => {
 
         </div>
 
-        {/* FOUR MINIMALIST EDITORIAL PRINCIPLES (No Cards, Magazine Columns Layout) */}
-        <div className="pt-12 sm:pt-16">
+        {/* FOUR MINIMALIST EDITORIAL PRINCIPLES */}
+        <div className="pt-8 sm:pt-14">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-40px' }}
             transition={{ duration: 0.7 }}
-            className="mb-12 flex items-center justify-between text-xs font-mono uppercase tracking-[0.3em] text-gray-500"
+            className="mb-8 sm:mb-12 flex items-center justify-between text-[10px] sm:text-xs font-mono uppercase tracking-[0.25em] text-gray-500"
           >
             <span>CORE ARCHITECTURE</span>
             <span>SYSTEM PRINCIPLES</span>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 sm:gap-14 lg:gap-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 lg:gap-10">
             {editorialPrinciples.map((principle, idx) => (
               <motion.div
                 key={principle.title}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.8, delay: idx * 0.12, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.8, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
                 className="flex flex-col justify-start group"
               >
-                <div className="border-b border-white/15 pb-4 mb-6 flex items-center justify-between">
+                <div className="border-b border-white/15 pb-3 mb-4 sm:mb-6 flex items-center justify-between">
                   <span className="text-xs font-mono text-gray-500 tracking-widest uppercase">
                     {principle.code}
                   </span>
                   <span className="w-1.5 h-1.5 rounded-full bg-gray-600 group-hover:bg-white transition-colors" />
                 </div>
 
-                <h3 className="text-xl sm:text-2xl font-body font-medium text-white mb-3 tracking-tight group-hover:text-gray-300 transition-colors">
+                <h3 className="text-lg sm:text-2xl font-body font-medium text-white mb-2 sm:mb-3 tracking-tight group-hover:text-gray-300 transition-colors">
                   {principle.title}
                 </h3>
 
-                <p className="text-sm font-body font-light text-gray-400 leading-relaxed">
+                <p className="text-xs sm:text-sm font-body font-light text-gray-400 leading-relaxed">
                   {principle.description}
                 </p>
               </motion.div>

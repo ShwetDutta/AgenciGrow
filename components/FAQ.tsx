@@ -43,20 +43,20 @@ const FAQ: React.FC = () => {
   };
 
   return (
-    <section id="faq" className="py-24 sm:py-32 bg-[#000000] text-[#F5F5F2] relative z-10 scroll-mt-12 border-t border-white/10 overflow-hidden select-none">
+    <section id="faq" className="py-20 sm:py-32 md:py-40 bg-[#000000] text-[#F5F5F2] relative z-10 scroll-mt-12 border-t border-white/10 overflow-hidden select-none font-body">
       
       {/* Oversized Background Typography */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 flex items-center justify-center">
-        <span className="text-[22vw] font-heading font-serif uppercase tracking-[-0.07em] leading-none text-white/[0.04] whitespace-nowrap select-none">
+        <span className="text-[18vw] sm:text-[22vw] font-heading font-serif uppercase tracking-[-0.07em] leading-none text-white/[0.04] whitespace-nowrap select-none">
           QUESTIONS
         </span>
       </div>
 
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 relative z-10">
         
         {/* Large Editorial Headline */}
-        <div className="mb-16 sm:mb-20 lg:mb-24">
-          <div className="flex items-center gap-2 text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-gray-400 mb-6">
+        <div className="mb-12 sm:mb-20 lg:mb-24 font-heading font-serif">
+          <div className="flex items-center gap-2 text-[9px] sm:text-xs font-mono uppercase tracking-[0.25em] sm:tracking-[0.3em] text-gray-400 mb-4 sm:mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-white/80" />
             <span>TRANSPARENCY & CLARITY</span>
           </div>
@@ -66,7 +66,7 @@ const FAQ: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-heading font-serif font-normal uppercase tracking-tighter text-white leading-[0.9]"
+            className="text-3xl xs:text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-normal uppercase tracking-tighter text-white leading-[0.9]"
           >
             FREQUENTLY<br />
             <span className="text-gray-400 italic font-serif">ASKED</span><br />
@@ -81,17 +81,17 @@ const FAQ: React.FC = () => {
             return (
               <div
                 key={idx}
-                className="border-b border-white/15 py-6 sm:py-8 lg:py-10 transition-colors duration-200"
+                className="border-b border-white/15 py-5 sm:py-8 lg:py-10 transition-colors duration-200"
               >
                 <button
                   onClick={() => toggle(idx)}
-                  className="w-full text-left flex items-start sm:items-center justify-between gap-4 sm:gap-8 group focus:outline-none cursor-pointer"
+                  className="w-full text-left flex items-start sm:items-center justify-between gap-3 sm:gap-8 group focus:outline-none cursor-pointer min-h-[44px]"
                 >
-                  <div className="flex items-start sm:items-center gap-4 sm:gap-8 min-w-0 pr-2">
-                    <span className="font-mono text-xs sm:text-sm text-gray-500 uppercase tracking-widest shrink-0 pt-1 sm:pt-0 w-7 sm:w-10">
+                  <div className="flex items-start sm:items-center gap-3 sm:gap-8 min-w-0 pr-2">
+                    <span className="font-mono text-xs sm:text-sm text-gray-500 uppercase tracking-widest shrink-0 pt-1 sm:pt-0 w-6 sm:w-10">
                       {faq.num}
                     </span>
-                    <span className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-body font-normal text-white tracking-[-0.01em] group-hover:text-gray-300 transition-colors leading-snug">
+                    <span className="text-base sm:text-xl md:text-2xl lg:text-3xl font-body font-normal text-white tracking-[-0.01em] group-hover:text-gray-300 transition-colors leading-snug">
                       {faq.question}
                     </span>
                   </div>
@@ -114,7 +114,7 @@ const FAQ: React.FC = () => {
                       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                       className="overflow-hidden"
                     >
-                      <div className="pt-4 sm:pt-6 pl-11 sm:pl-18 max-w-3xl text-sm sm:text-base md:text-lg text-gray-400 font-light leading-relaxed">
+                      <div className="pt-3 sm:pt-6 pl-9 sm:pl-18 max-w-3xl text-xs sm:text-base md:text-lg text-gray-400 font-light leading-relaxed">
                         {faq.answer}
                       </div>
                     </motion.div>

@@ -86,26 +86,26 @@ const CaseStudyCard: React.FC<{ caseStudy: CaseStudy }> = ({ caseStudy }) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="w-full bg-[#080809] border border-white/10 rounded-3xl p-6 sm:p-10 lg:p-12 relative overflow-hidden"
+      className="w-full bg-[#080809] border border-white/10 rounded-2xl sm:rounded-3xl p-4 xs:p-6 sm:p-10 lg:p-12 relative overflow-hidden"
     >
       {/* Background Subtle Gradient Glow */}
       <div className="absolute -top-32 -right-32 w-96 h-96 bg-white/[0.015] rounded-full blur-3xl pointer-events-none" />
 
       {/* Main Grid: Left Primary (Identity + Scope) | Right Secondary (Proof + Outcomes) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-14 items-start">
         
         {/* LEFT / PRIMARY AREA */}
-        <div className="lg:col-span-7 flex flex-col justify-between space-y-8">
+        <div className="lg:col-span-7 flex flex-col justify-between space-y-6 sm:space-y-8">
           
           {/* Header Metadata */}
-          <div className="space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-6">
-              <div className="flex items-center gap-3">
-                <span className="text-[10px] font-mono tracking-[0.2em] text-[#8B8F96] uppercase bg-white/5 border border-white/10 px-3 py-1 rounded-full">
+          <div className="space-y-5 sm:space-y-6">
+            <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4 border-b border-white/10 pb-5 sm:pb-6">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                <span className="text-[9px] sm:text-[10px] font-mono tracking-[0.2em] text-[#8B8F96] uppercase bg-white/5 border border-white/10 px-2.5 sm:px-3 py-1 rounded-full">
                   CLIENT {caseStudy.clientNumber}
                 </span>
                 {caseStudy.badge && (
-                  <span className="text-[10px] font-body tracking-[0.15em] text-[#C9CDD3] uppercase bg-white/[0.03] border border-white/5 px-3 py-1 rounded-full">
+                  <span className="text-[9px] sm:text-[10px] font-body tracking-[0.15em] text-[#C9CDD3] uppercase bg-white/[0.03] border border-white/5 px-2.5 sm:px-3 py-1 rounded-full">
                     {caseStudy.badge}
                   </span>
                 )}
@@ -116,7 +116,7 @@ const CaseStudyCard: React.FC<{ caseStudy: CaseStudy }> = ({ caseStudy }) => {
                   href={caseStudy.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-xs font-body text-[#8B8F96] hover:text-[#F5F5F2] uppercase tracking-wider transition-colors group"
+                  className="inline-flex items-center gap-2 text-xs font-body text-[#8B8F96] hover:text-[#F5F5F2] uppercase tracking-wider transition-colors group min-h-[44px]"
                 >
                   <span>{caseStudy.url.replace(/^https?:\/\//, '')}</span>
                   <ArrowUpRight className="w-3.5 h-3.5 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -125,56 +125,56 @@ const CaseStudyCard: React.FC<{ caseStudy: CaseStudy }> = ({ caseStudy }) => {
             </div>
 
             {/* Client Logo & Title Block */}
-            <div className="pt-2">
-              <div className="mb-4">
+            <div className="pt-1 sm:pt-2">
+              <div className="mb-3 sm:mb-4">
                 {caseStudy.logo && !logoError ? (
                   <img
                     src={caseStudy.logo}
                     alt={caseStudy.logoAlt || `${caseStudy.client} logo`}
                     onError={() => setLogoError(true)}
-                    className="h-10 sm:h-12 w-auto object-contain max-w-[220px]"
+                    className="h-9 sm:h-12 w-auto object-contain max-w-[200px] sm:max-w-[220px]"
                   />
                 ) : (
                   <MuscleLegacyBrandLogo />
                 )}
               </div>
 
-              <h3 className="text-3xl sm:text-4xl lg:text-5xl font-heading text-[#F5F5F2] tracking-tight mb-2">
+              <h3 className="text-2xl xs:text-3xl sm:text-4xl lg:text-5xl font-heading text-[#F5F5F2] tracking-tight mb-2">
                 {caseStudy.client}
               </h3>
-              <p className="text-xs sm:text-sm font-body text-[#8B8F96] uppercase tracking-[0.2em] font-medium">
+              <p className="text-[11px] sm:text-xs md:text-sm font-body text-[#8B8F96] uppercase tracking-[0.18em] sm:tracking-[0.2em] font-medium">
                 {caseStudy.category}
               </p>
             </div>
 
             {/* Description / Challenge */}
-            <p className="text-sm sm:text-base text-[#C9CDD3] font-body font-light leading-relaxed">
+            <p className="text-xs sm:text-sm md:text-base text-[#C9CDD3] font-body font-light leading-relaxed">
               {caseStudy.description}
             </p>
           </div>
 
           {/* Scope Delivered */}
-          <div className="pt-6 border-t border-white/10 space-y-4">
+          <div className="pt-5 sm:pt-6 border-t border-white/10 space-y-4">
             <div className="flex items-center justify-between">
-              <h4 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#8B8F96] font-body flex items-center gap-2">
+              <h4 className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.2em] text-[#8B8F96] font-body flex items-center gap-2">
                 <Layers className="w-3.5 h-3.5 text-[#8B8F96]" />
                 <span>System Delivered & Scope</span>
               </h4>
-              <span className="text-[10px] text-[#8B8F96] font-mono">
+              <span className="text-[9px] sm:text-[10px] text-[#8B8F96] font-mono">
                 {caseStudy.scope.length} MODULES
               </span>
             </div>
 
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 pt-1">
               {caseStudy.scope.map((item, idx) => (
                 <li 
                   key={idx} 
-                  className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/5 hover:border-white/15 transition-colors group"
+                  className="flex items-start gap-2.5 sm:gap-3 p-2.5 sm:p-3 rounded-xl bg-white/[0.02] border border-white/5 hover:border-white/15 transition-colors group"
                 >
                   <div className="w-4 h-4 rounded-full bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:border-white/30 transition-colors">
                     <Check className="w-2.5 h-2.5 text-[#F5F5F2]" />
                   </div>
-                  <span className="text-xs text-[#C9CDD3] font-body font-light leading-snug">
+                  <span className="text-[11px] sm:text-xs text-[#C9CDD3] font-body font-light leading-snug">
                     {item}
                   </span>
                 </li>
@@ -184,7 +184,7 @@ const CaseStudyCard: React.FC<{ caseStudy: CaseStudy }> = ({ caseStudy }) => {
 
           {/* Testimonial Optional */}
           {caseStudy.testimonial && (
-            <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/10 italic text-xs text-[#C9CDD3] font-body">
+            <div className="p-4 sm:p-5 rounded-2xl bg-white/[0.02] border border-white/10 italic text-xs text-[#C9CDD3] font-body">
               "{caseStudy.testimonial.quote}"
               <div className="mt-2 text-[10px] uppercase font-semibold text-[#8B8F96] not-italic">
                 — {caseStudy.testimonial.author}, {caseStudy.testimonial.role}
@@ -199,7 +199,7 @@ const CaseStudyCard: React.FC<{ caseStudy: CaseStudy }> = ({ caseStudy }) => {
                 href={caseStudy.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/15 hover:border-white/30 text-xs font-semibold text-[#F5F5F2] uppercase tracking-widest font-body transition-all group"
+                className="inline-flex items-center gap-2.5 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/15 hover:border-white/30 text-xs font-semibold text-[#F5F5F2] uppercase tracking-widest font-body transition-all group min-h-[44px]"
               >
                 <span>Explore Live System</span>
                 <ExternalLink className="w-3.5 h-3.5 text-[#8B8F96] group-hover:text-[#F5F5F2] transition-colors" />
@@ -209,15 +209,15 @@ const CaseStudyCard: React.FC<{ caseStudy: CaseStudy }> = ({ caseStudy }) => {
         </div>
 
         {/* RIGHT / SECONDARY AREA */}
-        <div className="lg:col-span-5 flex flex-col space-y-8 h-full justify-between">
+        <div className="lg:col-span-5 flex flex-col space-y-6 sm:space-y-8 h-full justify-between">
           
           {/* PROOF VISUAL AREA */}
-          <div className="w-full bg-[#030304] border border-white/10 rounded-2xl p-5 sm:p-6 relative overflow-hidden group">
+          <div className="w-full bg-[#030304] border border-white/10 rounded-xl sm:rounded-2xl p-4 sm:p-6 relative overflow-hidden group">
             {/* Visual Frame Header */}
-            <div className="flex items-center justify-between pb-4 mb-4 border-b border-white/10 text-[10px] font-mono tracking-widest text-[#8B8F96] uppercase">
+            <div className="flex items-center justify-between pb-3 sm:pb-4 mb-3 sm:mb-4 border-b border-white/10 text-[9px] sm:text-[10px] font-mono tracking-widest text-[#8B8F96] uppercase">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-500/80 animate-pulse" />
-                <span>SELECTED SYSTEM ARCHITECTURE</span>
+                <span>SELECTED ARCHITECTURE</span>
               </div>
               <span>PROVED // ML-01</span>
             </div>
@@ -237,7 +237,7 @@ const CaseStudyCard: React.FC<{ caseStudy: CaseStudy }> = ({ caseStudy }) => {
                       <button
                         key={i}
                         onClick={() => setActiveImageIndex(i)}
-                        className={`w-14 h-10 rounded-lg overflow-hidden border transition-all ${
+                        className={`w-14 h-10 rounded-lg overflow-hidden border transition-all min-h-[40px] cursor-pointer ${
                           i === activeImageIndex ? 'border-white/80 opacity-100' : 'border-white/10 opacity-50 hover:opacity-80'
                         }`}
                       >
@@ -249,7 +249,7 @@ const CaseStudyCard: React.FC<{ caseStudy: CaseStudy }> = ({ caseStudy }) => {
               </div>
             ) : (
               /* Intentional Dark Blueprint / Visual Placeholder State */
-              <div className="relative aspect-[16/10] w-full rounded-xl bg-[#0B0B0D] border border-white/10 p-5 flex flex-col justify-between overflow-hidden">
+              <div className="relative aspect-[16/10] w-full rounded-xl bg-[#0B0B0D] border border-white/10 p-3.5 sm:p-5 flex flex-col justify-between overflow-hidden">
                 {/* Subtle Grid Background */}
                 <div 
                   className="absolute inset-0 opacity-10 pointer-events-none"
@@ -260,34 +260,34 @@ const CaseStudyCard: React.FC<{ caseStudy: CaseStudy }> = ({ caseStudy }) => {
                 />
 
                 {/* Blueprint Top Tag */}
-                <div className="relative z-10 flex items-center justify-between text-[10px] font-mono text-[#8B8F96]">
-                  <span className="bg-white/5 px-2 py-0.5 rounded border border-white/10 text-[#C9CDD3]">
-                    CUSTOM WEBSITE + INSTAGRAM MANAGEMENT
+                <div className="relative z-10 flex items-center justify-between text-[9px] sm:text-[10px] font-mono text-[#8B8F96]">
+                  <span className="bg-white/5 px-2 py-0.5 rounded border border-white/10 text-[#C9CDD3] truncate mr-2">
+                    CUSTOM WEB + IG GROWTH
                   </span>
-                  <ShieldCheck className="w-4 h-4 text-emerald-400/80" />
+                  <ShieldCheck className="w-4 h-4 text-emerald-400/80 shrink-0" />
                 </div>
 
                 {/* Center Funnel Visualization Mockup */}
-                <div className="relative z-10 my-auto py-2 grid grid-cols-3 gap-2 text-center">
-                  <div className="p-2.5 rounded-lg bg-white/[0.03] border border-white/10 flex flex-col items-center">
-                    <Zap className="w-4 h-4 text-[#C9CDD3] mb-1" />
-                    <span className="text-[10px] font-body text-[#F5F5F2] font-medium">Custom Web</span>
-                    <span className="text-[9px] text-[#8B8F96] mt-0.5">High Convert</span>
+                <div className="relative z-10 my-auto py-2 grid grid-cols-3 gap-1.5 sm:gap-2 text-center">
+                  <div className="p-1.5 sm:p-2.5 rounded-lg bg-white/[0.03] border border-white/10 flex flex-col items-center">
+                    <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#C9CDD3] mb-1" />
+                    <span className="text-[9px] sm:text-[10px] font-body text-[#F5F5F2] font-medium">Custom Web</span>
+                    <span className="text-[8px] sm:text-[9px] text-[#8B8F96] mt-0.5">High Convert</span>
                   </div>
-                  <div className="p-2.5 rounded-lg bg-white/[0.03] border border-white/10 flex flex-col items-center">
-                    <Sparkles className="w-4 h-4 text-[#C9CDD3] mb-1" />
-                    <span className="text-[10px] font-body text-[#F5F5F2] font-medium">Film & Edit</span>
-                    <span className="text-[9px] text-[#8B8F96] mt-0.5">High Quality</span>
+                  <div className="p-1.5 sm:p-2.5 rounded-lg bg-white/[0.03] border border-white/10 flex flex-col items-center">
+                    <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#C9CDD3] mb-1" />
+                    <span className="text-[9px] sm:text-[10px] font-body text-[#F5F5F2] font-medium">Film & Edit</span>
+                    <span className="text-[8px] sm:text-[9px] text-[#8B8F96] mt-0.5">High Quality</span>
                   </div>
-                  <div className="p-2.5 rounded-lg bg-white/[0.03] border border-white/10 flex flex-col items-center">
-                    <Check className="w-4 h-4 text-emerald-400 mb-1" />
-                    <span className="text-[10px] font-body text-[#F5F5F2] font-medium">IG Growth</span>
-                    <span className="text-[9px] text-[#8B8F96] mt-0.5">Daily Posting</span>
+                  <div className="p-1.5 sm:p-2.5 rounded-lg bg-white/[0.03] border border-white/10 flex flex-col items-center">
+                    <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400 mb-1" />
+                    <span className="text-[9px] sm:text-[10px] font-body text-[#F5F5F2] font-medium">IG Growth</span>
+                    <span className="text-[8px] sm:text-[9px] text-[#8B8F96] mt-0.5">Daily Posting</span>
                   </div>
                 </div>
 
                 {/* Blueprint Footer */}
-                <div className="relative z-10 flex items-center justify-between text-[10px] font-body text-[#8B8F96] pt-2 border-t border-white/5">
+                <div className="relative z-10 flex items-center justify-between text-[9px] sm:text-[10px] font-body text-[#8B8F96] pt-1.5 sm:pt-2 border-t border-white/5">
                   <span className="font-mono text-[#C9CDD3]">SYSTEM VERIFIED</span>
                   <span className="text-emerald-400 font-medium">100% OPERATIONAL</span>
                 </div>
@@ -296,21 +296,21 @@ const CaseStudyCard: React.FC<{ caseStudy: CaseStudy }> = ({ caseStudy }) => {
           </div>
 
           {/* KEY OUTCOMES / METRICS BLOCK */}
-          <div className="bg-[#050506] border border-white/10 p-6 sm:p-8 rounded-2xl space-y-6">
-            <div className="flex items-center justify-between border-b border-white/10 pb-4">
-              <h4 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#8B8F96] font-body">
+          <div className="bg-[#050506] border border-white/10 p-5 sm:p-8 rounded-xl sm:rounded-2xl space-y-5 sm:space-y-6">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3 sm:pb-4">
+              <h4 className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.2em] text-[#8B8F96] font-body">
                 Key Outcomes
               </h4>
-              <span className="text-[10px] font-mono text-[#8B8F96] uppercase">VERIFIED METRICS</span>
+              <span className="text-[9px] sm:text-[10px] font-mono text-[#8B8F96] uppercase">VERIFIED METRICS</span>
             </div>
 
-            <div className="space-y-6 divide-y divide-white/10">
+            <div className="space-y-5 sm:space-y-6 divide-y divide-white/10">
               {caseStudy.outcomes.map((item, idx) => (
-                <div key={idx} className={idx === 0 ? "" : "pt-6"}>
-                  <div className="text-4xl sm:text-5xl lg:text-6xl font-heading text-[#F5F5F2] font-normal tracking-tight leading-none mb-2">
+                <div key={idx} className={idx === 0 ? "" : "pt-5 sm:pt-6"}>
+                  <div className="text-3xl xs:text-4xl sm:text-5xl lg:text-6xl font-heading text-[#F5F5F2] font-normal tracking-tight leading-none mb-1.5 sm:mb-2">
                     {item.metric}
                   </div>
-                  <p className="text-xs sm:text-sm font-body text-[#8B8F96] font-light leading-snug">
+                  <p className="text-[11px] sm:text-xs md:text-sm font-body text-[#8B8F96] font-light leading-snug">
                     {item.label}
                   </p>
                 </div>
@@ -331,17 +331,17 @@ const Work: React.FC = () => {
   const selectedStudy = caseStudies.find(cs => cs.id === activeClient) || caseStudies[0];
 
   return (
-    <section id="work" className="py-24 sm:py-32 bg-[#0A0A0B] relative z-10 scroll-mt-12 border-t border-white/10">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+    <section id="work" className="py-20 sm:py-32 md:py-40 bg-[#0A0A0B] relative z-10 scroll-mt-12 border-t border-white/10 font-body">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16">
         
-        {/* SECTION INTRO (Upper 25-30%) */}
-        <div className="max-w-3xl mb-12 sm:mb-16">
+        {/* SECTION INTRO */}
+        <div className="max-w-3xl mb-10 sm:mb-16">
           <motion.p
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-[11px] font-semibold tracking-[0.25em] uppercase text-[#8B8F96] mb-4 font-body"
+            className="text-[9px] sm:text-[11px] font-semibold tracking-[0.25em] uppercase text-[#8B8F96] mb-3 sm:mb-4 font-body"
           >
             // CLIENT WORK & PROOF
           </motion.p>
@@ -351,7 +351,7 @@ const Work: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading text-[#F5F5F2] tracking-tight leading-[1.12] mb-6"
+            className="text-3xl xs:text-4xl sm:text-5xl lg:text-6xl font-heading text-[#F5F5F2] tracking-tight leading-[1.12] mb-4 sm:mb-6"
           >
             Deep-dive client partnerships.
           </motion.h2>
@@ -361,7 +361,7 @@ const Work: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-base sm:text-lg text-[#8B8F96] font-body font-light leading-relaxed"
+            className="text-sm sm:text-base md:text-lg text-[#8B8F96] font-body font-light leading-relaxed"
           >
             “We focus on building deep, high-impact growth systems for a small number of active client relationships rather than maintaining a vanity portfolio wall.”
           </motion.p>
@@ -376,7 +376,7 @@ const Work: React.FC = () => {
                 <button
                   key={study.id}
                   onClick={() => setActiveClient(study.id)}
-                  className={`px-5 py-2.5 rounded-full text-xs font-body font-medium transition-all duration-300 flex items-center gap-2.5 flex-shrink-0 border ${
+                  className={`px-4 sm:px-5 py-2.5 rounded-full text-xs font-body font-medium transition-all duration-300 flex items-center gap-2.5 flex-shrink-0 border min-h-[44px] cursor-pointer ${
                     isActive
                       ? 'bg-white text-black border-white shadow-lg'
                       : 'bg-white/5 text-[#8B8F96] hover:text-[#F5F5F2] border-white/10 hover:border-white/20'
@@ -392,16 +392,16 @@ const Work: React.FC = () => {
           </div>
         ) : (
           <div className="flex items-center gap-3 mb-8">
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs font-body text-[#C9CDD3]">
+            <div className="inline-flex items-center gap-2 sm:gap-2.5 px-3.5 sm:px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs font-body text-[#C9CDD3]">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              <span className="font-mono text-[10px] text-[#8B8F96]">FEATURED CASE STUDY 01</span>
+              <span className="font-mono text-[9px] sm:text-[10px] text-[#8B8F96]">FEATURED CASE STUDY 01</span>
               <span className="text-[#8B8F96]">•</span>
               <span className="font-semibold text-[#F5F5F2]">MUSCLE LEGACY</span>
             </div>
           </div>
         )}
 
-        {/* CASE STUDY DISPLAY (Data-driven component rendering) */}
+        {/* CASE STUDY DISPLAY */}
         <AnimatePresence mode="wait">
           <CaseStudyCard key={selectedStudy.id} caseStudy={selectedStudy} />
         </AnimatePresence>

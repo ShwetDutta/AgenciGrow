@@ -632,8 +632,8 @@ const Process: React.FC = () => {
     // 4. Resize Handler
     const handleResize = () => {
       if (!container) return;
-      const width = container.clientWidth;
-      const height = container.clientHeight;
+      const width = container.clientWidth || 300;
+      const height = container.clientHeight || 300;
       camera.aspect = width / (height || 1);
       camera.updateProjectionMatrix();
       renderer.setSize(width, height);
@@ -641,6 +641,14 @@ const Process: React.FC = () => {
 
     handleResize();
     window.addEventListener('resize', handleResize);
+
+    let resizeObserver: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined' && container) {
+      resizeObserver = new ResizeObserver(() => {
+        handleResize();
+      });
+      resizeObserver.observe(container);
+    }
 
     // 5. Morphing & Render Loop
     let animId: number;
@@ -686,7 +694,7 @@ const Process: React.FC = () => {
         posAttr[idx6 + 1] = s1y + (targetSeg.start.y - s1y) * ease;
         posAttr[idx6 + 2] = s1z + (targetSeg.start.z - s1z) * ease;
 
-        posAttr[idx6 + 3] = s2x + (targetSeg.end.x - s2x) * ease;
+        posAttr[idx6] = s2x + (targetSeg.end.x - s2x) * ease;
         posAttr[idx6 + 4] = s2y + (targetSeg.end.y - s2y) * ease;
         posAttr[idx6 + 5] = s2z + (targetSeg.end.z - s2z) * ease;
       }
@@ -707,6 +715,9 @@ const Process: React.FC = () => {
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener('resize', handleResize);
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
       if (container && renderer.domElement) {
         container.removeChild(renderer.domElement);
       }
@@ -719,25 +730,25 @@ const Process: React.FC = () => {
   return (
     <section 
       id="process" 
-      className="py-24 sm:py-32 bg-[#000000] text-[#F5F5F2] relative z-10 scroll-mt-12 border-t border-white/10 overflow-hidden select-none"
+      className="py-20 sm:py-32 md:py-40 bg-[#000000] text-[#F5F5F2] relative z-10 scroll-mt-12 border-t border-white/10 overflow-hidden select-none"
     >
       {/* Oversized Subtle Background Typography */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 flex items-center justify-center">
-        <span className="text-[23vw] font-heading font-serif uppercase tracking-[-0.07em] leading-none text-white/[0.04] whitespace-nowrap select-none">
+        <span className="text-[18vw] sm:text-[23vw] font-heading font-serif uppercase tracking-[-0.07em] leading-none text-white/[0.04] whitespace-nowrap select-none">
           PROCESS
         </span>
       </div>
 
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 relative z-10">
         
         {/* Section Intro Header */}
-        <div className="max-w-3xl mb-16 sm:mb-20">
+        <div className="max-w-3xl mb-12 sm:mb-20">
           <motion.p
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-gray-400 mb-4"
+            className="text-[9px] sm:text-xs font-mono uppercase tracking-[0.25em] sm:tracking-[0.3em] text-gray-400 mb-3 sm:mb-4"
           >
             // THE PROCESS
           </motion.p>
@@ -747,7 +758,7 @@ const Process: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-heading font-serif font-normal uppercase tracking-tighter text-white leading-[0.95] mb-6"
+            className="text-3xl sm:text-5xl lg:text-6xl font-heading font-serif font-normal uppercase tracking-tighter text-white leading-[0.95] mb-4 sm:mb-6"
           >
             HOW WE BUILD<br />
             <span className="text-gray-400 italic font-serif">SYSTEMS THAT GROW.</span>
@@ -758,20 +769,20 @@ const Process: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-sm sm:text-base text-gray-400 font-body font-light leading-relaxed max-w-2xl"
+            className="text-xs sm:text-base text-gray-400 font-body font-light leading-relaxed max-w-2xl"
           >
             Every engagement follows a deliberate process. We understand the business first, build the right system around it, launch with intent, and continuously refine what works.
           </motion.p>
         </div>
 
         {/* Main Two Column Layout: Process List (Left) + Three.js Canvas (Right) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 lg:gap-16 items-center">
           
           {/* Left Column: Interactive Process List (approx 45% width) */}
-          <div className="lg:col-span-5 space-y-2">
+          <div className="lg:col-span-5 space-y-2 order-2 lg:order-1">
             
             {/* Stage Counter Label */}
-            <div className="flex items-center justify-between pb-4 border-b border-white/15 text-[10px] sm:text-xs font-mono uppercase tracking-[0.25em] text-gray-400">
+            <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-white/15 text-[9px] sm:text-xs font-mono uppercase tracking-[0.25em] text-gray-400">
               <span>STAGE SELECTION</span>
               <span className="text-white font-medium">
                 [ 0{activeIndex + 1} / 05 ]
@@ -790,7 +801,7 @@ const Process: React.FC = () => {
                     role="tab"
                     aria-selected={isActive}
                     aria-controls={`process-panel-${idx}`}
-                    className={`w-full text-left py-6 sm:py-7 transition-all duration-300 group focus:outline-none cursor-pointer flex flex-col justify-center relative ${
+                    className={`w-full text-left py-4 sm:py-6 lg:py-7 transition-all duration-300 group focus:outline-none cursor-pointer flex flex-col justify-center relative min-h-[50px] ${
                       isActive ? 'opacity-100' : 'opacity-50 hover:opacity-80'
                     }`}
                   >
@@ -799,22 +810,22 @@ const Process: React.FC = () => {
                       isActive ? 'bg-white' : 'bg-transparent'
                     }`} />
 
-                    <div className="flex items-center justify-between gap-4 pl-3">
-                      <div className="flex items-center gap-4 sm:gap-6 min-w-0">
+                    <div className="flex items-center justify-between gap-3 sm:gap-4 pl-3">
+                      <div className="flex items-center gap-3 sm:gap-6 min-w-0">
                         <span className={`font-mono text-xs sm:text-sm uppercase tracking-widest shrink-0 transition-colors ${
                           isActive ? 'text-white font-semibold' : 'text-gray-500'
                         }`}>
                           {step.number}
                         </span>
 
-                        <h3 className={`text-lg sm:text-xl lg:text-2xl font-body font-normal tracking-[-0.01em] transition-colors leading-snug ${
+                        <h3 className={`text-base sm:text-xl lg:text-2xl font-body font-normal tracking-[-0.01em] transition-colors leading-snug ${
                           isActive ? 'text-white font-medium' : 'text-gray-400 group-hover:text-gray-200'
                         }`}>
                           {step.title}
                         </h3>
                       </div>
 
-                      <span className={`text-[9px] sm:text-[10px] font-mono tracking-[0.2em] uppercase shrink-0 transition-colors ${
+                      <span className={`text-[8px] sm:text-[10px] font-mono tracking-[0.15em] sm:tracking-[0.2em] uppercase shrink-0 transition-colors ${
                         isActive ? 'text-gray-300' : 'text-gray-600'
                       }`}>
                         {step.subtitle}
@@ -832,7 +843,7 @@ const Process: React.FC = () => {
                           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                           className="overflow-hidden pl-3"
                         >
-                          <p className="pt-3 sm:pt-4 text-xs sm:text-sm text-gray-400 font-light leading-relaxed max-w-lg">
+                          <p className="pt-2.5 sm:pt-4 text-xs sm:text-sm text-gray-400 font-light leading-relaxed max-w-lg">
                             {step.desc}
                           </p>
                         </motion.div>
@@ -847,28 +858,28 @@ const Process: React.FC = () => {
           </div>
 
           {/* Right Column: Interactive Three.js WebGL Particle System Canvas */}
-          <div className="lg:col-span-7 flex flex-col items-center justify-center relative">
-            <div className="relative w-full aspect-square max-w-[480px] sm:max-w-[540px] lg:max-w-[580px] rounded-xs border border-white/10 bg-black/50 backdrop-blur-xs p-4 sm:p-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)] flex flex-col justify-between overflow-hidden">
+          <div className="lg:col-span-7 flex flex-col items-center justify-center relative order-1 lg:order-2">
+            <div className="relative w-full aspect-square max-w-[340px] xs:max-w-[400px] sm:max-w-[500px] lg:max-w-[560px] rounded-xs border border-white/10 bg-black/50 backdrop-blur-xs p-3.5 sm:p-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)] flex flex-col justify-between overflow-hidden">
               
               {/* Corner Watermark Details */}
-              <div className="flex items-center justify-between text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.25em] text-gray-500 z-10 pointer-events-none">
+              <div className="flex items-center justify-between text-[8px] sm:text-[10px] font-mono uppercase tracking-[0.2em] sm:tracking-[0.25em] text-gray-500 z-10 pointer-events-none">
                 <span>[ STAGE 0{activeIndex + 1} — FORMATION ]</span>
                 <span className="flex items-center gap-1.5 text-gray-400">
                   <span className="w-1.5 h-1.5 rounded-full bg-white/80 animate-pulse" />
-                  THREE.JS WEBGL SYSTEM
+                  THREE.JS WEBGL
                 </span>
               </div>
 
               {/* Main Three.js Container */}
               <div 
                 ref={containerRef}
-                className="relative w-full h-full flex items-center justify-center my-auto pointer-events-none overflow-hidden"
+                className="relative w-full h-full flex items-center justify-center my-auto pointer-events-none overflow-hidden min-h-[220px] sm:min-h-[300px]"
               />
 
               {/* Bottom Technical Subtitle Watermark */}
-              <div className="flex items-center justify-between text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.2em] text-gray-500 z-10 pointer-events-none pt-2 border-t border-white/5">
-                <span>{processSteps[activeIndex].title}</span>
-                <span className="text-gray-600">3D WIREFRAME SYSTEM // ROTATION ACTIVE</span>
+              <div className="flex items-center justify-between text-[8px] sm:text-[10px] font-mono uppercase tracking-[0.15em] sm:tracking-[0.2em] text-gray-500 z-10 pointer-events-none pt-2 border-t border-white/5">
+                <span className="truncate mr-2">{processSteps[activeIndex].title}</span>
+                <span className="text-gray-600 shrink-0">3D ROTATION</span>
               </div>
 
             </div>

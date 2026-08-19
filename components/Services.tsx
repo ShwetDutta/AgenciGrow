@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { openBookingModal } from './CalendlyModal';
@@ -72,6 +72,7 @@ const servicesData: ServiceItem[] = [
 
 const ServiceCard: React.FC<{ service: ServiceItem }> = ({ service }) => {
   const cardRef = useRef<HTMLDivElement>(null);
+  const [isActive, setIsActive] = useState(false);
 
   // Parallax scroll progress calculation
   const { scrollYProgress } = useScroll({
@@ -80,20 +81,22 @@ const ServiceCard: React.FC<{ service: ServiceItem }> = ({ service }) => {
   });
 
   // Subtle vertical parallax movement
-  const y = useTransform(scrollYProgress, [0, 1], ['-7%', '7%']);
+  const y = useTransform(scrollYProgress, [0, 1], ['-6%', '6%']);
 
   const scrollToContact = (e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     openBookingModal();
   };
 
   return (
     <div
       ref={cardRef}
-      className={`relative rounded-[28px] sm:rounded-[36px] overflow-hidden group border border-white/10 shadow-2xl bg-[#0a0a0c] cursor-pointer ${
+      onClick={() => setIsActive(!isActive)}
+      className={`relative rounded-[20px] sm:rounded-[32px] overflow-hidden group border border-white/10 shadow-2xl bg-[#0a0a0c] cursor-pointer ${
         service.isFullWidth
-          ? 'col-span-12 min-h-[480px] sm:min-h-[560px] lg:min-h-[620px]'
-          : 'col-span-12 lg:col-span-6 min-h-[440px] sm:min-h-[500px] lg:min-h-[540px]'
+          ? 'col-span-12 min-h-[380px] xs:min-h-[440px] sm:min-h-[540px] lg:min-h-[620px]'
+          : 'col-span-12 lg:col-span-6 min-h-[350px] xs:min-h-[400px] sm:min-h-[480px] lg:min-h-[540px]'
       }`}
     >
       {/* Media with Parallax - Subtle motion headroom */}
@@ -122,35 +125,41 @@ const ServiceCard: React.FC<{ service: ServiceItem }> = ({ service }) => {
       </div>
 
       {/* Subtle Top Gradient Shadow for Title Legibility */}
-      <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/75 to-transparent z-0 pointer-events-none" />
+      <div className="absolute inset-x-0 top-0 h-32 sm:h-40 bg-gradient-to-b from-black/80 via-black/40 to-transparent z-0 pointer-events-none" />
 
       {/* Top Header Content - Title in exact font style */}
-      <div className="relative z-10 p-6 sm:p-10">
-        <h3 className="text-2xl sm:text-3xl md:text-4xl font-body font-normal text-white leading-[1.15] tracking-[-0.03em] drop-shadow-md">
+      <div className="relative z-10 p-5 sm:p-8 lg:p-10">
+        <span className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.25em] text-gray-300 block mb-1">
+          {service.subtitle}
+        </span>
+        <h3 className="text-xl sm:text-3xl md:text-4xl font-body font-normal text-white leading-[1.15] tracking-[-0.03em] drop-shadow-md">
           {service.title}
         </h3>
       </div>
 
-      {/* Hover Info Overlay - Lower Half (No Blur, Sharp Image view with gradient background) */}
-      <div className="absolute inset-x-0 bottom-0 z-20 p-6 sm:p-10 bg-gradient-to-t from-black/95 via-black/80 to-transparent transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out flex flex-col justify-end rounded-b-[28px] sm:rounded-b-[36px]">
-        <div className="space-y-3">
-          <h4 className="text-xl sm:text-2xl font-body font-normal text-white tracking-[-0.03em] leading-snug">
+      {/* Hover Info Overlay - Lower Half (with touch activation support) */}
+      <div
+        className={`absolute inset-x-0 bottom-0 z-20 p-5 sm:p-8 lg:p-10 bg-gradient-to-t from-black/95 via-black/85 to-transparent transition-transform duration-500 ease-out flex flex-col justify-end rounded-b-[20px] sm:rounded-b-[32px] ${
+          isActive ? 'translate-y-0' : 'translate-y-full group-hover:translate-y-0'
+        }`}
+      >
+        <div className="space-y-2.5 sm:space-y-3">
+          <h4 className="text-lg sm:text-2xl font-body font-normal text-white tracking-[-0.03em] leading-snug">
             {service.title}
           </h4>
 
-          <p className="text-sm sm:text-base text-gray-200 font-body font-light leading-relaxed max-w-2xl">
+          <p className="text-xs sm:text-sm md:text-base text-gray-200 font-body font-light leading-relaxed max-w-2xl">
             {service.description}
           </p>
 
           <div className="pt-2">
-            <a
-              href="#contact"
+            <button
               onClick={scrollToContact}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/40 bg-white/20 hover:bg-white hover:text-black text-white font-medium text-xs sm:text-sm uppercase tracking-wider transition-all duration-300 shadow-xl"
+              className="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-full border border-white/40 bg-white/20 hover:bg-white hover:text-black text-white font-medium text-xs sm:text-sm uppercase tracking-wider transition-all duration-300 shadow-xl min-h-[44px] cursor-pointer"
             >
               <span>Get Started</span>
               <ArrowUpRight className="w-4 h-4" />
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -162,18 +171,18 @@ const Services: React.FC = () => {
   return (
     <section
       id="services"
-      className="py-24 sm:py-32 bg-[#000000] text-[#F5F5F2] relative z-10 scroll-mt-12 border-t border-white/10 font-body"
+      className="py-20 sm:py-32 md:py-40 bg-[#000000] text-[#F5F5F2] relative z-10 scroll-mt-12 border-t border-white/10 font-body"
     >
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16">
         {/* Header - Matching editorial serif font style */}
-        <div className="mb-12 sm:mb-20 font-heading font-serif">
-          <h2 className="text-5xl sm:text-7xl md:text-8xl font-normal uppercase tracking-tighter text-white leading-none">
+        <div className="mb-8 sm:mb-16 font-heading font-serif">
+          <h2 className="text-4xl xs:text-5xl sm:text-7xl md:text-8xl font-normal uppercase tracking-tighter text-white leading-none">
             Services
           </h2>
         </div>
 
         {/* 6 Services Grid Layout (1 - 2 - 1 - 2) */}
-        <div className="grid grid-cols-12 gap-6 sm:gap-8">
+        <div className="grid grid-cols-12 gap-4 sm:gap-6 lg:gap-8">
           {servicesData.map((service) => (
             <ServiceCard key={service.id} service={service} />
           ))}

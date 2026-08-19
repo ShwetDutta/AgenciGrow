@@ -28,14 +28,14 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-[#000000] text-[#F5F5F2] pt-12 pb-12 relative z-10 overflow-hidden font-body">
+    <footer className="bg-[#000000] text-[#F5F5F2] pt-12 pb-12 relative z-10 overflow-hidden font-body border-t border-white/10">
       
       {/* 1. Pre-Footer Featured Cards */}
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mb-16 sm:mb-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 mb-16 sm:mb-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-6">
           
           {/* Card 1: Billboard / Contact Us */}
-          <div className="relative min-h-[480px] sm:min-h-[540px] lg:min-h-[600px] rounded-[28px] sm:rounded-[36px] overflow-hidden flex flex-col justify-between p-8 sm:p-12 lg:p-14 group border border-white/10 shadow-2xl">
+          <div className="relative min-h-[380px] xs:min-h-[440px] sm:min-h-[520px] lg:min-h-[580px] rounded-2xl sm:rounded-[32px] overflow-hidden flex flex-col justify-between p-6 sm:p-10 lg:p-14 group border border-white/10 shadow-2xl">
             {/* Background Image */}
             <img 
               src="/Photos/billboard-agencigrow.png" 
@@ -45,26 +45,26 @@ const Footer: React.FC = () => {
             />
             
             {/* Subtle Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 z-0 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/30 z-0 pointer-events-none" />
 
             {/* Top Spacer for flex alignment */}
             <div className="relative z-10" />
 
             {/* Bottom Content / Pill CTA */}
-            <div className="relative z-10 pt-8">
+            <div className="relative z-10 pt-6 sm:pt-8">
               <a 
                 href="#contact" 
                 onClick={(e) => scrollToSection(e, 'contact')}
-                className="inline-flex items-center gap-3 px-8 py-4 rounded-full border border-white/40 bg-white/15 backdrop-blur-md text-white font-medium text-lg sm:text-xl hover:bg-white hover:text-black transition-all duration-300 transform hover:scale-[1.02] shadow-xl group/btn"
+                className="inline-flex items-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-full border border-white/40 bg-white/15 backdrop-blur-md text-white font-medium text-base sm:text-lg hover:bg-white hover:text-black transition-all duration-300 transform hover:scale-[1.02] shadow-xl group/btn min-h-[44px]"
               >
                 <span>Contact us</span>
-                <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover/btn:translate-x-1" />
               </a>
             </div>
           </div>
 
           {/* Card 2: Instagram / Go to Insta */}
-          <div className="relative min-h-[480px] sm:min-h-[540px] lg:min-h-[600px] rounded-[28px] sm:rounded-[36px] overflow-hidden flex flex-col justify-between p-8 sm:p-12 lg:p-14 group border border-white/10 shadow-2xl">
+          <div className="relative min-h-[380px] xs:min-h-[440px] sm:min-h-[520px] lg:min-h-[580px] rounded-2xl sm:rounded-[32px] overflow-hidden flex flex-col justify-between p-6 sm:p-10 lg:p-14 group border border-white/10 shadow-2xl">
             {/* Background Image */}
             <img 
               src="/Photos/instagram-page.png" 
@@ -74,21 +74,21 @@ const Footer: React.FC = () => {
             />
             
             {/* Subtle Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 z-0 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/30 z-0 pointer-events-none" />
 
             {/* Top Spacer for flex alignment */}
             <div className="relative z-10" />
 
             {/* Bottom Content / Pill CTA */}
-            <div className="relative z-10 pt-8">
+            <div className="relative z-10 pt-6 sm:pt-8">
               <a 
                 href="https://www.instagram.com/agencigrow?igsh=Mzh2cTVvejh1Y25x" 
                 target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 px-8 py-4 rounded-full border border-white/40 bg-white/15 backdrop-blur-md text-white font-medium text-lg sm:text-xl hover:bg-white hover:text-black transition-all duration-300 transform hover:scale-[1.02] shadow-xl group/btn"
+                rel="noopener noreferrer" 
+                className="inline-flex items-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-full border border-white/40 bg-white/15 backdrop-blur-md text-white font-medium text-base sm:text-lg hover:bg-white hover:text-black transition-all duration-300 transform hover:scale-[1.02] shadow-xl group/btn min-h-[44px]"
               >
                 <span>Go to Insta</span>
-                <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover/btn:translate-x-1" />
               </a>
             </div>
           </div>
@@ -96,23 +96,23 @@ const Footer: React.FC = () => {
         </div>
       </div>
 
-      {/* 2. Main Footer Footer Section */}
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12">
+      {/* 2. Main Footer Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16">
         
         {/* Top Navigation Row */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-white/10 text-sm text-[#A1A1A1] font-normal">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-white/10 text-xs sm:text-sm text-[#A1A1A1] font-normal">
           
-          <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 sm:gap-8">
-            <a href="#" onClick={(e) => scrollToSection(e, 'top')} className="hover:text-white transition-colors">Home</a>
-            <a href="#about" onClick={(e) => scrollToSection(e, 'about')} className="hover:text-white transition-colors">About</a>
-            <a href="#services" onClick={(e) => scrollToSection(e, 'services')} className="hover:text-white transition-colors">Services</a>
-            <a href="#process" onClick={(e) => scrollToSection(e, 'process')} className="hover:text-white transition-colors">Process</a>
-            <a href="#work" onClick={(e) => scrollToSection(e, 'work')} className="hover:text-white transition-colors">Work</a>
-            <a href="#faq" onClick={(e) => scrollToSection(e, 'faq')} className="hover:text-white transition-colors">FAQ</a>
-            <a href="#contact" onClick={(e) => scrollToSection(e, 'contact')} className="hover:text-white transition-colors">Contact</a>
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 sm:gap-8">
+            <a href="#" onClick={(e) => scrollToSection(e, 'top')} className="hover:text-white transition-colors py-2">Home</a>
+            <a href="#about" onClick={(e) => scrollToSection(e, 'about')} className="hover:text-white transition-colors py-2">About</a>
+            <a href="#services" onClick={(e) => scrollToSection(e, 'services')} className="hover:text-white transition-colors py-2">Services</a>
+            <a href="#process" onClick={(e) => scrollToSection(e, 'process')} className="hover:text-white transition-colors py-2">Process</a>
+            <a href="#work" onClick={(e) => scrollToSection(e, 'work')} className="hover:text-white transition-colors py-2">Work</a>
+            <a href="#faq" onClick={(e) => scrollToSection(e, 'faq')} className="hover:text-white transition-colors py-2">FAQ</a>
+            <a href="#contact" onClick={(e) => scrollToSection(e, 'contact')} className="hover:text-white transition-colors py-2">Contact</a>
           </div>
 
-          <div className="text-xs sm:text-sm text-[#888888]">
+          <div className="text-xs text-[#888888]">
             © Copyrights AgenciGrow
           </div>
 
@@ -126,12 +126,12 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Social & Legal Links */}
-        <div className="pt-4 sm:pt-6 flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs sm:text-sm text-[#888888]">
+        <div className="pt-4 sm:pt-6 flex flex-wrap items-center justify-center gap-4 sm:gap-10 text-xs sm:text-sm text-[#888888]">
           <a 
             href="https://www.linkedin.com/company/agencigrow/?viewAsMember=true" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="hover:text-white transition-colors"
+            className="hover:text-white transition-colors py-1.5"
           >
             LinkedIn
           </a>
@@ -139,19 +139,19 @@ const Footer: React.FC = () => {
             href="https://www.instagram.com/agencigrow?igsh=Mzh2cTVvejh1Y25x" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="hover:text-white transition-colors"
+            className="hover:text-white transition-colors py-1.5"
           >
             Instagram
           </a>
           <button 
             onClick={() => setActiveModal('privacy')} 
-            className="hover:text-white transition-colors cursor-pointer bg-transparent border-0 p-0"
+            className="hover:text-white transition-colors cursor-pointer bg-transparent border-0 py-1.5"
           >
             Privacy Policy
           </button>
           <button 
             onClick={() => setActiveModal('terms')} 
-            className="hover:text-white transition-colors cursor-pointer bg-transparent border-0 p-0"
+            className="hover:text-white transition-colors cursor-pointer bg-transparent border-0 py-1.5"
           >
             Terms & Conditions
           </button>
@@ -162,17 +162,17 @@ const Footer: React.FC = () => {
       {/* Modal for Privacy Policy / Terms */}
       {activeModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="bg-[#121214] border border-white/10 rounded-2xl p-6 sm:p-8 max-w-xl w-full text-white relative shadow-2xl">
+          <div className="bg-[#121214] border border-white/10 rounded-2xl p-5 sm:p-8 max-w-xl w-full text-white relative shadow-2xl">
             <button 
               onClick={() => setActiveModal(null)} 
-              className="absolute top-4 right-4 text-gray-400 hover:text-white p-2"
+              className="absolute top-4 right-4 text-gray-400 hover:text-white p-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
               <X size={20} />
             </button>
-            <h3 className="text-2xl font-heading mb-4">
+            <h3 className="text-xl sm:text-2xl font-heading mb-4">
               {activeModal === 'privacy' ? 'Privacy Policy' : 'Terms & Conditions'}
             </h3>
-            <div className="text-sm text-gray-300 space-y-3 max-h-96 overflow-y-auto pr-2 font-light">
+            <div className="text-xs sm:text-sm text-gray-300 space-y-3 max-h-80 sm:max-h-96 overflow-y-auto pr-2 font-light">
               {activeModal === 'privacy' ? (
                 <>
                   <p>AgenciGrow respects your privacy. We collect minimal information required to deliver growth services, handle client inquiries, and optimize campaign performance.</p>
@@ -187,7 +187,7 @@ const Footer: React.FC = () => {
             </div>
             <button 
               onClick={() => setActiveModal(null)} 
-              className="mt-6 px-6 py-2.5 bg-white text-black font-semibold rounded-full text-xs uppercase tracking-wider hover:bg-gray-200 transition-colors"
+              className="mt-6 px-6 py-2.5 bg-white text-black font-semibold rounded-full text-xs uppercase tracking-wider hover:bg-gray-200 transition-colors min-h-[44px]"
             >
               Close
             </button>
