@@ -1,890 +1,245 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import * as THREE from 'three';
+import React from 'react';
+import { ArrowUpRight } from 'lucide-react';
+import { openBookingModal } from './CalendlyModal';
 
-interface ProcessStep {
+interface SupportingItem {
+  label: string;
+  description: string;
+}
+
+interface ProcessStepData {
   number: string;
   title: string;
-  subtitle: string;
-  desc: string;
+  subLabel: string;
+  paragraph1: string;
+  paragraph2: string;
+  supportingHeader: string;
+  supportingItems: SupportingItem[];
+  closingStatement?: string;
 }
 
-const processSteps: ProcessStep[] = [
+const stepsData: ProcessStepData[] = [
   {
-    number: "01",
-    title: "Discovery & Audit",
-    subtitle: "LENS & ANALYSIS",
-    desc: "We analyze your current customer acquisition, conversion bottlenecks, sales pipeline leakage, and existing metrics to identify where growth is stuck."
+    number: '01',
+    title: 'Discovery Call',
+    subLabel: 'Business strategy & alignment',
+    paragraph1:
+      'Our projects always begin by gaining a deep understanding of your business goals, customer needs, applicable acquisition channels, and operational unit economics. We meet directly with key stakeholders to immerse ourselves in your business and evaluate your current commercial reality.',
+    paragraph2:
+      "This qualitative and analytical inquiry unlocks insights, opportunities, and friction points businesses typically haven't considered. We land on an informed hypothesis about where to focus the work to ensure every system deployed is feasible, highly profitable, and engineered for scalable customer acquisition.",
+    supportingHeader: 'WHAT WE WANT TO UNDERSTAND',
+    supportingItems: [
+      {
+        label: 'BUSINESS',
+        description:
+          'What you sell, who you sell it to, and how the business currently generates and collects revenue.',
+      },
+      {
+        label: 'CURRENT POSITION',
+        description:
+          'Where growth is coming from today, where pipeline leaks occur, and where friction exists.',
+      },
+      {
+        label: 'OBJECTIVES',
+        description:
+          'What the business actually wants to achieve over the coming quarter and long-term horizon.',
+      },
+      {
+        label: 'CONSTRAINTS',
+        description:
+          'The practical operational limitations, unit margins, and conditions we need to work within.',
+      },
+    ],
   },
   {
-    number: "02",
-    title: "Custom Strategy & Roadmap",
-    subtitle: "POSITIONING & BLUEPRINT",
-    desc: "We architect a bespoke growth blueprint tailored to your unit economics — choosing the exact mix of ads, landing pages, and WhatsApp/CRM triggers needed."
+    number: '02',
+    title: 'Strategy & Analysis',
+    subLabel: 'Diagnostic & commercial fit',
+    paragraph1:
+      'We schedule a deep-dive strategy session to examine the business from the inside out. We audit current ad spend, conversion friction across landing pages, lead response times, and customer lifetime value to map where revenue is being lost.',
+    paragraph2:
+      "We identify the real constraints and determine where we can create immediate, compounding impact. Crucially, we evaluate whether AgenciGrow can genuinely move the needle—if there isn't an authentic, high-margin fit, we will tell you directly rather than recommend an unviable solution.",
+    supportingHeader: 'WHAT WE EXAMINE',
+    supportingItems: [
+      {
+        label: '01 — ACQUISITION',
+        description:
+          'Current advertising channels, traffic sources, customer acquisition costs, and inbound lead quality.',
+      },
+      {
+        label: '02 — CONVERSION',
+        description:
+          'Landing pages, offer structure, speed-to-lead response times, and sales pipeline conversion friction.',
+      },
+      {
+        label: '03 — RETENTION',
+        description:
+          'Customer lifetime value, repeat transaction cycles, and automated downstream revenue opportunities.',
+      },
+      {
+        label: '04 — OPERATIONS',
+        description:
+          'Existing CRM workflows, team routing protocols, and areas where manual bottlenecks cap growth.',
+      },
+    ],
   },
   {
-    number: "03",
-    title: "System Build & Creative",
-    subtitle: "ARCHITECTURE & ASSETS",
-    desc: "We write conversion-focused copy, design high-converting React landing pages, craft disruption ad creatives, and set up automated CRM workflows."
+    number: '03',
+    title: 'Custom Proposal',
+    subLabel: 'Commercial architecture & scope',
+    paragraph1:
+      'Once we understand the exact constraints and opportunity, we build a proposal engineered around your specific business conditions and growth objectives. Every recommendation is designed around what you actually need—not a predetermined package.',
+    paragraph2:
+      'Your custom scope outlines the exact revenue architecture: targeted acquisition channels, automated WhatsApp & CRM pipelines, creative sprint cadence, and transparent unit economics engineered for compounding enterprise value.',
+    supportingHeader: 'WHAT YOU RECEIVE',
+    supportingItems: [
+      {
+        label: 'TAILORED STRATEGY',
+        description:
+          'A dedicated growth roadmap built around the actual unit economics and opportunities identified.',
+      },
+      {
+        label: 'SCOPE OF WORK',
+        description:
+          'A clear, exhaustive definition of what we will build, automate, and manage—and why.',
+      },
+      {
+        label: 'PRIORITIES',
+        description:
+          'The highest-impact revenue levers we believe should be implemented and validated first.',
+      },
+      {
+        label: 'INVESTMENT',
+        description:
+          'Transparent pricing based on the scope and requirements of the business, with zero hidden fees.',
+      },
+    ],
+    closingStatement:
+      'No generic packages. No unnecessary retainers. Just a system built around the business.',
   },
-  {
-    number: "04",
-    title: "Precision Launch",
-    subtitle: "DEPLOYMENT & TRACKING",
-    desc: "We deploy high-intent search campaigns and targeted Meta ad funnels, connecting analytics tracking for 100% lead attribution and speed."
-  },
-  {
-    number: "05",
-    title: "Optimize & Scale",
-    subtitle: "COMPOUNDING & GROWTH",
-    desc: "We continuously test ad variations, optimize landing page conversion rates, and refine WhatsApp nurture flows to lower your acquisition cost as budget scales."
-  }
 ];
 
-const WIRE_SEGMENTS_COUNT = 1400;
-
-interface LineSegment {
-  start: THREE.Vector3;
-  end: THREE.Vector3;
-}
-
-// ============================================================================
-// 3D THREE.JS PROCEDURAL GEOMETRY & WIREFRAME LINE SAMPLING SYSTEM
-// ============================================================================
-
-function sampleLineSegmentsFromGroup(group: THREE.Group, totalSegments: number): LineSegment[] {
-  group.updateMatrixWorld(true);
-
-  interface RawEdge {
-    a: THREE.Vector3;
-    b: THREE.Vector3;
-    len: number;
-    cumLen: number;
-  }
-
-  const rawEdges: RawEdge[] = [];
-  let totalLength = 0;
-
-  group.traverse((child) => {
-    if ((child as THREE.Mesh).isMesh) {
-      const mesh = child as THREE.Mesh;
-      if (!mesh.geometry) return;
-
-      const wireGeo = new THREE.WireframeGeometry(mesh.geometry);
-      const posAttr = wireGeo.attributes.position;
-      if (!posAttr) return;
-
-      for (let i = 0; i < posAttr.count; i += 2) {
-        const a = new THREE.Vector3(posAttr.getX(i), posAttr.getY(i), posAttr.getZ(i));
-        const b = new THREE.Vector3(posAttr.getX(i + 1), posAttr.getY(i + 1), posAttr.getZ(i + 1));
-
-        a.applyMatrix4(mesh.matrixWorld);
-        b.applyMatrix4(mesh.matrixWorld);
-
-        const len = a.distanceTo(b);
-        if (len > 0.0001) {
-          totalLength += len;
-          rawEdges.push({ a, b, len, cumLen: totalLength });
-        }
-      }
-      wireGeo.dispose();
-    }
-  });
-
-  const segments: LineSegment[] = [];
-
-  if (rawEdges.length === 0 || totalLength === 0) {
-    for (let i = 0; i < totalSegments; i++) {
-      const p1 = new THREE.Vector3((Math.random() - 0.5) * 1.5, (Math.random() - 0.5) * 1.5, (Math.random() - 0.5) * 1.5);
-      const p2 = p1.clone().add(new THREE.Vector3((Math.random() - 0.5) * 0.2, (Math.random() - 0.5) * 0.2, (Math.random() - 0.5) * 0.2));
-      segments.push({ start: p1, end: p2 });
-    }
-    return segments;
-  }
-
-  // 1. If rawEdges fit inside totalSegments, take all and subdivide remaining
-  if (rawEdges.length <= totalSegments) {
-    for (let i = 0; i < rawEdges.length; i++) {
-      segments.push({ start: rawEdges[i].a.clone(), end: rawEdges[i].b.clone() });
-    }
-
-    const remaining = totalSegments - segments.length;
-    for (let i = 0; i < remaining; i++) {
-      const r = Math.random() * totalLength;
-      let low = 0;
-      let high = rawEdges.length - 1;
-      let selectedIdx = 0;
-
-      while (low <= high) {
-        const mid = Math.floor((low + high) / 2);
-        if (rawEdges[mid].cumLen >= r) {
-          selectedIdx = mid;
-          high = mid - 1;
-        } else {
-          low = mid + 1;
-        }
-      }
-
-      const edge = rawEdges[selectedIdx];
-      const t1 = Math.random() * 0.5;
-      const t2 = t1 + 0.5;
-      const p1 = new THREE.Vector3().lerpVectors(edge.a, edge.b, t1);
-      const p2 = new THREE.Vector3().lerpVectors(edge.a, edge.b, t2);
-      segments.push({ start: p1, end: p2 });
-    }
-  } else {
-    // Uniformly stride across rawEdges so EVERY child mesh (lens, rim, handle, rings, pommel) is represented
-    const step = rawEdges.length / totalSegments;
-    for (let i = 0; i < totalSegments; i++) {
-      const idx = Math.min(Math.floor(i * step), rawEdges.length - 1);
-      segments.push({ start: rawEdges[idx].a.clone(), end: rawEdges[idx].b.clone() });
-    }
-  }
-
-  return segments;
-}
-
-// 01: DISCOVERY & AUDIT — 3D Volumetric Optical Magnifying Glass
-function createMagnifyingGlassMesh(): THREE.Group {
-  const group = new THREE.Group();
-  
-  // Position lens in upper-left quadrant so the handle extends down-right naturally centered
-  const lensCenter = new THREE.Vector3(-0.16, 0.20, 0);
-
-  // 1. Primary Outer Torus Rim (Generates thick rounded 3D rim outline)
-  const rimOuter = new THREE.Mesh(new THREE.TorusGeometry(0.48, 0.065, 12, 28));
-  rimOuter.position.copy(lensCenter);
-  group.add(rimOuter);
-
-  // 2. Inner Aperture Bevel Ring (Defines inner lens frame edge)
-  const rimInner = new THREE.Mesh(new THREE.TorusGeometry(0.40, 0.03, 10, 28));
-  rimInner.position.copy(lensCenter);
-  group.add(rimInner);
-
-  // 3. Outer Cylindrical Shell Wall (Provides 3D depth quads along Z-axis)
-  const frameCylOuter = new THREE.Mesh(new THREE.CylinderGeometry(0.545, 0.545, 0.13, 28, 2, true));
-  frameCylOuter.rotation.x = Math.PI / 2;
-  frameCylOuter.position.copy(lensCenter);
-  group.add(frameCylOuter);
-
-  // 4. Inner Cylindrical Aperture Wall (Internal 3D depth quads)
-  const frameCylInner = new THREE.Mesh(new THREE.CylinderGeometry(0.395, 0.395, 0.13, 28, 2, true));
-  frameCylInner.rotation.x = Math.PI / 2;
-  frameCylInner.position.copy(lensCenter);
-  group.add(frameCylInner);
-
-  // 5. Connecting Ferrule Collar (-45 degree angle towards bottom right)
-  const angle = -Math.PI / 4;
-  const dir = new THREE.Vector3(Math.cos(angle), Math.sin(angle), 0); // (0.7071, -0.7071, 0)
-  
-  const ferrulePos = lensCenter.clone().add(dir.clone().multiplyScalar(0.48));
-  const ferruleCyl = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.18, 16, 2));
-  ferruleCyl.position.copy(ferrulePos);
-  ferruleCyl.rotation.z = angle + Math.PI / 2;
-  group.add(ferruleCyl);
-
-  const ferruleRing = new THREE.Mesh(new THREE.TorusGeometry(0.095, 0.02, 8, 16));
-  ferruleRing.position.copy(ferrulePos);
-  ferruleRing.rotation.z = angle + Math.PI / 2;
-  ferruleRing.rotation.x = Math.PI / 2;
-  group.add(ferruleRing);
-
-  // 6. Main Cylindrical Handle
-  const handleLength = 0.84;
-  const handlePos = ferrulePos.clone().add(dir.clone().multiplyScalar(0.09 + handleLength / 2));
-  const handleCyl = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.085, handleLength, 16, 6));
-  handleCyl.position.copy(handlePos);
-  handleCyl.rotation.z = angle + Math.PI / 2;
-  group.add(handleCyl);
-
-  // 7. Handle Structural Accent Rings & End Cap
-  const ringDistances = [0.25, 0.50, 0.75];
-  ringDistances.forEach((fraction) => {
-    const ringPos = ferrulePos.clone().add(dir.clone().multiplyScalar(0.09 + handleLength * fraction));
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.082, 0.015, 8, 16));
-    ring.position.copy(ringPos);
-    ring.rotation.z = angle + Math.PI / 2;
-    ring.rotation.x = Math.PI / 2;
-    group.add(ring);
-  });
-
-  const capPos = ferrulePos.clone().add(dir.clone().multiplyScalar(0.09 + handleLength));
-  const baseCap = new THREE.Mesh(new THREE.CylinderGeometry(0.085, 0.085, 0.04, 16));
-  baseCap.position.copy(capPos);
-  baseCap.rotation.z = angle + Math.PI / 2;
-  group.add(baseCap);
-
-  return group;
-}
-
-// 02: CUSTOM STRATEGY & ROADMAP — 3D Staunton Chess King
-function createChessKingMesh(): THREE.Group {
-  const group = new THREE.Group();
-
-  // Tiered Pedestal Base
-  const base1 = new THREE.Mesh(new THREE.CylinderGeometry(0.52, 0.58, 0.12, 28));
-  base1.position.set(0, -0.68, 0);
-  group.add(base1);
-
-  const base2 = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.48, 0.10, 28));
-  base2.position.set(0, -0.57, 0);
-  group.add(base2);
-
-  const baseRing = new THREE.Mesh(new THREE.TorusGeometry(0.38, 0.04, 12, 28));
-  baseRing.rotation.x = Math.PI / 2;
-  baseRing.position.set(0, -0.50, 0);
-  group.add(baseRing);
-
-  // Pedestal Waist
-  const waist = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.38, 0.32, 28));
-  waist.position.set(0, -0.30, 0);
-  group.add(waist);
-
-  const midRing = new THREE.Mesh(new THREE.TorusGeometry(0.32, 0.04, 12, 28));
-  midRing.rotation.x = Math.PI / 2;
-  midRing.position.set(0, -0.12, 0);
-  group.add(midRing);
-
-  // Torso Chest
-  const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.28, 0.34, 28));
-  torso.position.set(0, 0.07, 0);
-  group.add(torso);
-
-  const shoulderRing = new THREE.Mesh(new THREE.TorusGeometry(0.34, 0.04, 12, 28));
-  shoulderRing.rotation.x = Math.PI / 2;
-  shoulderRing.position.set(0, 0.26, 0);
-  group.add(shoulderRing);
-
-  // Crown Cup & Dome
-  const crownCup = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.26, 0.28, 28));
-  crownCup.position.set(0, 0.42, 0);
-  group.add(crownCup);
-
-  const crownDome = new THREE.Mesh(new THREE.SphereGeometry(0.20, 20, 20));
-  crownDome.position.set(0, 0.54, 0);
-  group.add(crownDome);
-
-  const crownRim = new THREE.Mesh(new THREE.TorusGeometry(0.22, 0.035, 12, 24));
-  crownRim.rotation.x = Math.PI / 2;
-  crownRim.position.set(0, 0.64, 0);
-  group.add(crownRim);
-
-  // Iconic King's 3D Cross
-  const crossVert = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.24, 0.08));
-  crossVert.position.set(0, 0.77, 0);
-  group.add(crossVert);
-
-  const crossHoriz = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.08, 0.08));
-  crossHoriz.position.set(0, 0.81, 0);
-  group.add(crossHoriz);
-
-  return group;
-}
-
-// 03: SYSTEM BUILD & CREATIVE — 3D Interconnected Architectural System
-function createArchitecturalSystemMesh(): THREE.Group {
-  const group = new THREE.Group();
-
-  // Central Core 3D Cube
-  const coreBox = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.42, 0.42));
-  coreBox.rotation.x = Math.PI / 6;
-  coreBox.rotation.y = Math.PI / 4;
-  group.add(coreBox);
-
-  // Inner Core Sphere
-  const coreSphere = new THREE.Mesh(new THREE.SphereGeometry(0.20, 16, 16));
-  group.add(coreSphere);
-
-  // 6 Primary Axial Spherical Nodes
-  const axialNodes: THREE.Vector3[] = [
-    new THREE.Vector3(0.68, 0, 0),
-    new THREE.Vector3(-0.68, 0, 0),
-    new THREE.Vector3(0, 0.68, 0),
-    new THREE.Vector3(0, -0.68, 0),
-    new THREE.Vector3(0, 0, 0.68),
-    new THREE.Vector3(0, 0, -0.68)
-  ];
-
-  // 8 Diagonal Corner Spherical Nodes
-  const cubeNodes: THREE.Vector3[] = [
-    new THREE.Vector3(0.42, 0.42, 0.42),
-    new THREE.Vector3(-0.42, 0.42, 0.42),
-    new THREE.Vector3(0.42, -0.42, 0.42),
-    new THREE.Vector3(-0.42, -0.42, 0.42),
-    new THREE.Vector3(0.42, 0.42, -0.42),
-    new THREE.Vector3(-0.42, 0.42, -0.42),
-    new THREE.Vector3(0.42, -0.42, -0.42),
-    new THREE.Vector3(-0.42, -0.42, -0.42)
-  ];
-
-  const allNodes = [...axialNodes, ...cubeNodes];
-
-  // Add Sphere meshes for each node
-  allNodes.forEach((pos) => {
-    const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.12, 14, 14));
-    sphere.position.copy(pos);
-    group.add(sphere);
-
-    // Beams connecting node to center
-    const len = pos.length();
-    const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, len, 10));
-    beam.position.copy(pos.clone().multiplyScalar(0.5));
-    beam.quaternion.setFromUnitVectors(
-      new THREE.Vector3(0, 1, 0),
-      pos.clone().normalize()
-    );
-    group.add(beam);
-  });
-
-  // Perimeter connecting beams between axial nodes
-  const outerBeams: [number, number][] = [
-    [0, 2], [0, 3], [0, 4], [0, 5],
-    [1, 2], [1, 3], [1, 4], [1, 5],
-    [2, 4], [2, 5], [3, 4], [3, 5]
-  ];
-
-  outerBeams.forEach(([i, j]) => {
-    const p1 = axialNodes[i];
-    const p2 = axialNodes[j];
-    const dir = new THREE.Vector3().subVectors(p2, p1);
-    const len = dir.length();
-    const mid = new THREE.Vector3().addVectors(p1, p2).multiplyScalar(0.5);
-
-    const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, len, 10));
-    beam.position.copy(mid);
-    beam.quaternion.setFromUnitVectors(
-      new THREE.Vector3(0, 1, 0),
-      dir.normalize()
-    );
-    group.add(beam);
-  });
-
-  return group;
-}
-
-// 04: PRECISION LAUNCH — 3D Rocket matching the uploaded blueprint
-function createRocketMesh(): THREE.Group {
-  const group = new THREE.Group();
-
-  // 1. Aerodynamic Bullet/Ogive Nose Cone
-  const noseGeo = new THREE.ConeGeometry(0.34, 0.65, 20, 6);
-  const noseMesh = new THREE.Mesh(noseGeo);
-  noseMesh.position.set(0, 0.625, 0);
-  group.add(noseMesh);
-
-  // Nose Cone Seam Accent Rings
-  const noseRing1 = new THREE.Mesh(new THREE.TorusGeometry(0.18, 0.012, 8, 20));
-  noseRing1.rotation.x = Math.PI / 2;
-  noseRing1.position.set(0, 0.72, 0);
-  group.add(noseRing1);
-
-  const noseRing2 = new THREE.Mesh(new THREE.TorusGeometry(0.28, 0.015, 8, 20));
-  noseRing2.rotation.x = Math.PI / 2;
-  noseRing2.position.set(0, 0.48, 0);
-  group.add(noseRing2);
-
-  // 2. Main Cylindrical Fuselage Body
-  const bodyGeo = new THREE.CylinderGeometry(0.34, 0.34, 0.70, 20, 4);
-  const bodyMesh = new THREE.Mesh(bodyGeo);
-  bodyMesh.position.set(0, -0.05, 0);
-  group.add(bodyMesh);
-
-  // Body Belt Rings
-  const beltTop = new THREE.Mesh(new THREE.TorusGeometry(0.345, 0.018, 8, 20));
-  beltTop.rotation.x = Math.PI / 2;
-  beltTop.position.set(0, 0.22, 0);
-  group.add(beltTop);
-
-  const beltMid = new THREE.Mesh(new THREE.TorusGeometry(0.345, 0.018, 8, 20));
-  beltMid.rotation.x = Math.PI / 2;
-  beltMid.position.set(0, -0.12, 0);
-  group.add(beltMid);
-
-  const beltBottom = new THREE.Mesh(new THREE.TorusGeometry(0.345, 0.018, 8, 20));
-  beltBottom.rotation.x = Math.PI / 2;
-  beltBottom.position.set(0, -0.38, 0);
-  group.add(beltBottom);
-
-  // 3. Iconic Double-Ringed Circular Porthole Window on Front Torso
-  const portholeOuter = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.025, 10, 20));
-  portholeOuter.position.set(0, 0.12, 0.34);
-  group.add(portholeOuter);
-
-  const portholeInner = new THREE.Mesh(new THREE.TorusGeometry(0.08, 0.018, 8, 16));
-  portholeInner.position.set(0, 0.12, 0.345);
-  group.add(portholeInner);
-
-  // 4. Multi-Stage Stepped Engine Thruster Nozzle Base
-  // Tier 1: Upper Neck Collar
-  const neckCyl = new THREE.Mesh(new THREE.CylinderGeometry(0.30, 0.26, 0.10, 20, 2));
-  neckCyl.position.set(0, -0.43, 0);
-  group.add(neckCyl);
-
-  // Tier 2: Mid Flared Thruster Bell
-  const bellGeo = new THREE.CylinderGeometry(0.24, 0.28, 0.12, 20, 2);
-  const bellMesh = new THREE.Mesh(bellGeo);
-  bellMesh.position.set(0, -0.53, 0);
-  group.add(bellMesh);
-
-  // Tier 3: Corrugated Thruster Ring
-  const thrusterRing = new THREE.Mesh(new THREE.TorusGeometry(0.28, 0.022, 8, 20));
-  thrusterRing.rotation.x = Math.PI / 2;
-  thrusterRing.position.set(0, -0.59, 0);
-  group.add(thrusterRing);
-
-  // Tier 4: Lower Nozzle Exit Cone
-  const exitNozzle = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.16, 0.14, 18, 2));
-  exitNozzle.position.set(0, -0.68, 0);
-  group.add(exitNozzle);
-
-  const exitLip = new THREE.Mesh(new THREE.TorusGeometry(0.165, 0.018, 8, 18));
-  exitLip.rotation.x = Math.PI / 2;
-  exitLip.position.set(0, -0.75, 0);
-  group.add(exitLip);
-
-  // 5. Four Symmetrical Swept Retro Fins with Internal Structural Struts
-  for (let i = 0; i < 4; i++) {
-    const angle = (i * Math.PI) / 2;
-    const finShape = new THREE.Shape();
-    finShape.moveTo(0.32, 0.02);
-    finShape.quadraticCurveTo(0.52, -0.25, 0.68, -0.58);
-    finShape.lineTo(0.54, -0.70);
-    finShape.lineTo(0.32, -0.45);
-    finShape.closePath();
-
-    const finGeo = new THREE.ExtrudeGeometry(finShape, {
-      depth: 0.03,
-      bevelEnabled: true,
-      bevelSize: 0.01,
-      bevelThickness: 0.01
-    });
-    finGeo.center();
-
-    const finMesh = new THREE.Mesh(finGeo);
-    const radiusOffset = 0.50;
-    const finY = -0.34;
-    finMesh.position.set(Math.cos(angle) * radiusOffset, finY, Math.sin(angle) * radiusOffset);
-    finMesh.rotation.y = -angle + Math.PI / 2;
-    group.add(finMesh);
-  }
-
-  return group;
-}
-
-// 05: OPTIMIZE & SCALE — 3D Exponential Growth Chart & Upward Arrow
-function createGrowthArrowMesh(): THREE.Group {
-  const group = new THREE.Group();
-
-  // 5 Rising 3D Bar Chart Columns forming a curved graph
-  const colXs = [-0.58, -0.34, -0.10, 0.14, 0.38];
-  const colHeights = [0.18, 0.30, 0.48, 0.72, 1.02];
-
-  colXs.forEach((cx, idx) => {
-    const h = colHeights[idx];
-    const colMesh = new THREE.Mesh(new THREE.BoxGeometry(0.18, h, 0.22));
-    colMesh.position.set(cx, -0.58 + h / 2, 0);
-    group.add(colMesh);
-  });
-
-  // Base Foundation Plate
-  const basePlate = new THREE.Mesh(new THREE.BoxGeometry(1.24, 0.08, 0.30));
-  basePlate.position.set(-0.10, -0.62, 0);
-  group.add(basePlate);
-
-  // 3D Angled Upward Arrow Shaft
-  const shaftMesh = new THREE.Mesh(new THREE.BoxGeometry(0.16, 1.48, 0.20));
-  shaftMesh.rotation.z = -Math.PI / 3.6;
-  shaftMesh.position.set(-0.02, 0.08, 0.12);
-  group.add(shaftMesh);
-
-  // 3D Pyramid Arrowhead
-  const headMesh = new THREE.Mesh(new THREE.ConeGeometry(0.38, 0.62, 4));
-  headMesh.rotation.z = -Math.PI / 3.6;
-  headMesh.position.set(0.58, 0.64, 0.12);
-  group.add(headMesh);
-
-  return group;
-}
-
+/**
+ * Our Process / How We Work Section
+ *
+ * Swiss Editorial Grid Architecture:
+ * - Column 1 (Left): Oversized numerical anchor (01, 02, 03) sticky throughout each step.
+ * - Columns 2 & 3 (Right): Solid black horizontal rule (`border-t-2 border-black`)
+ *   spanning across the content columns, aligned with the top of the number.
+ * - Content Layers:
+ *     1. Main heading (bold Swiss grotesk) + descriptor label
+ *     2. Primary and secondary editorial explanations
+ *     3. Supporting deliverables/breakdown list with thin rules
+ *     4. Editorial serif closing statement on Step 03
+ * - Scroll mechanics untouched: exact same 1:1 scroll progression and sticky runway.
+ */
 const Process: React.FC = () => {
-  const [activeIndex, setActiveIndex] = useState<number>(0);
-  const containerRef = useRef<HTMLDivElement | null>(null);
-
-  const activeIndexRef = useRef<number>(0);
-  const morphStartTimeRef = useRef<number>(0);
-
-  // References to hold Three.js objects across renders
-  const targetSegmentSetsRef = useRef<LineSegment[][]>([]);
-  const startPositionsRef = useRef<Float32Array | null>(null);
-
-  // Pre-generate all 5 3D wireframe line segment target sets once
-  if (targetSegmentSetsRef.current.length === 0) {
-    targetSegmentSetsRef.current = [
-      sampleLineSegmentsFromGroup(createMagnifyingGlassMesh(), WIRE_SEGMENTS_COUNT),
-      sampleLineSegmentsFromGroup(createChessKingMesh(), WIRE_SEGMENTS_COUNT),
-      sampleLineSegmentsFromGroup(createArchitecturalSystemMesh(), WIRE_SEGMENTS_COUNT),
-      sampleLineSegmentsFromGroup(createRocketMesh(), WIRE_SEGMENTS_COUNT),
-      sampleLineSegmentsFromGroup(createGrowthArrowMesh(), WIRE_SEGMENTS_COUNT)
-    ];
-  }
-
-  // Handle stage change
-  useEffect(() => {
-    activeIndexRef.current = activeIndex;
-    morphStartTimeRef.current = performance.now();
-  }, [activeIndex]);
-
-  // Optional automatic stage cycling every 7 seconds if untouched
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % processSteps.length);
-    }, 7000);
-    return () => clearInterval(timer);
-  }, [activeIndex]);
-
-  // Main Three.js Scene Setup & Render Loop
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    // 1. Scene, Camera, Renderer
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
-    camera.position.set(0, 0, 3.2);
-
-    const renderer = new THREE.WebGLRenderer({
-      alpha: true,
-      antialias: true,
-      powerPreference: 'high-performance'
-    });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    renderer.setClearColor(0x000000, 0);
-
-    container.appendChild(renderer.domElement);
-
-    // 2. BufferGeometry Initialization for LineSegments
-    const initialSegments = targetSegmentSetsRef.current[0];
-    const positions = new Float32Array(WIRE_SEGMENTS_COUNT * 6);
-    const startPositions = new Float32Array(WIRE_SEGMENTS_COUNT * 6);
-
-    for (let i = 0; i < WIRE_SEGMENTS_COUNT; i++) {
-      const seg = initialSegments[i];
-      const idx = i * 6;
-
-      positions[idx] = seg.start.x;
-      positions[idx + 1] = seg.start.y;
-      positions[idx + 2] = seg.start.z;
-      positions[idx + 3] = seg.end.x;
-      positions[idx + 4] = seg.end.y;
-      positions[idx + 5] = seg.end.z;
-
-      startPositions[idx] = seg.start.x;
-      startPositions[idx + 1] = seg.start.y;
-      startPositions[idx + 2] = seg.start.z;
-      startPositions[idx + 3] = seg.end.x;
-      startPositions[idx + 4] = seg.end.y;
-      startPositions[idx + 5] = seg.end.z;
-    }
-
-    startPositionsRef.current = startPositions;
-
-    const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-    // 3. Shader Material for Elegant Minimal Wireframe Lines
-    const material = new THREE.ShaderMaterial({
-      uniforms: {
-        uColor: { value: new THREE.Color('#FFFFFF') }
-      },
-      vertexShader: `
-        varying float vDepth;
-
-        void main() {
-          vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-          gl_Position = projectionMatrix * mvPosition;
-          vDepth = mvPosition.z;
-        }
-      `,
-      fragmentShader: `
-        uniform vec3 uColor;
-        varying float vDepth;
-
-        void main() {
-          // Subtle depth shading (closer lines = crisp ~0.95, further lines = softer ~0.35)
-          float depthFactor = clamp((-vDepth - 1.0) / 3.2, 0.35, 0.95);
-          gl_FragColor = vec4(uColor, depthFactor);
-        }
-      `,
-      transparent: true,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending
-    });
-
-    const wireframeGroup = new THREE.Group();
-    // Subtle pitch tilt (10 deg) for optimal 3D perspective
-    wireframeGroup.rotation.x = 0.18;
-
-    const lineSegmentsSystem = new THREE.LineSegments(geometry, material);
-    wireframeGroup.add(lineSegmentsSystem);
-    scene.add(wireframeGroup);
-
-    // 4. Resize Handler
-    const handleResize = () => {
-      if (!container) return;
-      const width = container.clientWidth || 300;
-      const height = container.clientHeight || 300;
-      camera.aspect = width / (height || 1);
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
-    };
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
-
-    let resizeObserver: ResizeObserver | null = null;
-    if (typeof ResizeObserver !== 'undefined' && container) {
-      resizeObserver = new ResizeObserver(() => {
-        handleResize();
-      });
-      resizeObserver.observe(container);
-    }
-
-    // 5. Morphing & Render Loop
-    let animId: number;
-    const MORPH_DURATION = 1500; // ms
-    let prevActiveIndex = 0;
-
-    const render = (now: number) => {
-      const currentActiveIndex = activeIndexRef.current;
-
-      // If stage index changed, snapshot current positions as startPositions
-      if (currentActiveIndex !== prevActiveIndex) {
-        const posAttr = geometry.attributes.position.array as Float32Array;
-        for (let i = 0; i < WIRE_SEGMENTS_COUNT * 6; i++) {
-          startPositions[i] = posAttr[i];
-        }
-        prevActiveIndex = currentActiveIndex;
-      }
-
-      const elapsed = now - morphStartTimeRef.current;
-      const morphProgress = Math.min(Math.max(elapsed / MORPH_DURATION, 0), 1);
-      
-      // Smooth cubic ease in-out
-      const ease = morphProgress < 0.5 
-        ? 4 * morphProgress * morphProgress * morphProgress 
-        : 1 - Math.pow(-2 * morphProgress + 2, 3) / 2;
-
-      const posAttr = geometry.attributes.position.array as Float32Array;
-      const targetSegments = targetSegmentSetsRef.current[currentActiveIndex];
-
-      for (let i = 0; i < WIRE_SEGMENTS_COUNT; i++) {
-        const idx6 = i * 6;
-        const targetSeg = targetSegments[i];
-
-        const s1x = startPositions[idx6];
-        const s1y = startPositions[idx6 + 1];
-        const s1z = startPositions[idx6 + 2];
-
-        const s2x = startPositions[idx6 + 3];
-        const s2y = startPositions[idx6 + 4];
-        const s2z = startPositions[idx6 + 5];
-
-        posAttr[idx6] = s1x + (targetSeg.start.x - s1x) * ease;
-        posAttr[idx6 + 1] = s1y + (targetSeg.start.y - s1y) * ease;
-        posAttr[idx6 + 2] = s1z + (targetSeg.start.z - s1z) * ease;
-
-        posAttr[idx6] = s2x + (targetSeg.end.x - s2x) * ease;
-        posAttr[idx6 + 4] = s2y + (targetSeg.end.y - s2y) * ease;
-        posAttr[idx6 + 5] = s2z + (targetSeg.end.z - s2z) * ease;
-      }
-
-      geometry.attributes.position.needsUpdate = true;
-
-      // Smooth continuous 3D compound rotation around Y and X axes
-      wireframeGroup.rotation.y += 0.007;
-      wireframeGroup.rotation.x = 0.18 + Math.sin(now * 0.0006) * 0.04;
-
-      renderer.render(scene, camera);
-      animId = requestAnimationFrame(render);
-    };
-
-    animId = requestAnimationFrame(render);
-
-    // 6. Cleanup
-    return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener('resize', handleResize);
-      if (resizeObserver) {
-        resizeObserver.disconnect();
-      }
-      if (container && renderer.domElement) {
-        container.removeChild(renderer.domElement);
-      }
-      geometry.dispose();
-      material.dispose();
-      renderer.dispose();
-    };
-  }, []);
-
   return (
-    <section 
-      id="process" 
-      className="py-20 sm:py-32 md:py-40 bg-[#000000] text-[#F5F5F2] relative z-10 scroll-mt-12 border-t border-white/10 overflow-hidden select-none"
-    >
-      {/* Oversized Subtle Background Typography */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 flex items-center justify-center">
-        <span className="text-[18vw] sm:text-[23vw] font-heading font-serif uppercase tracking-[-0.07em] leading-none text-white/[0.04] whitespace-nowrap select-none">
-          PROCESS
-        </span>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 relative z-10">
-        
-        {/* Section Intro Header */}
-        <div className="max-w-3xl mb-12 sm:mb-20">
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-[9px] sm:text-xs font-mono uppercase tracking-[0.25em] sm:tracking-[0.3em] text-gray-400 mb-3 sm:mb-4"
-          >
-            // THE PROCESS
-          </motion.p>
-
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-3xl sm:text-5xl lg:text-6xl font-heading font-serif font-normal uppercase tracking-tighter text-white leading-[0.95] mb-4 sm:mb-6"
-          >
-            HOW WE BUILD<br />
-            <span className="text-gray-400 italic font-serif">SYSTEMS THAT GROW.</span>
-          </motion.h2>
-
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-xs sm:text-base text-gray-400 font-body font-light leading-relaxed max-w-2xl"
-          >
-            Every engagement follows a deliberate process. We understand the business first, build the right system around it, launch with intent, and continuously refine what works.
-          </motion.p>
+    <section id="process" className="w-full select-none pt-12 sm:pt-16 lg:pt-20 pb-20 sm:pb-32">
+      <div className="w-full max-w-[1440px] mx-auto flex flex-col">
+        {/* Top Section Label: "FROM START TO FINISH" */}
+        <div className="text-[11px] sm:text-xs font-mono uppercase tracking-[0.2em] text-neutral-600 mb-10 sm:mb-14 lg:mb-16">
+          FROM START TO FINISH
         </div>
 
-        {/* Main Two Column Layout: Process List (Left) + Three.js Canvas (Right) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 lg:gap-16 items-center">
-          
-          {/* Left Column: Interactive Process List (approx 45% width) */}
-          <div className="lg:col-span-5 space-y-2 order-2 lg:order-1">
-            
-            {/* Stage Counter Label */}
-            <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-white/15 text-[9px] sm:text-xs font-mono uppercase tracking-[0.25em] text-gray-400">
-              <span>STAGE SELECTION</span>
-              <span className="text-white font-medium">
-                [ 0{activeIndex + 1} / 05 ]
-              </span>
-            </div>
+        {/* Sequential Process Steps */}
+        <div className="flex flex-col">
+          {stepsData.map((step) => (
+            <article
+              key={step.number}
+              id={`process-step-${step.number}`}
+              className="w-full grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 lg:gap-14 min-h-[85vh] sm:min-h-[90vh] lg:min-h-[95vh] pt-6 sm:pt-8 lg:pt-10 pb-20 sm:pb-28 lg:pb-36"
+            >
+              {/* Column 1: Number — Sits cleanly on the left with NO line above it */}
+              <div className="md:col-span-3 lg:col-span-3 relative">
+                <div className="sticky top-[64px] sm:top-[74px] lg:top-[84px] z-10 select-none">
+                  <span className="font-grotesk font-bold tracking-[-0.05em] leading-[0.74] text-black text-7xl sm:text-8xl md:text-[8.5rem] lg:text-[10.5rem] xl:text-[12rem] block">
+                    {step.number}
+                  </span>
+                </div>
+              </div>
 
-            {/* List Rows */}
-            <div className="divide-y divide-white/15 border-b border-white/15">
-              {processSteps.map((step, idx) => {
-                const isActive = activeIndex === idx;
-
-                return (
-                  <button
-                    key={step.number}
-                    onClick={() => setActiveIndex(idx)}
-                    role="tab"
-                    aria-selected={isActive}
-                    aria-controls={`process-panel-${idx}`}
-                    className={`w-full text-left py-4 sm:py-6 lg:py-7 transition-all duration-300 group focus:outline-none cursor-pointer flex flex-col justify-center relative min-h-[50px] ${
-                      isActive ? 'opacity-100' : 'opacity-50 hover:opacity-80'
-                    }`}
-                  >
-                    {/* Active Accent Indicator */}
-                    <div className={`absolute left-0 top-0 bottom-0 w-[2px] transition-colors duration-300 ${
-                      isActive ? 'bg-white' : 'bg-transparent'
-                    }`} />
-
-                    <div className="flex items-center justify-between gap-3 sm:gap-4 pl-3">
-                      <div className="flex items-center gap-3 sm:gap-6 min-w-0">
-                        <span className={`font-mono text-xs sm:text-sm uppercase tracking-widest shrink-0 transition-colors ${
-                          isActive ? 'text-white font-semibold' : 'text-gray-500'
-                        }`}>
-                          {step.number}
-                        </span>
-
-                        <h3 className={`text-base sm:text-xl lg:text-2xl font-body font-normal tracking-[-0.01em] transition-colors leading-snug ${
-                          isActive ? 'text-white font-medium' : 'text-gray-400 group-hover:text-gray-200'
-                        }`}>
-                          {step.title}
-                        </h3>
-                      </div>
-
-                      <span className={`text-[8px] sm:text-[10px] font-mono tracking-[0.15em] sm:tracking-[0.2em] uppercase shrink-0 transition-colors ${
-                        isActive ? 'text-gray-300' : 'text-gray-600'
-                      }`}>
-                        {step.subtitle}
-                      </span>
+              {/* Columns 2 & 3: Content block with crisp solid black line starting at the title and spanning to the right edge */}
+              <div className="md:col-span-9 lg:col-span-9 border-t-2 border-black pt-5 sm:pt-6 lg:pt-7">
+                {/* Primary Section: Title + Subtitle & Narrative Paragraphs */}
+                <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 lg:gap-12 items-start">
+                  
+                  {/* Title & Subtitle */}
+                  <div className="md:col-span-5 lg:col-span-5 flex flex-col justify-start">
+                    <h4 className="text-2xl sm:text-3xl md:text-[2.1rem] lg:text-[2.4rem] font-grotesk font-bold tracking-[-0.03em] leading-[1.12] text-black">
+                      {step.title}
+                    </h4>
+                    <div className="text-sm sm:text-base font-grotesk font-medium text-neutral-600 mt-2 sm:mt-2.5">
+                      {step.subLabel}
                     </div>
+                  </div>
 
-                    {/* Animated Expandable Description for Active Item */}
-                    <AnimatePresence initial={false}>
-                      {isActive && (
-                        <motion.div
-                          id={`process-panel-${idx}`}
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                          className="overflow-hidden pl-3"
-                        >
-                          <p className="pt-2.5 sm:pt-4 text-xs sm:text-sm text-gray-400 font-light leading-relaxed max-w-lg">
-                            {step.desc}
-                          </p>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                  {/* Primary Narrative Paragraphs */}
+                  <div className="md:col-span-7 lg:col-span-7 flex flex-col space-y-4 sm:space-y-5">
+                    <p className="font-grotesk font-normal text-sm sm:text-base md:text-[0.975rem] text-neutral-700 leading-[1.68] tracking-[-0.01em]">
+                      {step.paragraph1}
+                    </p>
+                    <p className="font-grotesk font-normal text-sm sm:text-base md:text-[0.975rem] text-neutral-700 leading-[1.68] tracking-[-0.01em]">
+                      {step.paragraph2}
+                    </p>
+                  </div>
 
-                  </button>
-                );
-              })}
-            </div>
+                </div>
 
-          </div>
+                {/* Supporting Details / Editorial Breakdown Layer */}
+                <div className="mt-10 sm:mt-12 lg:mt-14 pt-8 sm:pt-10 border-t border-black/15">
+                  <div className="text-[11px] sm:text-xs font-mono uppercase tracking-[0.18em] text-neutral-600 mb-6 sm:mb-8">
+                    {step.supportingHeader}
+                  </div>
 
-          {/* Right Column: Interactive Three.js WebGL Particle System Canvas */}
-          <div className="lg:col-span-7 flex flex-col items-center justify-center relative order-1 lg:order-2">
-            <div className="relative w-full aspect-square max-w-[340px] xs:max-w-[400px] sm:max-w-[500px] lg:max-w-[560px] rounded-xs border border-white/10 bg-black/50 backdrop-blur-xs p-3.5 sm:p-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)] flex flex-col justify-between overflow-hidden">
-              
-              {/* Corner Watermark Details */}
-              <div className="flex items-center justify-between text-[8px] sm:text-[10px] font-mono uppercase tracking-[0.2em] sm:tracking-[0.25em] text-gray-500 z-10 pointer-events-none">
-                <span>[ STAGE 0{activeIndex + 1} — FORMATION ]</span>
-                <span className="flex items-center gap-1.5 text-gray-400">
-                  <span className="w-1.5 h-1.5 rounded-full bg-white/80 animate-pulse" />
-                  THREE.JS WEBGL
-                </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 lg:gap-x-14 gap-y-6 sm:gap-y-8">
+                    {step.supportingItems.map((item, idx) => (
+                      <div
+                        key={idx}
+                        className="flex flex-col space-y-2 pb-5 border-b border-black/10"
+                      >
+                        <div className="font-mono text-xs sm:text-[13px] font-bold text-black uppercase tracking-[0.06em]">
+                          {item.label}
+                        </div>
+                        <p className="font-grotesk font-normal text-xs sm:text-sm text-neutral-700 leading-[1.62]">
+                          {item.description}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Editorial Serif Closing Statement (for Step 03) */}
+                  {step.closingStatement && (
+                    <div className="mt-8 sm:mt-10 pt-6 border-t border-black/15">
+                      <p className="font-serif italic text-xl sm:text-2xl md:text-[1.75rem] text-black leading-snug">
+                        "{step.closingStatement}"
+                      </p>
+                    </div>
+                  )}
+                </div>
+
               </div>
+            </article>
+          ))}
+        </div>
 
-              {/* Main Three.js Container */}
-              <div 
-                ref={containerRef}
-                className="relative w-full h-full flex items-center justify-center my-auto pointer-events-none overflow-hidden min-h-[220px] sm:min-h-[300px]"
-              />
-
-              {/* Bottom Technical Subtitle Watermark */}
-              <div className="flex items-center justify-between text-[8px] sm:text-[10px] font-mono uppercase tracking-[0.15em] sm:tracking-[0.2em] text-gray-500 z-10 pointer-events-none pt-2 border-t border-white/5">
-                <span className="truncate mr-2">{processSteps[activeIndex].title}</span>
-                <span className="text-gray-600 shrink-0">3D ROTATION</span>
-              </div>
-
+        {/* Minimal Swiss Closing Action & Natural Handoff to Next Section */}
+        <div className="w-full pt-12 sm:pt-16 pb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 border-t border-black/15 mt-8 sm:mt-12">
+          <div className="space-y-1">
+            <div className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.14em] text-neutral-600">
+              Stage 01
+            </div>
+            <div className="font-serif text-xl sm:text-2xl md:text-3xl text-black">
+              It begins with a 30-minute discovery conversation.
             </div>
           </div>
-
+          <button
+            onClick={openBookingModal}
+            className="inline-flex items-center gap-3 px-6 sm:px-7 py-3.5 bg-black text-white hover:bg-neutral-800 transition-colors text-xs font-mono uppercase tracking-[0.14em] group cursor-pointer"
+          >
+            <span>Book Discovery Call</span>
+            <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </button>
         </div>
 
       </div>

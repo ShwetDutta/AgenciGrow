@@ -1,89 +1,135 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 const WhoWeAre: React.FC = () => {
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  /* ==========================================================================
+     SCROLL MATH (Hero Shrink & Reveal Effect):
+     - target: trackRef (height: 250vh)
+     - offset: ['start start', 'end end']
+     - start start = 0px scroll (Who We Are enters docked fullscreen)
+     - 0 -> 0.48 = stays full scale (1.0) while user views Who We Are
+     - 0.48 -> 1.0 = scales down smoothly to 0.72 as What We Believe ascends
+     ========================================================================== */
+  const { scrollYProgress } = useScroll({
+    target: trackRef,
+    offset: ['start start', 'end end'],
+  });
+
+  // Scale down from 1.0 to 0.72 as What We Believe section ascends
+  const scale = useTransform(scrollYProgress, [0, 0.48, 1], [1, 1, 0.72]);
+
+  // Corner radius transforms from 0px (edge-to-edge) up to 40px
+  const borderRadius = useTransform(scrollYProgress, [0, 0.48, 0.85], ['0px', '0px', '40px']);
+
+  // Elevation shadow as it shrinks into a floating card
+  const boxShadow = useTransform(
+    scrollYProgress,
+    [0, 0.48, 0.85],
+    [
+      '0px 0px 0px rgba(0,0,0,0)',
+      '0px 0px 0px rgba(0,0,0,0)',
+      '0px 35px 110px -10px rgba(0,0,0,0.95), 0px 0px 0px 1px rgba(255,255,255,0.18)',
+    ]
+  );
+
+  // Subtle dimming overlay
+  const dimOpacity = useTransform(scrollYProgress, [0.48, 0.95], [0, 0.35]);
+
+  // Horizontal motion for the oversized display headline as user scrolls
+  const whoTitleX = useTransform(scrollYProgress, [0, 1], ['40vw', '-40vw']);
+
   return (
-    <section id="about" className="py-28 bg-[#0A0A0B] relative z-10 scroll-mt-12 overflow-hidden border-t border-white/5">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
-        
-        {/* Header Block */}
-        <div className="max-w-4xl mb-20">
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-[11px] font-semibold tracking-[0.25em] uppercase text-[#8B8F96] mb-4 font-body"
-          >
-            // WHO WE ARE
-          </motion.p>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-heading text-[#F5F5F2] tracking-tight leading-[1.12]"
-          >
-            The agency we wished existed when we started.
-          </motion.h2>
-        </div>
+    <section
+      ref={trackRef}
+      id="about"
+      className="relative z-40 w-full h-[250vh] bg-[#07080a] select-none -mt-[100vh]"
+    >
+      {/* Pinned Sticky Viewport Window */}
+      <div className="sticky top-0 w-full h-screen overflow-hidden flex items-center justify-center p-0 z-0 bg-[#07080a]">
+        {/* Subtle Ambient Spatial Depth Grid (visible when card shrinks away from edges) */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_38%,_rgba(255,255,255,0.08)_0%,_transparent_65%)] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(#ffffff0d_1px,transparent_1px)] [background-size:32px_32px] opacity-50 pointer-events-none" />
 
-        {/* 3 Columns/Paragraphs Block */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
-          <motion.div
-            initial={{ opacity: 0, y: 25 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="space-y-4"
-          >
-            <span className="text-xs font-semibold text-[#8B8F96] uppercase tracking-[0.2em] font-body block opacity-40">01 / GENUINE STRATEGY</span>
-            <p className="text-sm md:text-base text-[#C9CDD3] font-body font-light leading-relaxed">
-              AgenciGrow was founded to disrupt the traditional digital marketing paradigm. Instead of selling cookie-cutter templates or generic tactics, we engineer custom systems. We combine technical SEO, custom web design, and precise paid traffic funnels to capture high-intent search queries and transform them into predictable business growth.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 25 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="space-y-4"
-          >
-            <span className="text-xs font-semibold text-[#8B8F96] uppercase tracking-[0.2em] font-body block opacity-40">02 / FOUNDER-LED</span>
-            <p className="text-sm md:text-base text-[#C9CDD3] font-body font-light leading-relaxed">
-              We are a dedicated, founder-led team of digital growth specialists. This structure guarantees that senior strategists are directly crafting your marketing channels, writing copy, and building systems. Decisions are made fast, communications are crystal clear, and your systems are never diluted by layers of corporate management.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 25 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="space-y-4"
-          >
-            <span className="text-xs font-semibold text-[#8B8F96] uppercase tracking-[0.2em] font-body block opacity-40">03 / UNIFIED FOCUS</span>
-            <p className="text-sm md:text-base text-[#C9CDD3] font-body font-light leading-relaxed">
-              By limiting our active client roster, we provide unparalleled attention to your brand. We dedicate ourselves to thoroughly understanding your business model, customer touchpoints, and conversion bottlenecks before launching a single paid campaign. This exhaustive preparation ensures we build genuine trust and long-term search authority.
-            </p>
-          </motion.div>
-        </div>
-
-        {/* Small line beneath */}
+        {/* The Scaling Who We Are Canvas */}
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, delay: 0.5 }}
-          className="mt-20 pt-8 border-t border-white/5"
+          style={{
+            scale,
+            borderRadius,
+            boxShadow,
+            transformOrigin: 'center 42%',
+          }}
+          className="relative w-full h-full overflow-hidden flex flex-col justify-between px-5 sm:px-10 lg:px-14 py-6 sm:py-8 lg:py-10 will-change-transform bg-[#E5E3DD] text-[#111111]"
         >
-          <p className="text-xs md:text-sm text-[#8B8F96] font-body font-light tracking-wide italic flex items-center gap-2">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#C9CDD3]/60 animate-pulse" />
-            Currently working hands-on with a small number of businesses, by design.
-          </p>
-        </motion.div>
+          {/* Scroll-Driven Dimming Overlay */}
+          <motion.div
+            style={{ opacity: dimOpacity }}
+            className="absolute inset-0 bg-black pointer-events-none z-20"
+          />
 
+          <div className="w-full max-w-[1440px] mx-auto flex flex-col justify-between h-full relative z-10">
+            {/* Top divider & category row */}
+            <div className="w-full">
+              <div className="w-full border-t-2 border-black" />
+              <div className="w-full flex items-center justify-between py-2 sm:py-2.5 text-[11px] sm:text-xs font-mono tracking-[0.14em] uppercase text-neutral-800">
+                <span className="font-medium">
+                  AGENCIGROW®
+                </span>
+                <span className="text-neutral-600">
+                  [ 01 / WHO WE ARE ]
+                </span>
+                <span className="text-neutral-600 hidden sm:inline-block">
+                  GROWTH SYSTEMS AGENCY
+                </span>
+              </div>
+              <div className="w-full border-b-2 border-black" />
+            </div>
+
+            {/* Dramatically Oversized Bold Display Headline: "Who We Are" */}
+            <div className="w-full overflow-hidden py-1 sm:py-2 flex justify-center pointer-events-none select-none">
+              <motion.div
+                style={{ x: whoTitleX }}
+                className="whitespace-nowrap will-change-transform flex justify-center"
+              >
+                <h2 className="text-[17vw] sm:text-[19vw] md:text-[20vw] font-bold tracking-[-0.04em] leading-[0.82] text-black font-grotesk inline-block">
+                  Who We Are
+                </h2>
+              </motion.div>
+            </div>
+
+            <div className="w-full border-b-2 border-black mb-3 sm:mb-5" />
+
+            {/* Two-Column Open Editorial Content Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 pt-1 pb-2">
+              {/* Left Column: Large Serif Statement */}
+              <div className="lg:col-span-6">
+                <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.5vw] font-serif font-normal tracking-[-0.03em] leading-[1.12] text-black">
+                  We build brands that deserve to be remembered.
+                </h3>
+              </div>
+
+              {/* Right Column: Supporting Story Copy */}
+              <div className="lg:col-span-6 space-y-3 sm:space-y-4">
+                <p className="text-base sm:text-lg md:text-[1.25rem] lg:text-[1.35rem] font-grotesk font-normal text-black leading-[1.35] tracking-[-0.015em]">
+                  Traditional agencies pitch with senior leadership, then quietly delegate your campaigns to inexperienced interns. We rejected that model completely.
+                </p>
+                <p className="text-xs sm:text-sm md:text-[0.9375rem] font-grotesk font-normal text-neutral-700 leading-[1.55] tracking-[-0.01em]">
+                  At AgenciGrow, every growth vector—from algorithmic Meta and Google ad buying to custom-engineered web platforms and automated WhatsApp CRM pipelines—is personally architected by the founder. You receive institutional strategic clarity with zero communication friction.
+                </p>
+              </div>
+            </div>
+
+            {/* Bottom Border and Swiss Metadata Row */}
+            <div className="w-full">
+              <div className="w-full border-b-2 border-black" />
+              <div className="w-full pt-3 flex items-center justify-between text-[10px] sm:text-[11px] font-mono tracking-[0.14em] uppercase text-neutral-600">
+                <span className="text-neutral-700 font-medium">Zurich // Global</span>
+                <span className="text-neutral-500">Scroll to reveal What We Believe ↓</span>
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

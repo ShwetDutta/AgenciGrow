@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hero Section Scale-Down on Scroll</title>
+  
+  <!-- Modern clean typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       1. CSS RESET & GLOBAL RESETS
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: #0b0c10;
+      color: #e0e2ec;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-color: #0b0c10;
+    }
+
+    /* ==========================================================================
+       2. HERO SECTION ARCHITECTURE
+       - The container (.hero-track) provides the scroll distance (200vh).
+       - The inner wrapper (.hero-sticky) sticks to the viewport (100vh, top: 0).
+       - This gives us a 100vh scroll window to calculate the scale-down effect.
+       ========================================================================== */
+    .hero-track {
+      position: relative;
+      height: 180vh; /* Scroll runway for the shrink animation */
+      background-color: #050608;
+    }
+
+    .hero-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 1000px; /* Provides subtle depth perspective */
+    }
+
+    /* The visual container that scales down and dims */
+    .hero-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      transform-origin: center center;
+      will-change: transform, filter, border-radius;
+      /* GPU acceleration hints */
+      backface-visibility: hidden;
+      transform: translateZ(0);
+      transition: box-shadow 0.2s ease;
+    }
+
+    /* Fullscreen background image from Unsplash */
+    .hero-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: saturate(1.1);
+      transform: scale(1.04); /* Slight initial bleed to avoid edge clipping */
+    }
+
+    /* Dark gradient scrim to guarantee text legibility */
+    .hero-scrim {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.75) 100%);
+      pointer-events: none;
+    }
+
+    /* Hero overlay dimming layer tied to scroll */
+    .hero-dim {
+      position: absolute;
+      inset: 0;
+      background-color: #000000;
+      opacity: 0;
+      will-change: opacity;
+      pointer-events: none;
+    }
+
+    /* Hero centered typographic content */
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 900px;
+      padding: 0 24px;
+      color: #ffffff;
+      transform: translateZ(0);
+      will-change: transform, opacity;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      margin-bottom: 24px;
+      border-radius: 9999px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .hero-badge-pulse {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: #4ade80;
+      box-shadow: 0 0 10px #4ade80;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(2.75rem, 7vw, 6rem);
+      font-weight: 600;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+      text-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      font-weight: 300;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.82);
+      max-width: 620px;
+      margin: 0 auto 36px;
+    }
+
+    .scroll-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: rgba(255, 255, 255, 0.6);
+      animation: float 2.5s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(6px); }
+    }
+
+    /* ==========================================================================
+       3. THE REVEAL: CONTENT SECTION
+       - z-index: 10 places it physically above the shrinking hero.
+       - Large negative margin-top or overlapping sticky flow brings it over.
+       - Rounded top corners and subtle border make it look like a floating sheet.
+       ========================================================================== */
+    .content-section {
+      position: relative;
+      z-index: 10;
+      background-color: #0d0f14;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-top-left-radius: 36px;
+      border-top-right-radius: 36px;
+      box-shadow: 0 -24px 60px rgba(0, 0, 0, 0.85);
+      padding: 100px 24px 140px;
+      margin-top: -10vh; /* Smoothly intercepts the shrinking hero */
+    }
+
+    .content-container {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .content-header {
+      margin-bottom: 72px;
+      text-align: center;
+    }
+
+    .content-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #94a3b8;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .content-headline {
+      font-size: clamp(2rem, 4vw, 3.25rem);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      color: #f8fafc;
+      max-width: 780px;
+      margin: 0 auto 20px;
+    }
+
+    .content-desc {
+      font-size: 1.125rem;
+      color: #94a3b8;
+      line-height: 1.7;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* Grid cards inside content */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 28px;
+      margin-top: 56px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 20px;
+      padding: 36px 30px;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .card-num {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 2rem;
+      color: #64748b;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .card-title {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: #f1f5f9;
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+    }
+
+    .card-body {
+      color: #94a3b8;
+      font-size: 0.95rem;
+      line-height: 1.65;
+    }
+
+    /* Math telemetry pill (demonstrating exact calculations) */
+    .telemetry-pill {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      padding: 10px 18px;
+      border-radius: 9999px;
+      font-family: monospace;
+      font-size: 0.75rem;
+      color: #cbd5e1;
+      z-index: 100;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================================
+       1. HERO TRACK SECTION
+       ======================================================================== -->
+  <section class="hero-track" id="heroTrack">
+    
+    <!-- Sticky viewport window (stays locked while heroTrack scrolls) -->
+    <div class="hero-sticky" id="heroSticky">
+      
+      <!-- Scale-down canvas (receives transform: scale(), border-radius, and shadow) -->
+      <div class="hero-canvas" id="heroCanvas">
+        
+        <!-- High-res Unsplash Hero Image (Cinematic mountain architecture / nature) -->
+        <img 
+          class="hero-image" 
+          id="heroImage"
+          src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2560&q=85" 
+          alt="Atmospheric Mountain Wilderness" 
+        />
+
+        <!-- Vignette Scrim -->
+        <div class="hero-scrim"></div>
+
+        <!-- Dimming overlay layer (opacity controlled by JS scroll progress) -->
+        <div class="hero-dim" id="heroDim"></div>
+
+        <!-- Hero typography -->
+        <div class="hero-content" id="heroContent">
+          <div class="hero-badge">
+            <span class="hero-badge-pulse"></span>
+            <span>Scale-Down On Scroll</span>
+          </div>
+          
+          <h1 class="hero-title">Engineering Fluid Spatial Depth</h1>
+          
+          <p class="hero-subtitle">
+            Observe the background shrink smoothly into an inset viewport canvas as you scroll down, whilst the foreground content seamlessly slides forward.
+          </p>
+
+          <div class="scroll-indicator">
+            <span>Scroll to explore</span>
+            <span>↓</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ========================================================================
+       2. REVEAL CONTENT SECTION
+       ======================================================================== -->
+  <main class="content-section" id="contentSection">
+    <div class="content-container">
+      
+      <header class="content-header">
+        <span class="content-tag">Interactive Architecture</span>
+        <h2 class="content-headline">Seamless overlap without jarring layout shifts.</h2>
+        <p class="content-desc">
+          By synchronizing GPU-accelerated CSS transforms with high-frequency scroll telemetry via requestAnimationFrame, the animation achieves 60fps fluidity across desktop and mobile devices.
+        </p>
+      </header>
+
+      <!-- Demonstration Grid -->
+      <div class="features-grid">
+        
+        <article class="card">
+          <span class="card-num">01</span>
+          <h3 class="card-title">Sticky Scroll Runway</h3>
+          <p class="card-body">
+            The hero track is given an extended height (e.g. 180vh), while the inner viewport container is pinned with <code>position: sticky</code>. This converts vertical scroll distance into a normalized progress ratio from 0.0 to 1.0.
+          </p>
+        </article>
+
+        <article class="card">
+          <span class="card-num">02</span>
+          <h3 class="card-title">requestAnimationFrame Sync</h3>
+          <p class="card-body">
+            Scroll events only schedule an animation tick rather than directly updating DOM nodes. This eliminates scroll hitching and guarantees transform updates align with browser paint cycles.
+          </p>
+        </article>
+
+        <article class="card">
+          <span class="card-num">03</span>
+          <h3 class="card-title">Spatial Depth & Overlap</h3>
+          <p class="card-body">
+            As the hero recedes into the background (scaling down from 1.0 to 0.86), the content container slides in front with rounded corners and a soft shadow, completing the layered physical depth illusion.
+          </p>
+        </article>
+
+      </div>
+
+      <!-- Additional scroll space to appreciate the return scroll -->
+      <div style="margin-top: 80px; padding: 60px 40px; background: rgba(255,255,255,0.015); border: 1px dashed rgba(255,255,255,0.1); border-radius: 20px; text-align: center;">
+        <h4 style="font-size: 1.25rem; font-weight: 500; margin-bottom: 12px; color: #e2e8f0;">Reverse Scroll Testing</h4>
+        <p style="color: #94a3b8; font-size: 0.95rem; max-width: 580px; margin: 0 auto 24px;">
+          Scroll back to the top to see the hero canvas expand back to full 100vw and 100vh with matching reverse interpolation.
+        </p>
+        <button 
+          onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
+          style="padding: 10px 24px; border-radius: 9999px; background: #ffffff; color: #000000; border: none; font-weight: 600; font-size: 0.875rem; cursor: pointer;"
+        >
+          Scroll Back to Top ↑
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Live telemetry readout -->
+  <div class="telemetry-pill" id="telemetryPill">
+    Progress: 0.00 | Scale: 1.000
+  </div>
+
+  <!-- ========================================================================
+       3. JAVASCRIPT: SCROLL MATH & RAF ENGINE
+       ======================================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      // Cache DOM references
+      const heroTrack = document.getElementById('heroTrack');
+      const heroCanvas = document.getElementById('heroCanvas');
+      const heroContent = document.getElementById('heroContent');
+      const heroDim = document.getElementById('heroDim');
+      const telemetryPill = document.getElementById('telemetryPill');
+
+      // State tracking
+      let scrollY = window.pageYOffset || document.documentElement.scrollTop;
+      let isTicking = false;
+
+      // Track dimensions (recalculated on resize for performance)
+      let trackTop = 0;
+      let trackHeight = 0;
+      let windowHeight = window.innerHeight;
+
+      function updateMeasurements() {
+        const rect = heroTrack.getBoundingClientRect();
+        trackTop = window.pageYOffset + rect.top;
+        trackHeight = heroTrack.offsetHeight;
+        windowHeight = window.innerHeight;
+      }
+
+      /* ========================================================================
+         SCROLL-TRACKING MATH EXPLANATION:
+         1. We want the animation to progress from 0.0 (at scroll top) to 1.0
+            (when the hero track has scrolled past its threshold).
+         2. totalScrollableDistance = trackHeight - windowHeight
+            Because the sticky element occupies exactly 1 windowHeight, the user
+            scrolls through (trackHeight - windowHeight) pixels before the next
+            section reaches the viewport.
+         3. progress = clamp(scrollY / totalScrollableDistance, 0, 1)
+         4. We then map this progress to target properties:
+            - scale: from 1.00 down to 0.86
+            - borderRadius: from 0px up to 32px
+            - dimming opacity: from 0.0 up to 0.55
+            - content fade/lift: opacity 1.0 -> 0.0, translateY 0px -> -50px
+         ======================================================================== */
+      function render() {
+        const totalDistance = Math.max(trackHeight - windowHeight, 1);
+        const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // Calculate normalized progress clamped between 0 and 1
+        const rawProgress = (currentScroll - trackTop) / totalDistance;
+        const progress = Math.min(Math.max(rawProgress, 0), 1);
+
+        // Map progress to scale: 1.0 down to 0.86
+        const minScale = 0.86;
+        const currentScale = 1 - (progress * (1 - minScale));
+
+        // Map progress to border radius: 0px up to 32px
+        const maxBorderRadius = 32;
+        const currentBorderRadius = progress * maxBorderRadius;
+
+        // Map progress to dimming opacity: 0 up to 0.55
+        const maxDim = 0.55;
+        const currentDim = progress * maxDim;
+
+        // Map progress to hero text opacity and slight upward drift
+        const textOpacity = Math.max(1 - (progress * 1.5), 0);
+        const textTranslateY = progress * -60;
+
+        // Apply hardware-accelerated transforms to the hero canvas
+        heroCanvas.style.transform = `scale3d(${currentScale.toFixed(4)}, ${currentScale.toFixed(4)}, 1)`;
+        heroCanvas.style.borderRadius = `${currentBorderRadius.toFixed(1)}px`;
+        
+        // Add subtle shadow when scaled down to enhance depth
+        if (progress > 0.02) {
+          heroCanvas.style.boxShadow = `0 30px 80px rgba(0, 0, 0, ${ (progress * 0.7).toFixed(2) })`;
+        } else {
+          heroCanvas.style.boxShadow = 'none';
+        }
+
+        // Apply dimming overlay
+        heroDim.style.opacity = currentDim.toFixed(3);
+
+        // Apply text translation & fade
+        heroContent.style.opacity = textOpacity.toFixed(3);
+        heroContent.style.transform = `translate3d(0, ${textTranslateY.toFixed(1)}px, 0)`;
+
+        // Update live telemetry pill
+        telemetryPill.textContent = `Progress: ${progress.toFixed(2)} | Scale: ${currentScale.toFixed(3)}`;
+
+        // Release ticking lock
+        isTicking = false;
+      }
+
+      function onScroll() {
+        // requestAnimationFrame throttle: only schedule a frame if not already waiting
+        if (!isTicking) {
+          window.requestAnimationFrame(render);
+          isTicking = true;
+        }
+      }
+
+      // Initialize
+      updateMeasurements();
+      render();
+
+      // Event listeners with passive flag for smooth scrolling performance
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', () => {
+        updateMeasurements();
+        render();
+      }, { passive: true });
+
+    })();
+  </script>
+</body>
+</html>

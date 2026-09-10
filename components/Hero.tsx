@@ -1,160 +1,174 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-
-const editorialServices = ['STRATEGY', 'SYSTEMS', 'AUTOMATION', 'WEB', 'PAID MEDIA'];
+import { ArrowUpRight, Menu } from 'lucide-react';
+import { openBookingModal } from './CalendlyModal';
+import SwissMenuModal from './SwissMenuModal';
 
 const Hero: React.FC = () => {
-  const containerRef = useRef<HTMLElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Parallax scroll controls
+  /* ==========================================================================
+     SCROLL MATH:
+     - target: trackRef (height: 200vh)
+     - offset: ['start start', 'end end']
+     - start start = 0px scroll (hero enters viewport top)
+     - end end = 100vh scroll (bottom of track reaches bottom of viewport)
+     ========================================================================== */
   const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end start']
+    target: trackRef,
+    offset: ['start start', 'end end'],
   });
 
-  const headlineY = useTransform(scrollYProgress, [0, 1], ['0%', '-6%']);
-  const imageY = useTransform(scrollYProgress, [0, 1], ['0%', '8%']);
-  const bgTextX = useTransform(scrollYProgress, [0, 1], ['0%', '-6%']);
+  // Visibly scale down from 1.0 (fullscreen edge-to-edge) down to 0.72 as next section ascends
+  const scale = useTransform(scrollYProgress, [0, 0.6, 1], [1, 0.78, 0.70]);
+
+  // Corner radius transforms quickly from 0px (edge-to-edge) up to 40px
+  const borderRadius = useTransform(scrollYProgress, [0, 0.35], ['0px', '40px']);
+
+  // Subtle dimming overlay from 0 to 0.45 to push hero back in 3D space without wiping out content
+  const dimOpacity = useTransform(scrollYProgress, [0, 0.8], [0, 0.45]);
+
+  // Horizontal motion of the Didone typographic track
+  const textXTranslation = useTransform(scrollYProgress, [0, 1], ['0%', '-30%']);
+
+  // Maintain legibility of hero text while adding depth translation
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0.6]);
+  const contentTranslateY = useTransform(scrollYProgress, [0, 1], [0, -50]);
+
+  // Crisp perimeter illumination & deep elevation shadow as it shrinks into a card
+  const boxShadow = useTransform(
+    scrollYProgress,
+    [0, 0.35],
+    [
+      '0px 0px 0px rgba(0,0,0,0)',
+      '0px 30px 100px -10px rgba(0,0,0,0.95), 0px 0px 0px 1px rgba(255,255,255,0.22)'
+    ]
+  );
 
   return (
     <section
+      ref={trackRef}
       id="hero"
-      ref={containerRef}
-      className="relative min-h-[100svh] flex flex-col justify-between bg-[#000000] text-[#F5F5F2] pt-20 sm:pt-24 lg:pt-24 pb-5 sm:pb-6 lg:pb-6 px-4 sm:px-8 lg:px-16 overflow-hidden z-10 select-none"
+      className="relative w-full h-[200vh] bg-[#07080a] select-none"
     >
-      {/* Subtle Oversized Background Typography */}
-      <motion.div
-        aria-hidden="true"
-        style={{ x: bgTextX }}
-        className="absolute inset-0 pointer-events-none overflow-hidden z-0 flex items-center justify-center"
-      >
-        <span
-          className="
-            text-[18vw]
-            sm:text-[20vw]
-            lg:text-[23vw]
-            font-heading
-            font-serif
-            uppercase
-            tracking-[-0.07em]
-            leading-none
-            text-white/[0.07]
-            whitespace-nowrap
-            select-none
-            translate-y-[-2%]"
-        >
-          AGENCIGROW
-        </span>
-      </motion.div>
-
-      {/* Hero Content Wrapper */}
-      <div className="max-w-7xl mx-auto w-full relative z-10 flex flex-col justify-between flex-1 h-full">
+      {/* Pinned Sticky Viewport Window */}
+      <div className="sticky top-0 w-full h-screen overflow-hidden flex items-center justify-center p-0 z-0 bg-[#07080a]">
         
-        {/* Top Editorial Metadata Header */}
+        {/* Subtle Ambient Spatial Depth Grid (visible when hero card shrinks away from edges) */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_38%,_rgba(255,255,255,0.08)_0%,_transparent_65%)] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(#ffffff0d_1px,transparent_1px)] [background-size:32px_32px] opacity-50 pointer-events-none" />
+
+        {/* The Scaling Canvas */}
         <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="flex items-center justify-between pb-3 sm:pb-4 border-b border-white/10 text-[9px] sm:text-xs font-mono uppercase tracking-[0.2em] sm:tracking-[0.3em] text-gray-400 mb-4 sm:mb-6"
+          style={{
+            scale,
+            borderRadius,
+            boxShadow,
+            transformOrigin: 'center 38%',
+          }}
+          className="relative w-full h-full overflow-hidden flex flex-col justify-between p-5 sm:p-10 lg:p-14 will-change-transform bg-neutral-900 border border-white/15"
         >
-          <div className="flex items-center gap-1.5 sm:gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-white/80 animate-pulse shrink-0" />
-            <span>CHENNAI • INDIA</span>
-          </div>
+          {/* Fullscreen High-Resolution Editorial Background Image from Unsplash */}
+          <img
+            src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2560&q=85"
+            alt="AgenciGrow Editorial Architecture"
+            className="absolute inset-0 w-full h-full object-cover filter grayscale contrast-125 brightness-75 scale-105 pointer-events-none"
+            referrerPolicy="no-referrer"
+          />
 
-          <div className="hidden sm:block text-gray-500 tracking-[0.3em] lg:tracking-[0.4em] text-[9px] sm:text-[10px]">
-            STRATEGY / SYSTEMS / SCALE
-          </div>
+          {/* Vignette Scrim Layer */}
+          <div className="absolute inset-0 bg-radial-[circle_at_center,_transparent_0%,_rgba(0,0,0,0.75)_100%] pointer-events-none" />
 
-          <div className="flex items-center gap-3 sm:gap-6 text-gray-500">
-            <span>EST. 2026</span>
-          </div>
-        </motion.div>
-
-        {/* Main Editorial Headline & Integrated Image Composition */}
-        <div className="relative my-auto py-4 sm:py-6 lg:py-4">
-          
-          {/* Main Headline Stack with Layered Composition */}
-          <motion.div style={{ y: headlineY }} className="relative z-20 space-y-1 sm:space-y-1.5">
-            
-            {/* Line 1: BUILD */}
-            <div className="overflow-hidden">
-              <motion.h1
-                initial={{ y: '100%', opacity: 0 }}
-                animate={{ y: '0%', opacity: 1 }}
-                transition={{ duration: 0.85, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className="text-[2.75rem] xs:text-5xl sm:text-7xl md:text-8xl lg:text-[5.5rem] xl:text-[6.8rem] 2xl:text-[7.6rem] font-heading font-serif font-normal uppercase tracking-tighter leading-[0.88] text-white"
-              >
-                BUILD
-              </motion.h1>
-            </div>
-
-            {/* Line 2: WHAT */}
-            <div className="overflow-hidden pl-4 sm:pl-16 md:pl-28 lg:pl-36">
-              <motion.h1
-                initial={{ y: '100%', opacity: 0 }}
-                animate={{ y: '0%', opacity: 1 }}
-                transition={{ duration: 0.85, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                className="text-[2.25rem] xs:text-4xl sm:text-6xl md:text-7xl lg:text-[4.8rem] xl:text-[6rem] 2xl:text-[6.8rem] font-heading font-serif font-normal uppercase italic tracking-tighter leading-[0.88] text-gray-400"
-              >
-                WHAT
-              </motion.h1>
-            </div>
-
-            {/* Line 3: COMPOUNDS. */}
-            <div className="overflow-hidden">
-              <motion.h1
-                initial={{ y: '100%', opacity: 0 }}
-                animate={{ y: '0%', opacity: 1 }}
-                transition={{ duration: 0.85, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                className="text-[2.5rem] xs:text-5xl sm:text-7xl md:text-8xl lg:text-[5.5rem] xl:text-[6.8rem] 2xl:text-[7.6rem] font-heading font-serif font-normal uppercase tracking-tighter leading-[0.88] text-white"
-              >
-                COMPOUNDS.
-              </motion.h1>
-            </div>
-
-          </motion.div>
-
-          {/* Substantially Larger Editorial Image Layered Over Typography */}
+          {/* Scroll-Driven Dimming Overlay */}
           <motion.div
-            style={{ y: imageY }}
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-6 md:mt-0 md:absolute md:top-1/2 md:-translate-y-[70%] lg:-translate-y-[85%] right-0 sm:right-4 md:right-6 lg:right-12 xl:right-16 z-30 pointer-events-none flex justify-end"
-          >
-            <div className="relative w-32 h-44 xs:w-36 xs:h-48 sm:w-48 sm:h-64 md:w-56 md:h-76 lg:w-64 lg:h-84 xl:w-72 xl:h-92 rounded-xs border border-white/15 bg-black shadow-[0_25px_60px_rgba(0,0,0,0.9)] overflow-hidden">
-              <img
-                src="/Photos/Hero-page-card.jpeg"
-                alt="AgenciGrow Strategy"
-                className="w-full h-full object-cover filter contrast-[1.05] brightness-[0.92]"
-                referrerPolicy="no-referrer"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-white/5 pointer-events-none" />
+            style={{ opacity: dimOpacity }}
+            className="absolute inset-0 bg-black pointer-events-none z-10"
+          />
+
+          {/* Top Swiss Metadata Line & Collapsed Navbar */}
+          <div className="relative z-20 w-full">
+            <div className="flex items-center justify-between pb-3 sm:pb-4 text-xs sm:text-sm font-sans tracking-tight">
+              <span className="font-normal text-white">Form</span>
+              <span className="font-normal text-neutral-400">Follows</span>
+              
+              {/* Top Right Collapsed Navbar Trigger (Three Lines) */}
+              <button
+                onClick={() => setIsMenuOpen(true)}
+                className="inline-flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/10 hover:bg-white text-white hover:text-black border border-white/20 transition-all duration-200 cursor-pointer backdrop-blur-md group shadow-sm"
+                aria-label="Open Navigation Menu"
+              >
+                <Menu className="w-4 h-4 transition-transform group-hover:scale-110" />
+              </button>
             </div>
+            {/* Hairline Rule */}
+            <div className="w-full border-b border-white/20" />
+          </div>
+
+          {/* Center Oversized Typographic Track with Scroll Drift & Fade */}
+          <motion.div
+            style={{
+              opacity: contentOpacity,
+              y: contentTranslateY,
+            }}
+            className="relative z-20 my-auto py-6 sm:py-12 overflow-hidden w-full"
+          >
+            {/* Giant Horizontal Moving Wordmark */}
+            <motion.div
+              style={{ x: textXTranslation }}
+              className="flex items-center gap-10 sm:gap-20 whitespace-nowrap will-change-transform"
+            >
+              <h1
+                className="text-[20vw] sm:text-[19vw] lg:text-[18vw] font-serif font-normal text-white leading-[0.80] tracking-[-0.035em] select-none"
+                style={{ fontFamily: '"Bodoni Moda", "Playfair Display", Georgia, serif' }}
+              >
+                AgenciGrow
+              </h1>
+              <span
+                className="text-[20vw] sm:text-[19vw] lg:text-[18vw] font-serif font-normal text-white/40 leading-[0.80] tracking-[-0.035em] select-none"
+                style={{ fontFamily: '"Bodoni Moda", "Playfair Display", Georgia, serif' }}
+              >
+                Noble
+              </span>
+              <span
+                className="text-[20vw] sm:text-[19vw] lg:text-[18vw] font-serif font-normal text-white leading-[0.80] tracking-[-0.035em] select-none"
+                style={{ fontFamily: '"Bodoni Moda", "Playfair Display", Georgia, serif' }}
+              >
+                AgenciGrow
+              </span>
+            </motion.div>
+
+            {/* Subtitle statement */}
+            <p className="mt-8 sm:mt-12 lg:mt-16 text-sm sm:text-base lg:text-lg text-neutral-300 font-sans font-light max-w-2xl leading-relaxed">
+              We design and engineer compounding revenue systems: high-converting web applications, precision Meta & Google ad funnels, and automated WhatsApp CRM pipelines.
+            </p>
           </motion.div>
 
-        </div>
+          {/* Bottom Action Bar */}
+          <div className="relative z-20 w-full">
+            <div className="w-full border-b border-white/20 mb-5 sm:mb-6" />
 
-        {/* Bottom Editorial Service Labels */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="pt-4 sm:pt-5 border-t border-white/10 flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 text-[9px] sm:text-xs font-mono uppercase tracking-[0.2em] sm:tracking-[0.3em] text-gray-400 relative z-20"
-        >
-          {editorialServices.map((service, idx) => (
-            <React.Fragment key={service}>
-              <span className="hover:text-white transition-colors cursor-default">{service}</span>
-              {idx < editorialServices.length - 1 && <span className="text-gray-600 hidden xs:inline">•</span>}
-            </React.Fragment>
-          ))}
+            <div className="flex items-center justify-end text-white">
+              <button
+                onClick={openBookingModal}
+                className="inline-flex items-center justify-between gap-3 px-5 py-2.5 rounded-full bg-white text-black hover:bg-neutral-200 text-xs font-mono uppercase tracking-wider transition-all duration-200 cursor-pointer min-h-[42px] shadow-lg font-medium"
+              >
+                <span>Book Consultation</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+
         </motion.div>
-
       </div>
+
+      {/* Expanded Swiss Navigation Modal matching reference design */}
+      <SwissMenuModal
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+      />
     </section>
   );
 };
 
 export default Hero;
-

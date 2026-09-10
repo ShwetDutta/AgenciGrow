@@ -1,160 +1,134 @@
 import React, { useState } from 'react';
-import { ArrowRight, X } from 'lucide-react';
+import { ArrowUpRight, X } from 'lucide-react';
 import { openBookingModal } from './CalendlyModal';
 
 const Footer: React.FC = () => {
   const [activeModal, setActiveModal] = useState<'privacy' | 'terms' | null>(null);
 
-  const scrollToSection = (e: React.MouseEvent, id: string) => {
+  const scrollToTop = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (id === 'contact' || id === 'booking') {
-      openBookingModal();
-      return;
-    }
-    if (id === 'top') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      return;
-    }
-    const el = document.getElementById(id);
-    if (el) {
-      const offset = 80;
-      const elementPosition = el.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
-    <footer className="bg-[#000000] text-[#F5F5F2] pt-12 pb-12 relative z-10 overflow-hidden font-body border-t border-white/10">
-      
-      {/* 1. Pre-Footer Featured Cards */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 mb-16 sm:mb-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-6">
-          
-          {/* Card 1: Billboard / Contact Us */}
-          <div className="relative min-h-[380px] xs:min-h-[440px] sm:min-h-[520px] lg:min-h-[580px] rounded-2xl sm:rounded-[32px] overflow-hidden flex flex-col justify-between p-6 sm:p-10 lg:p-14 group border border-white/10 shadow-2xl">
-            {/* Background Image */}
-            <img 
-              src="/Photos/billboard-agencigrow.png" 
-              alt="AgenciGrow Billboard"
-              referrerPolicy="no-referrer"
-              className="absolute inset-0 w-full h-full object-cover object-center z-0 transition-transform duration-700 group-hover:scale-105"
-            />
-            
-            {/* Subtle Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/30 z-0 pointer-events-none" />
-
-            {/* Top Spacer for flex alignment */}
-            <div className="relative z-10" />
-
-            {/* Bottom Content / Pill CTA */}
-            <div className="relative z-10 pt-6 sm:pt-8">
-              <a 
-                href="#contact" 
-                onClick={(e) => scrollToSection(e, 'contact')}
-                className="inline-flex items-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-full border border-white/40 bg-white/15 backdrop-blur-md text-white font-medium text-base sm:text-lg hover:bg-white hover:text-black transition-all duration-300 transform hover:scale-[1.02] shadow-xl group/btn min-h-[44px]"
-              >
-                <span>Contact us</span>
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover/btn:translate-x-1" />
-              </a>
-            </div>
-          </div>
-
-          {/* Card 2: Instagram / Go to Insta */}
-          <div className="relative min-h-[380px] xs:min-h-[440px] sm:min-h-[520px] lg:min-h-[580px] rounded-2xl sm:rounded-[32px] overflow-hidden flex flex-col justify-between p-6 sm:p-10 lg:p-14 group border border-white/10 shadow-2xl">
-            {/* Background Image */}
-            <img 
-              src="/Photos/instagram-page.png" 
-              alt="AgenciGrow Instagram"
-              referrerPolicy="no-referrer"
-              className="absolute inset-0 w-full h-full object-cover object-center z-0 transition-transform duration-700 group-hover:scale-105"
-            />
-            
-            {/* Subtle Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/30 z-0 pointer-events-none" />
-
-            {/* Top Spacer for flex alignment */}
-            <div className="relative z-10" />
-
-            {/* Bottom Content / Pill CTA */}
-            <div className="relative z-10 pt-6 sm:pt-8">
-              <a 
-                href="https://www.instagram.com/agencigrow?igsh=Mzh2cTVvejh1Y25x" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="inline-flex items-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-full border border-white/40 bg-white/15 backdrop-blur-md text-white font-medium text-base sm:text-lg hover:bg-white hover:text-black transition-all duration-300 transform hover:scale-[1.02] shadow-xl group/btn min-h-[44px]"
-              >
-                <span>Go to Insta</span>
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover/btn:translate-x-1" />
-              </a>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      {/* 2. Main Footer Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16">
+    <footer
+      id="contact"
+      className="relative w-full bg-[#0A0A0A] text-[#EDEDED] rounded-t-[28px] sm:rounded-t-[36px] border-t border-white/10 overflow-hidden select-none shadow-2xl p-5 sm:p-10 lg:p-14 -mt-6 sm:-mt-8 z-10"
+    >
+      <div className="w-full max-w-[1440px] mx-auto flex flex-col justify-between min-h-[60vh] sm:min-h-[70vh]">
         
-        {/* Top Navigation Row */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-white/10 text-xs sm:text-sm text-[#A1A1A1] font-normal">
-          
-          <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 sm:gap-8">
-            <a href="#" onClick={(e) => scrollToSection(e, 'top')} className="hover:text-white transition-colors py-2">Home</a>
-            <a href="#about" onClick={(e) => scrollToSection(e, 'about')} className="hover:text-white transition-colors py-2">About</a>
-            <a href="#services" onClick={(e) => scrollToSection(e, 'services')} className="hover:text-white transition-colors py-2">Services</a>
-            <a href="#process" onClick={(e) => scrollToSection(e, 'process')} className="hover:text-white transition-colors py-2">Process</a>
-            <a href="#work" onClick={(e) => scrollToSection(e, 'work')} className="hover:text-white transition-colors py-2">Work</a>
-            <a href="#faq" onClick={(e) => scrollToSection(e, 'faq')} className="hover:text-white transition-colors py-2">FAQ</a>
-            <a href="#contact" onClick={(e) => scrollToSection(e, 'contact')} className="hover:text-white transition-colors py-2">Contact</a>
-          </div>
-
-          <div className="text-xs text-[#888888]">
-            © Copyrights AgenciGrow
-          </div>
-
+        {/* Top Tagline */}
+        <div className="flex items-center justify-between pb-6 text-xs font-sans text-neutral-400">
+          <span>Inquiries & Partnerships</span>
+          <span className="font-mono text-xs uppercase tracking-widest text-neutral-500">
+            [ ACCEPTING SELECT CLIENTS ]
+          </span>
         </div>
 
-        {/* Middle Massive Title */}
-        <div className="py-6 sm:py-10 text-center select-none overflow-hidden">
-          <h1 className="text-[13vw] sm:text-[13.5vw] font-body font-normal text-[#FFFFFF] leading-none tracking-[-0.04em] w-full">
-            AgenciGrow
-          </h1>
+        {/* Massive Headline & Billboard Grid */}
+        <div className="my-auto py-8 sm:py-12 lg:py-16 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          <div className="lg:col-span-7 flex flex-col justify-center">
+            <h2 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-[4.5rem] xl:text-[5.4rem] 2xl:text-[6.2rem] font-sans font-normal text-white leading-[0.96] tracking-tight">
+              Drop us a line<br />
+              if you want to collab.
+            </h2>
+
+            <div className="mt-8 sm:mt-12 flex flex-wrap items-center gap-4 sm:gap-6">
+              <button
+                onClick={openBookingModal}
+                className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white text-black hover:bg-neutral-200 text-xs sm:text-sm font-sans font-medium uppercase tracking-wider transition-colors cursor-pointer min-h-[44px]"
+              >
+                <span>Reserve a Consultation</span>
+                <ArrowUpRight className="w-4 h-4" />
+              </button>
+
+              <a
+                href="mailto:shwetdutta29@gmail.com"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-full border border-white/25 text-white hover:bg-white/10 text-xs sm:text-sm font-sans tracking-wider transition-colors min-h-[44px]"
+              >
+                <span>shwetdutta29@gmail.com</span>
+              </a>
+            </div>
+          </div>
+
+          {/* Right: Billboard AgenciGrow Image */}
+          <div className="lg:col-span-5 flex items-center justify-center lg:justify-end">
+            <div className="relative w-full max-w-[520px] rounded-2xl overflow-hidden border border-white/15 bg-neutral-900 shadow-2xl group">
+              <img
+                src="/Photos/billboard-agencigrow.png"
+                alt="AgenciGrow Billboard"
+                className="w-full h-auto object-cover block group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+          </div>
         </div>
 
-        {/* Bottom Social & Legal Links */}
-        <div className="pt-4 sm:pt-6 flex flex-wrap items-center justify-center gap-4 sm:gap-10 text-xs sm:text-sm text-[#888888]">
-          <a 
-            href="https://www.linkedin.com/company/agencigrow/?viewAsMember=true" 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="hover:text-white transition-colors py-1.5"
-          >
-            LinkedIn
-          </a>
-          <a 
-            href="https://www.instagram.com/agencigrow?igsh=Mzh2cTVvejh1Y25x" 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="hover:text-white transition-colors py-1.5"
-          >
-            Instagram
-          </a>
-          <button 
-            onClick={() => setActiveModal('privacy')} 
-            className="hover:text-white transition-colors cursor-pointer bg-transparent border-0 py-1.5"
-          >
-            Privacy Policy
-          </button>
-          <button 
-            onClick={() => setActiveModal('terms')} 
-            className="hover:text-white transition-colors cursor-pointer bg-transparent border-0 py-1.5"
-          >
-            Terms & Conditions
-          </button>
+        {/* Bottom Swiss Meta Grid (Exact Reference Video 00:13 Style: Hairline Rule + Left / Center / Right Columns) */}
+        <div className="w-full">
+          {/* Hairline Rule */}
+          <div className="w-full border-b border-white/15 mb-6 sm:mb-8" />
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 items-start sm:items-end text-xs font-sans text-neutral-400">
+            
+            {/* Left: Copyright */}
+            <div className="space-y-1">
+              <span className="text-neutral-500 block">Copyright 2026</span>
+              <span className="text-white block font-medium">AgenciGrow®</span>
+            </div>
+
+            {/* Center: Location & Founder */}
+            <div className="space-y-1 sm:text-center">
+              <span className="text-neutral-500 block">Location & Philosophy</span>
+              <span className="text-white block">Chennai • Direct Founder Execution</span>
+            </div>
+
+            {/* Right: Socials & Policies */}
+            <div className="space-y-1 sm:text-right flex flex-col sm:items-end">
+              <div className="flex items-center gap-4 text-white">
+                <a
+                  href="https://www.instagram.com/agencigrow?igsh=Mzh2cTVvejh1Y25x"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-neutral-400 transition-colors"
+                >
+                  Instagram ↗
+                </a>
+                <a
+                  href="https://www.linkedin.com/company/agencigrow/?viewAsMember=true"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-neutral-400 transition-colors"
+                >
+                  LinkedIn ↗
+                </a>
+              </div>
+              <div className="flex items-center gap-3 text-[11px] text-neutral-500 pt-1">
+                <button
+                  onClick={() => setActiveModal('privacy')}
+                  className="hover:text-white transition-colors cursor-pointer"
+                >
+                  Privacy
+                </button>
+                <span>•</span>
+                <button
+                  onClick={() => setActiveModal('terms')}
+                  className="hover:text-white transition-colors cursor-pointer"
+                >
+                  Terms
+                </button>
+                <span>•</span>
+                <a
+                  href="#"
+                  onClick={scrollToTop}
+                  className="hover:text-white transition-colors cursor-pointer"
+                >
+                  Top ↑
+                </a>
+              </div>
+            </div>
+
+          </div>
         </div>
 
       </div>
@@ -162,17 +136,17 @@ const Footer: React.FC = () => {
       {/* Modal for Privacy Policy / Terms */}
       {activeModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="bg-[#121214] border border-white/10 rounded-2xl p-5 sm:p-8 max-w-xl w-full text-white relative shadow-2xl">
-            <button 
-              onClick={() => setActiveModal(null)} 
-              className="absolute top-4 right-4 text-gray-400 hover:text-white p-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
+          <div className="bg-[#141414] border border-white/15 rounded-xl p-6 sm:p-8 max-w-xl w-full text-white relative shadow-2xl">
+            <button
+              onClick={() => setActiveModal(null)}
+              className="absolute top-4 right-4 text-neutral-400 hover:text-white p-2 min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
             >
               <X size={20} />
             </button>
-            <h3 className="text-xl sm:text-2xl font-heading mb-4">
+            <h3 className="text-xl sm:text-2xl font-serif mb-4">
               {activeModal === 'privacy' ? 'Privacy Policy' : 'Terms & Conditions'}
             </h3>
-            <div className="text-xs sm:text-sm text-gray-300 space-y-3 max-h-80 sm:max-h-96 overflow-y-auto pr-2 font-light">
+            <div className="text-xs sm:text-sm text-neutral-300 space-y-3 max-h-80 sm:max-h-96 overflow-y-auto pr-2 font-sans font-light leading-relaxed">
               {activeModal === 'privacy' ? (
                 <>
                   <p>AgenciGrow respects your privacy. We collect minimal information required to deliver growth services, handle client inquiries, and optimize campaign performance.</p>
@@ -185,9 +159,9 @@ const Footer: React.FC = () => {
                 </>
               )}
             </div>
-            <button 
-              onClick={() => setActiveModal(null)} 
-              className="mt-6 px-6 py-2.5 bg-white text-black font-semibold rounded-full text-xs uppercase tracking-wider hover:bg-gray-200 transition-colors min-h-[44px]"
+            <button
+              onClick={() => setActiveModal(null)}
+              className="mt-6 px-6 py-2.5 bg-white text-black font-mono font-medium rounded-full text-xs uppercase tracking-wider hover:bg-neutral-200 transition-colors min-h-[44px] cursor-pointer"
             >
               Close
             </button>

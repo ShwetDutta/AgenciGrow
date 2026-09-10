@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus } from 'lucide-react';
+import { openBookingModal } from './CalendlyModal';
 
 const faqs = [
   {
@@ -43,86 +44,98 @@ const FAQ: React.FC = () => {
   };
 
   return (
-    <section id="faq" className="py-20 sm:py-32 md:py-40 bg-[#000000] text-[#F5F5F2] relative z-10 scroll-mt-12 border-t border-white/10 overflow-hidden select-none font-body">
-      
-      {/* Oversized Background Typography */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 flex items-center justify-center">
-        <span className="text-[18vw] sm:text-[22vw] font-heading font-serif uppercase tracking-[-0.07em] leading-none text-white/[0.04] whitespace-nowrap select-none">
-          QUESTIONS
-        </span>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 relative z-10">
+    <section
+      id="faq"
+      className="relative w-full bg-[#E5E3DD] text-[#111111] overflow-hidden select-none"
+    >
+      <div className="w-full max-w-[1440px] mx-auto pt-4 sm:pt-8 pb-12 sm:pb-16">
         
-        {/* Large Editorial Headline */}
-        <div className="mb-12 sm:mb-20 lg:mb-24 font-heading font-serif">
-          <div className="flex items-center gap-2 text-[9px] sm:text-xs font-mono uppercase tracking-[0.25em] sm:tracking-[0.3em] text-gray-400 mb-4 sm:mb-6">
-            <span className="w-1.5 h-1.5 rounded-full bg-white/80" />
-            <span>TRANSPARENCY & CLARITY</span>
+        {/* Top Header Label */}
+        <div className="w-full mb-6 sm:mb-10">
+          <div className="flex items-center justify-between pb-3 text-xs sm:text-sm font-sans text-neutral-600">
+            <span>Frequently Asked Inquiries</span>
+            <span className="font-mono text-xs uppercase tracking-widest text-neutral-500">[ 06 ANSWERS ]</span>
           </div>
 
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-3xl xs:text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-normal uppercase tracking-tighter text-white leading-[0.9]"
-          >
-            FREQUENTLY<br />
-            <span className="text-gray-400 italic font-serif">ASKED</span><br />
-            QUESTIONS.
-          </motion.h2>
+          {/* Thin Hairline Rule */}
+          <div className="w-full border-b border-black/15" />
         </div>
 
-        {/* FAQ Accordion List */}
-        <div className="border-t border-white/15">
+        {/* Section Headline */}
+        <div className="mb-10 sm:mb-14">
+          <h2 className="text-3xl sm:text-5xl lg:text-7xl font-sans font-normal text-[#111111] tracking-tight max-w-4xl">
+            Everything you need to know about the retainer.
+          </h2>
+        </div>
+
+        {/* Swiss Accordion List */}
+        <div className="divide-y divide-black/15 border-b border-black/15">
           {faqs.map((faq, idx) => {
             const isOpen = openIndex === idx;
+
             return (
               <div
-                key={idx}
-                className="border-b border-white/15 py-5 sm:py-8 lg:py-10 transition-colors duration-200"
+                key={faq.num}
+                className="py-6 sm:py-8 group cursor-pointer transition-colors duration-200"
+                onClick={() => toggle(idx)}
               >
-                <button
-                  onClick={() => toggle(idx)}
-                  className="w-full text-left flex items-start sm:items-center justify-between gap-3 sm:gap-8 group focus:outline-none cursor-pointer min-h-[44px]"
-                >
-                  <div className="flex items-start sm:items-center gap-3 sm:gap-8 min-w-0 pr-2">
-                    <span className="font-mono text-xs sm:text-sm text-gray-500 uppercase tracking-widest shrink-0 pt-1 sm:pt-0 w-6 sm:w-10">
+                <div className="flex items-start justify-between gap-4 sm:gap-8">
+                  
+                  {/* Left: Number + Question */}
+                  <div className="flex items-baseline gap-4 sm:gap-6 min-w-0">
+                    <span className="font-mono text-xs sm:text-sm text-neutral-500 uppercase tracking-widest shrink-0">
                       {faq.num}
                     </span>
-                    <span className="text-base sm:text-xl md:text-2xl lg:text-3xl font-body font-normal text-white tracking-[-0.01em] group-hover:text-gray-300 transition-colors leading-snug">
+
+                    <h3 className="text-lg sm:text-2xl md:text-3xl font-sans font-normal text-[#111111] tracking-tight group-hover:text-neutral-600 transition-colors">
                       {faq.question}
-                    </span>
+                    </h3>
                   </div>
 
-                  <motion.div
-                    animate={{ rotate: isOpen ? 135 : 0 }}
-                    transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                    className="shrink-0 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full border border-white/10 group-hover:border-white/30 transition-colors bg-white/5"
-                  >
-                    <Plus className="w-4 h-4 sm:w-5 sm:h-5 text-white stroke-[2]" />
-                  </motion.div>
-                </button>
+                  {/* Right: Plus / Minus Toggle Button */}
+                  <div className="shrink-0 w-8 h-8 rounded-full border border-black/15 flex items-center justify-center group-hover:border-black transition-colors">
+                    <motion.div
+                      animate={{ rotate: isOpen ? 45 : 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <Plus className="w-4 h-4 text-black" />
+                    </motion.div>
+                  </div>
 
+                </div>
+
+                {/* Animated Accordion Body */}
                 <AnimatePresence>
                   {isOpen && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
+                      animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                       className="overflow-hidden"
                     >
-                      <div className="pt-3 sm:pt-6 pl-9 sm:pl-18 max-w-3xl text-xs sm:text-base md:text-lg text-gray-400 font-light leading-relaxed">
+                      <div className="mt-4 pl-8 sm:pl-10 text-xs sm:text-sm md:text-base font-sans font-light text-neutral-600 leading-relaxed max-w-3xl">
                         {faq.answer}
                       </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
+
               </div>
             );
           })}
+        </div>
+
+        {/* Bottom Banner */}
+        <div className="pt-8 sm:pt-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs font-mono uppercase tracking-widest text-neutral-500">
+          <span>HAVE A SPECIFIC QUESTION NOT LISTED?</span>
+
+          <button
+            onClick={openBookingModal}
+            className="text-black hover:underline cursor-pointer min-h-[44px] flex items-center"
+          >
+            Ask the founder directly ↗
+          </button>
         </div>
 
       </div>
@@ -131,5 +144,3 @@ const FAQ: React.FC = () => {
 };
 
 export default FAQ;
-
-
