@@ -1,6 +1,4 @@
 import React from 'react';
-import { ArrowUpRight } from 'lucide-react';
-import { openBookingModal } from './CalendlyModal';
 
 interface SupportingItem {
   label: string;
@@ -120,7 +118,7 @@ const stepsData: ProcessStepData[] = [
 ];
 
 /**
- * Our Process / How We Work Section
+ * Our Process / How We Work Section (Steps 01, 02 & 03)
  *
  * Swiss Editorial Grid Architecture:
  * - Column 1 (Left): Oversized numerical anchor (01, 02, 03) sticky throughout each step.
@@ -131,7 +129,7 @@ const stepsData: ProcessStepData[] = [
  *     2. Primary and secondary editorial explanations
  *     3. Supporting deliverables/breakdown list with thin rules
  *     4. Editorial serif closing statement on Step 03
- * - Scroll mechanics untouched: exact same 1:1 scroll progression and sticky runway.
+ * - Steps 01, 02, and 03 all scroll down sequentially in full natural layout.
  */
 const Process: React.FC = () => {
   return (
@@ -142,7 +140,7 @@ const Process: React.FC = () => {
           FROM START TO FINISH
         </div>
 
-        {/* Sequential Process Steps */}
+        {/* Sequential Process Steps 01, 02, and 03 */}
         <div className="flex flex-col">
           {stepsData.map((step) => (
             <article
@@ -222,26 +220,6 @@ const Process: React.FC = () => {
             </article>
           ))}
         </div>
-
-        {/* Minimal Swiss Closing Action & Natural Handoff to Next Section */}
-        <div className="w-full pt-12 sm:pt-16 pb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 border-t border-black/15 mt-8 sm:mt-12">
-          <div className="space-y-1">
-            <div className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.14em] text-neutral-600">
-              Stage 01
-            </div>
-            <div className="font-serif text-xl sm:text-2xl md:text-3xl text-black">
-              It begins with a 30-minute discovery conversation.
-            </div>
-          </div>
-          <button
-            onClick={openBookingModal}
-            className="inline-flex items-center gap-3 px-6 sm:px-7 py-3.5 bg-black text-white hover:bg-neutral-800 transition-colors text-xs font-mono uppercase tracking-[0.14em] group cursor-pointer"
-          >
-            <span>Book Discovery Call</span>
-            <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </button>
-        </div>
-
       </div>
     </section>
   );

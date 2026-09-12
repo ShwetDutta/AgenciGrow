@@ -12,7 +12,7 @@ const WhatWeBelieve: React.FC = () => {
   const titleX = useTransform(scrollYProgress, [0, 1], ['-40vw', '40vw']);
 
   return (
-    <section id="what-we-believe" className="relative w-full select-none">
+    <section id="what-we-believe" className="relative w-full select-none pt-4 sm:pt-6 pb-12 sm:pb-16">
       <div className="w-full max-w-[1440px] mx-auto flex flex-col">
         {/* Top thick, dark rule */}
         <div className="w-full border-t-2 border-black" />

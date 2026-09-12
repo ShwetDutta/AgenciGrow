@@ -36,6 +36,7 @@ const SwissMenuModal: React.FC<SwissMenuModalProps> = ({ isOpen, onClose }) => {
     { name: 'Services', href: '#services' },
     { name: 'About', href: '#about' },
     { name: 'Process', href: '#process' },
+    { name: 'Work', href: '#client-work' },
     { name: 'FAQ', href: '#faq' },
     { name: 'Contact', href: '#contact' },
   ];
