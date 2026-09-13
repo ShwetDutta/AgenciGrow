@@ -11,7 +11,7 @@ interface NavbarProps {
   theme?: 'dark' | 'light';
 }
 
-const Navbar: React.FC<NavbarProps> = ({ theme = 'dark' }) => {
+export const Navbar: React.FC<NavbarProps> = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -20,17 +20,11 @@ const Navbar: React.FC<NavbarProps> = ({ theme = 'dark' }) => {
     return () => window.removeEventListener('open-nav-menu', handleOpen);
   }, []);
 
-  const isLight = theme === 'light';
-
   return (
     <>
-      {/* Swiss Sticky Top Bar (Left Brand • Center Boutique Agency • Right Menu) */}
+      {/* Permanent Fixed Top Bar: Sticky in one place from Hero to Footer */}
       <header
-        className={`sticky top-0 z-40 w-full px-5 sm:px-10 lg:px-14 py-3 sm:py-3.5 select-none transition-colors ${
-          isLight
-            ? 'bg-[#E5E3DD]/95 backdrop-blur-md text-[#111111] border-b border-black/10 shadow-sm'
-            : 'bg-[#0A0A0A] text-[#EDEDED] border-b border-white/10 shadow-md'
-        }`}
+        className="fixed top-0 left-0 right-0 z-[100] w-full px-5 sm:px-10 lg:px-14 py-3.5 select-none bg-[#07080a]/90 backdrop-blur-md text-[#EDEDED] border-b border-white/10 shadow-lg transition-colors"
       >
         <div className="w-full max-w-[1440px] mx-auto flex items-center justify-between">
           
@@ -42,36 +36,30 @@ const Navbar: React.FC<NavbarProps> = ({ theme = 'dark' }) => {
                 e.preventDefault();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className={`text-xs sm:text-sm font-sans tracking-tight transition-colors font-medium ${
-                isLight ? 'text-[#111111] hover:text-neutral-600' : 'text-white hover:text-neutral-300'
-              }`}
+              className="text-xs sm:text-sm font-sans tracking-tight text-white hover:text-neutral-300 transition-colors font-medium"
             >
               <span>AgenciGrow®</span>
             </a>
           </div>
 
           {/* Center Agency Type */}
-          <div className={`text-xs font-sans tracking-tight ${isLight ? 'text-neutral-500' : 'text-neutral-400'}`}>
+          <div className="text-xs font-sans tracking-tight text-neutral-400">
             Boutique Agency
           </div>
 
           {/* Right Menu & Booking Actions */}
-          <div className="flex items-center gap-3 sm:gap-5">
+          <div className="flex items-center gap-4 sm:gap-6">
             <button
               onClick={openBookingModal}
-              className={`hidden md:inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider transition-colors cursor-pointer ${
-                isLight ? 'text-neutral-700 hover:text-black' : 'text-neutral-300 hover:text-white'
-              }`}
+              className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-neutral-300 hover:text-white transition-colors cursor-pointer"
             >
-              <span>Book Call</span>
+              <span>BOOK CALL</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
 
             <button
               onClick={() => setIsMenuOpen(true)}
-              className={`text-xs sm:text-sm font-sans tracking-tight transition-colors cursor-pointer min-h-[36px] px-2 flex items-center ${
-                isLight ? 'text-[#111111] hover:text-neutral-600' : 'text-white hover:text-neutral-300'
-              }`}
+              className="text-xs sm:text-sm font-sans tracking-tight text-white hover:text-neutral-300 transition-colors cursor-pointer min-h-[36px] px-1 flex items-center font-medium"
               aria-label="Open Navigation Menu"
             >
               Menu

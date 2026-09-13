@@ -61,61 +61,58 @@ const FAQ: React.FC = () => {
   }, [openIndex]);
 
   /* ==========================================================================
-     SCROLL MATH (Hero Shrink & Reveal Effect):
-     - target: trackRef (height: 300vh)
+     SCROLL MATH (Hero Shrink Effect for Closing Footer):
+     - target: trackRef (height: 250vh)
      - offset: ['start start', 'end end']
-     - 0 -> 0.28 = Ascends from 100vh to 0vh as Muscle Legacy shrinks in background
-     - 0.28 -> 0.72 = Docks fullscreen at scale 1.0; content pans to reveal questions
-     - 0.72 -> 1.0 = Scales down smoothly to 0.72 as Closing Footer ascends
+     - start start = 0px scroll (FAQ enters docked fullscreen at scale 1.0)
+     - 0 -> 0.52 = content pans vertically so all FAQ questions are readable
+     - 0.52 -> 0.68 = holds full scale (1.0) with ample reading time
+     - 0.68 -> 1.0 = scales down smoothly to 0.72 as Closing Footer ascends
      ========================================================================== */
   const { scrollYProgress } = useScroll({
     target: trackRef,
     offset: ['start start', 'end end'],
   });
 
-  // Physical card rise: ascends from bottom of viewport over shrinking Muscle Legacy
-  const entryY = useTransform(scrollYProgress, [0, 0.28], ['100vh', '0vh']);
-
   // Vertical scroll panning so all FAQ items are reachable
   const contentY = useTransform(
     scrollYProgress,
-    [0.28, 0.62, 0.72, 1],
+    [0, 0.52, 0.68, 1],
     [0, -scrollDelta, -scrollDelta, -scrollDelta]
   );
 
   // Scale down from 1.0 to 0.72 as Closing Footer ascends
-  const scale = useTransform(scrollYProgress, [0, 0.28, 0.72, 1], [1, 1, 1, 0.72]);
+  const scale = useTransform(scrollYProgress, [0, 0.68, 1], [1, 1, 0.72]);
 
-  // Corner radius transforms during entrance and exit
+  // Corner radius transforms during exit
   const borderRadius = useTransform(
     scrollYProgress,
-    [0, 0.28, 0.72, 0.92],
-    ['48px', '0px', '0px', '40px']
+    [0, 0.68, 0.90],
+    ['0px', '0px', '40px']
   );
 
-  // Elevation shadow during entrance and exit
+  // Elevation shadow during exit
   const boxShadow = useTransform(
     scrollYProgress,
-    [0, 0.28, 0.72, 0.92],
+    [0, 0.68, 0.90],
     [
-      '0px -35px 90px rgba(0,0,0,0.85)',
       '0px 0px 0px rgba(0,0,0,0)',
       '0px 0px 0px rgba(0,0,0,0)',
       '0px 35px 110px -10px rgba(0,0,0,0.95), 0px 0px 0px 1px rgba(255,255,255,0.18)',
     ]
   );
 
-  // Subtle dimming overlay
-  const dimOpacity = useTransform(scrollYProgress, [0.72, 0.95], [0, 0.35]);
+  // Subtle dimming overlay as it shrinks for Closing Footer
+  const dimOpacity = useTransform(scrollYProgress, [0.68, 0.95], [0, 0.35]);
 
   return (
     <section
       ref={trackRef}
       id="faq"
-      className="relative z-80 w-full h-[300vh] bg-[#07080a] select-none -mt-[100vh]"
+      className="relative z-70 w-full h-[250vh] bg-[#07080a] select-none"
     >
       {/* Pinned Sticky Viewport Window */}
-      <div className="sticky top-0 w-full h-screen overflow-hidden flex items-start justify-center p-0 z-0 bg-transparent pointer-events-none">
+      <div className="sticky top-0 w-full h-screen h-[100dvh] overflow-hidden flex items-start justify-center p-0 z-0 bg-transparent pointer-events-none">
         
         {/* Subtle Ambient Spatial Depth Grid (visible when card shrinks away from edges) */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_38%,_rgba(255,255,255,0.08)_0%,_transparent_65%)] pointer-events-none" />
@@ -124,13 +121,12 @@ const FAQ: React.FC = () => {
         {/* The Scaling FAQ Canvas */}
         <motion.div
           style={{
-            y: entryY,
             scale,
             borderRadius,
             boxShadow,
             transformOrigin: 'center 42%',
           }}
-          className="relative w-full h-full overflow-hidden flex flex-col justify-start px-5 sm:px-10 lg:px-14 py-6 sm:py-8 lg:py-10 will-change-transform bg-[#E5E3DD] text-[#111111] pointer-events-auto border-t border-black/15"
+          className="relative w-full h-full overflow-hidden flex flex-col justify-start px-4 xs:px-6 sm:px-10 lg:px-14 pt-12 sm:pt-8 lg:pt-10 pb-4 sm:pb-8 will-change-transform bg-[#E5E3DD] text-[#111111] pointer-events-auto border-t border-black/15"
         >
           {/* Scroll-Driven Dimming Overlay */}
           <motion.div
@@ -144,17 +140,16 @@ const FAQ: React.FC = () => {
             className="w-full max-w-[1440px] mx-auto flex flex-col justify-between relative z-10 will-change-transform"
           >
             {/* Top Header Label */}
-            <div className="w-full mb-4 sm:mb-6">
-              <div className="flex items-center justify-between pb-2 text-xs sm:text-sm font-sans text-neutral-600">
+            <div className="w-full mb-3 sm:mb-6">
+              <div className="flex items-center pb-1.5 sm:pb-2 text-[11px] sm:text-sm font-sans text-neutral-600">
                 <span>Frequently Asked Inquiries</span>
-                <span className="font-mono text-xs uppercase tracking-widest text-neutral-500">[ 06 ANSWERS ]</span>
               </div>
               <div className="w-full border-b border-black/15" />
             </div>
 
             {/* Section Headline */}
-            <div className="mb-6 sm:mb-8">
-              <h2 className="text-2xl sm:text-4xl lg:text-6xl font-sans font-normal text-[#111111] tracking-tight max-w-4xl">
+            <div className="mb-4 sm:mb-8">
+              <h2 className="text-xl xs:text-2xl sm:text-4xl lg:text-6xl font-sans font-normal text-[#111111] tracking-tight max-w-4xl">
                 Everything you need to know about the retainer.
               </h2>
             </div>
@@ -167,23 +162,23 @@ const FAQ: React.FC = () => {
                 return (
                   <div
                     key={faq.num}
-                    className="py-4 sm:py-5 group cursor-pointer transition-colors duration-200"
+                    className="py-3.5 sm:py-5 group cursor-pointer transition-colors duration-200"
                     onClick={() => toggle(idx)}
                   >
-                    <div className="flex items-start justify-between gap-4 sm:gap-8">
+                    <div className="flex items-start justify-between gap-3 sm:gap-8">
                       {/* Left: Number + Question */}
-                      <div className="flex items-baseline gap-4 sm:gap-6 min-w-0">
+                      <div className="flex items-baseline gap-3 sm:gap-6 min-w-0">
                         <span className="font-mono text-xs sm:text-sm text-neutral-500 uppercase tracking-widest shrink-0">
                           {faq.num}
                         </span>
 
-                        <h3 className="text-base sm:text-xl md:text-2xl font-sans font-normal text-[#111111] tracking-tight group-hover:text-neutral-600 transition-colors">
+                        <h3 className="text-sm xs:text-base sm:text-xl md:text-2xl font-sans font-normal text-[#111111] tracking-tight group-hover:text-neutral-600 transition-colors">
                           {faq.question}
                         </h3>
                       </div>
 
                       {/* Right: Plus / Minus Toggle Button */}
-                      <div className="shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-black/15 flex items-center justify-center group-hover:border-black transition-colors">
+                      <div className="shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-black/15 flex items-center justify-center group-hover:border-black transition-colors min-h-[32px] min-w-[32px]">
                         <motion.div
                           animate={{ rotate: isOpen ? 45 : 0 }}
                           transition={{ duration: 0.2 }}
@@ -203,7 +198,7 @@ const FAQ: React.FC = () => {
                           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                           className="overflow-hidden"
                         >
-                          <div className="mt-3 pl-8 sm:pl-10 text-xs sm:text-sm md:text-[0.95rem] font-sans font-light text-neutral-600 leading-relaxed max-w-3xl">
+                          <div className="mt-2.5 sm:mt-3 pl-6 sm:pl-10 text-xs sm:text-sm md:text-[0.95rem] font-sans font-light text-neutral-600 leading-relaxed max-w-3xl">
                             {faq.answer}
                           </div>
                         </motion.div>
@@ -215,7 +210,7 @@ const FAQ: React.FC = () => {
             </div>
 
             {/* Bottom Banner */}
-            <div className="pt-6 sm:pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-mono uppercase tracking-widest text-neutral-500">
+            <div className="pt-5 sm:pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 text-[10px] sm:text-xs font-mono uppercase tracking-widest text-neutral-500 pb-4 sm:pb-0">
               <span>HAVE A SPECIFIC QUESTION NOT LISTED?</span>
 
               <button

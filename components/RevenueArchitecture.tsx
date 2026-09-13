@@ -66,10 +66,11 @@ const RevenueArchitecture: React.FC = () => {
   const dimOpacity = useTransform(scrollYProgress, [0.70, 0.95], [0, 0.35]);
 
   // Scroll-driven horizontal slide from Right to Left for Service 06
+  // Controlled range (-12% to 12%) so text stays comfortably framed on compact viewports
   const headingX = useTransform(
     scrollYProgress,
     [0, 0.35, 0.70],
-    ['25%', '0%', '-25%']
+    ['12%', '0%', '-12%']
   );
 
   const service = {
@@ -100,7 +101,7 @@ const RevenueArchitecture: React.FC = () => {
       className="relative z-30 w-full h-[320vh] bg-[#07080a] select-none"
     >
       {/* Pinned Sticky Viewport Window */}
-      <div className="sticky top-0 w-full h-screen overflow-hidden flex items-center justify-center p-0 z-0 bg-[#07080a]">
+      <div className="sticky top-0 w-full h-screen h-[100dvh] overflow-hidden flex items-center justify-center p-0 z-0 bg-[#07080a]">
         {/* Subtle Ambient Spatial Depth Grid (visible when card shrinks away from edges) */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_38%,_rgba(255,255,255,0.08)_0%,_transparent_65%)] pointer-events-none" />
         <div className="absolute inset-0 bg-[radial-gradient(#ffffff0d_1px,transparent_1px)] [background-size:32px_32px] opacity-50 pointer-events-none" />
@@ -113,7 +114,7 @@ const RevenueArchitecture: React.FC = () => {
             boxShadow,
             transformOrigin: 'center 42%',
           }}
-          className="relative w-full h-full overflow-hidden flex flex-col justify-between px-5 sm:px-10 lg:px-14 pt-3 sm:pt-4 lg:pt-6 pb-4 sm:pb-5 lg:pb-6 will-change-transform bg-[#E5E3DD] text-[#111111]"
+          className="relative w-full h-full overflow-hidden flex flex-col justify-between px-4 xs:px-6 sm:px-10 lg:px-14 pt-12 sm:pt-6 lg:pt-8 pb-3 sm:pb-5 lg:pb-6 will-change-transform bg-[#E5E3DD] text-[#111111]"
         >
           {/* Scroll-Driven Dimming Overlay */}
           <motion.div
@@ -130,13 +131,13 @@ const RevenueArchitecture: React.FC = () => {
             <div className="w-full border-t-2 border-black" />
 
             {/* Split Layout: Picture on Left, Content on Right (matching Services 01-05 exactly) */}
-            <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-8 sm:gap-10 lg:gap-16 items-center flex-1 my-4 sm:my-6">
+            <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10 lg:gap-16 items-center flex-1 my-3 sm:my-6">
               
               {/* LEFT: Full Image Container (Matches Services 01-05 in size exactly) */}
-              <div className="w-full md:col-span-6 lg:col-span-6 flex justify-center items-center">
+              <div className="w-full lg:col-span-6 flex justify-center items-center">
                 <div
                   onClick={openBookingModal}
-                  className="relative w-fit max-w-[560px] cursor-pointer group will-change-transform flex items-center justify-center bg-transparent"
+                  className="relative w-full max-w-[560px] cursor-pointer group will-change-transform flex items-center justify-center bg-transparent"
                 >
                   <img
                     src={safeSrc}
@@ -144,7 +145,7 @@ const RevenueArchitecture: React.FC = () => {
                     onError={() => {
                       if (!mediaError) setMediaError(true);
                     }}
-                    className="w-full max-w-[560px] h-auto block object-contain shadow-2xl group-hover:scale-[1.01] transition-transform duration-500 ease-out"
+                    className="w-full h-auto max-h-[460px] sm:max-h-[520px] block object-contain shadow-xl rounded-xl group-hover:scale-[1.01] transition-transform duration-500 ease-out"
                     referrerPolicy="no-referrer"
                   />
 
@@ -158,50 +159,47 @@ const RevenueArchitecture: React.FC = () => {
               </div>
 
               {/* RIGHT: Service Content */}
-              <div className="w-full md:col-span-6 lg:col-span-6 flex flex-col justify-center">
+              <div className="w-full lg:col-span-6 flex flex-col justify-center">
                 
-                {/* Category & Index Header Row */}
-                <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-black/15">
-                  <span className="text-xs sm:text-sm font-mono tracking-widest text-neutral-600 font-bold uppercase">
-                    [ 06 // 06 ]
-                  </span>
+                {/* Category Header Row */}
+                <div className="flex items-center pb-2.5 sm:pb-3 border-b border-black/15">
                   <span className="text-xs sm:text-sm font-sans tracking-wider text-neutral-900 font-semibold uppercase">
                     {service.category}
                   </span>
                 </div>
 
                 {/* Discipline Tag */}
-                <div className="pt-3 sm:pt-4 text-xs sm:text-sm font-mono tracking-wider text-neutral-500 uppercase">
+                <div className="pt-2.5 sm:pt-3 text-[11px] sm:text-xs font-mono tracking-wider text-neutral-500 uppercase">
                   {service.discipline}
                 </div>
 
                 {/* Primary Service Title with dynamic alternating slide */}
-                <div className="w-full overflow-visible my-2 sm:my-3">
+                <div className="w-full overflow-hidden my-1.5 sm:my-3 py-1">
                   <motion.div
                     style={{ x: headingX }}
-                    className="will-change-transform inline-block"
+                    className="will-change-transform inline-block max-w-full"
                   >
-                    <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-bold tracking-[-0.03em] leading-[1.06] text-black font-sans mb-2 sm:mb-3">
+                    <h3 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-[3.1rem] font-bold tracking-[-0.03em] leading-[1.08] text-black font-sans mb-1 sm:mb-2">
                       {service.title}
                     </h3>
                   </motion.div>
                 </div>
 
                 {/* Tagline / Description */}
-                <p className="text-base sm:text-lg lg:text-xl text-neutral-700 font-sans leading-relaxed mb-4 sm:mb-6 max-w-xl">
+                <p className="text-sm xs:text-base sm:text-lg text-neutral-700 font-sans leading-relaxed mb-3 sm:mb-5 max-w-xl">
                   {service.tagline}
                 </p>
 
                 {/* Deliverables / Capabilities List */}
-                <div className="w-full pt-3 sm:pt-4 border-t border-black/15 mb-4 sm:mb-6">
-                  <div className="text-[11px] sm:text-xs font-mono uppercase tracking-widest text-neutral-500 mb-2.5 sm:mb-3">
+                <div className="w-full pt-3 sm:pt-4 border-t border-black/15 mb-3 sm:mb-5">
+                  <div className="text-[10px] sm:text-xs font-mono uppercase tracking-widest text-neutral-500 mb-2 sm:mb-3">
                     Deliverables & Capabilities
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2.5">
                     {service.deliverables.map((item, i) => (
                       <div
                         key={i}
-                        className="flex items-center space-x-2.5 text-xs sm:text-sm text-neutral-800 font-sans"
+                        className="flex items-center space-x-2 text-xs sm:text-sm text-neutral-800 font-sans"
                       >
                         <span className="w-1.5 h-1.5 rounded-full bg-black/70 flex-shrink-0" />
                         <span className="font-medium">{item}</span>
@@ -214,7 +212,7 @@ const RevenueArchitecture: React.FC = () => {
                 <div className="pt-1">
                   <button
                     onClick={openBookingModal}
-                    className="inline-flex items-center justify-between gap-4 px-6 py-3.5 bg-black text-white rounded-full text-xs sm:text-sm font-mono uppercase tracking-wider font-semibold hover:bg-neutral-800 transition-colors shadow-sm group/btn"
+                    className="w-full sm:w-auto inline-flex items-center justify-between sm:justify-start gap-4 px-5 sm:px-6 py-3 sm:py-3.5 bg-black text-white rounded-full text-xs sm:text-sm font-mono uppercase tracking-wider font-semibold hover:bg-neutral-800 transition-all active:scale-95 shadow-sm min-h-[44px] cursor-pointer group/btn"
                   >
                     <span>Book Strategy Call</span>
                     <span className="group-hover/btn:translate-x-1 transition-transform">→</span>
@@ -226,9 +224,9 @@ const RevenueArchitecture: React.FC = () => {
             </div>
 
             {/* Bottom divider line & metadata */}
-            <div className="w-full mt-4 sm:mt-6">
+            <div className="w-full mt-3 sm:mt-5 pb-1 sm:pb-0">
               <div className="w-full border-b-2 border-black" />
-              <div className="w-full pt-2.5 sm:pt-3 flex items-center justify-between text-[11px] sm:text-xs font-mono text-neutral-600">
+              <div className="w-full pt-2 sm:pt-2.5 flex items-center justify-between text-[10px] sm:text-xs font-mono text-neutral-600">
                 <span className="uppercase tracking-widest text-neutral-700 font-medium">Zurich // Global</span>
                 <span className="uppercase tracking-widest text-neutral-500">AgenciGrow® Systems Architecture</span>
               </div>

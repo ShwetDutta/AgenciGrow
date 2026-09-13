@@ -22,9 +22,6 @@ const WhatWeBelieve: React.FC = () => {
           <span className="font-medium">
             AGENCIGROW®
           </span>
-          <span className="text-neutral-600">
-            [ 02 / WHAT WE BELIEVE ]
-          </span>
           <span className="text-neutral-600 hidden sm:inline-block">
             PRINCIPLES THAT DRIVE US
           </span>
@@ -36,7 +33,7 @@ const WhatWeBelieve: React.FC = () => {
         {/* Dramatically Oversized Bold Display Headline: "What We Believe" */}
         <div
           ref={headerRef}
-          className="w-screen relative left-1/2 -translate-x-1/2 overflow-hidden py-1 sm:py-2 flex justify-center pointer-events-none select-none"
+          className="w-full overflow-hidden py-1 sm:py-2 flex justify-center pointer-events-none select-none"
         >
           <motion.div
             style={{ x: titleX }}
@@ -49,22 +46,22 @@ const WhatWeBelieve: React.FC = () => {
         </div>
 
         {/* Bottom thick rule under the massive header */}
-        <div className="w-full border-b-2 border-black mb-8 sm:mb-12 lg:mb-14" />
+        <div className="w-full border-b-2 border-black mb-6 sm:mb-12 lg:mb-14" />
 
         {/* Two-Column Open Editorial Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 pt-2 pb-16 sm:pb-24">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-14 pt-2 pb-12 sm:pb-24">
           {/* Left Column: Large Serif Statement */}
           <div className="lg:col-span-6">
-            <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-serif font-normal tracking-[-0.03em] leading-[1.12] text-black">
+            <h3 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-serif font-normal tracking-[-0.03em] leading-[1.12] text-black">
               Good design gets attention.
               <br className="hidden sm:inline" />
-              Great design creates recognition.
+              {' '}Great design creates recognition.
             </h3>
           </div>
 
           {/* Right Column: Supporting Copy & 3 Core Principles */}
-          <div className="lg:col-span-6 space-y-8 sm:space-y-10">
-            <div className="space-y-4">
+          <div className="lg:col-span-6 space-y-6 sm:space-y-10">
+            <div className="space-y-3 sm:space-y-4">
               <p className="text-base sm:text-lg md:text-[1.25rem] lg:text-[1.35rem] font-grotesk font-normal text-black leading-[1.35] tracking-[-0.015em]">
                 A fight against mediocrity, vanity metrics, and bloated retainers. We create enterprise value for you, your customers, and beyond.
               </p>

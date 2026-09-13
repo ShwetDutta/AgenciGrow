@@ -13,30 +13,27 @@ const Footer: React.FC = () => {
   return (
     <footer
       id="contact"
-      className="relative w-full bg-[#0A0A0A] text-[#EDEDED] rounded-t-[28px] sm:rounded-t-[36px] border-t border-white/10 overflow-hidden select-none shadow-2xl p-5 sm:p-10 lg:p-14 -mt-6 sm:-mt-8 z-10"
+      className="relative w-full bg-[#0A0A0A] text-[#EDEDED] rounded-t-[28px] sm:rounded-t-[36px] border-t border-white/10 overflow-hidden select-none shadow-2xl -mt-6 sm:-mt-8 z-10 flex flex-col justify-between"
     >
-      <div className="w-full max-w-[1440px] mx-auto flex flex-col justify-between min-h-[60vh] sm:min-h-[70vh]">
+      <div className="w-full max-w-[1440px] mx-auto flex flex-col justify-between min-h-[55vh] sm:min-h-[70vh] p-4 xs:p-6 sm:p-10 lg:p-14 pb-8 sm:pb-12">
         
         {/* Top Tagline */}
-        <div className="flex items-center justify-between pb-6 text-xs font-sans text-neutral-400">
+        <div className="flex items-center pb-4 sm:pb-6 text-xs font-sans text-neutral-400">
           <span>Inquiries & Partnerships</span>
-          <span className="font-mono text-xs uppercase tracking-widest text-neutral-500">
-            [ ACCEPTING SELECT CLIENTS ]
-          </span>
         </div>
 
         {/* Massive Headline & Billboard Grid */}
-        <div className="my-auto py-8 sm:py-12 lg:py-16 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        <div className="my-auto py-6 sm:py-12 lg:py-16 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           <div className="lg:col-span-7 flex flex-col justify-center">
-            <h2 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-[4.5rem] xl:text-[5.4rem] 2xl:text-[6.2rem] font-sans font-normal text-white leading-[0.96] tracking-tight">
+            <h2 className="text-3xl xs:text-4xl sm:text-6xl md:text-7xl lg:text-[4.5rem] xl:text-[5.4rem] 2xl:text-[6.2rem] font-sans font-normal text-white leading-[0.96] tracking-tight">
               Drop us a line<br />
               if you want to collab.
             </h2>
 
-            <div className="mt-8 sm:mt-12 flex flex-wrap items-center gap-4 sm:gap-6">
+            <div className="mt-6 sm:mt-12 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
               <button
                 onClick={openBookingModal}
-                className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white text-black hover:bg-neutral-200 text-xs sm:text-sm font-sans font-medium uppercase tracking-wider transition-colors cursor-pointer min-h-[44px]"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-full bg-white text-black hover:bg-neutral-200 text-xs sm:text-sm font-sans font-medium uppercase tracking-wider transition-all active:scale-95 cursor-pointer min-h-[44px]"
               >
                 <span>Reserve a Consultation</span>
                 <ArrowUpRight className="w-4 h-4" />
@@ -44,7 +41,7 @@ const Footer: React.FC = () => {
 
               <a
                 href="mailto:shwetdutta29@gmail.com"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-full border border-white/25 text-white hover:bg-white/10 text-xs sm:text-sm font-sans tracking-wider transition-colors min-h-[44px]"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full border border-white/25 text-white hover:bg-white/10 text-xs sm:text-sm font-sans tracking-wider transition-all active:scale-95 min-h-[44px]"
               >
                 <span>shwetdutta29@gmail.com</span>
               </a>
@@ -133,7 +130,19 @@ const Footer: React.FC = () => {
 
       </div>
 
-      {/* Modal for Privacy Policy / Terms */}
+      {/* Giant Screen-Width Footer Wordmark: "AgenciGrow" in the uploaded image font spanning left to right end */}
+      <div className="w-full border-t border-white/10 pt-8 sm:pt-12 md:pt-16 pb-10 sm:pb-16 md:pb-20 select-none bg-gradient-to-b from-transparent to-black/40 overflow-x-clip">
+        <div className="w-full flex items-center justify-center overflow-visible px-2 sm:px-4">
+          <span
+            className="text-[16.6vw] font-sans font-normal text-white leading-[1.08] tracking-[-0.035em] select-none whitespace-nowrap block text-center w-full pointer-events-none transition-colors duration-500 hover:text-neutral-200"
+            style={{
+              fontFamily: '"Plus Jakarta Sans", "Inter", sans-serif',
+            }}
+          >
+            AgenciGrow
+          </span>
+        </div>
+      </div>
       {activeModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
           <div className="bg-[#141414] border border-white/15 rounded-xl p-6 sm:p-8 max-w-xl w-full text-white relative shadow-2xl">

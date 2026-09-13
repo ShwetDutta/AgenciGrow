@@ -1,12 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowUpRight } from 'lucide-react';
-import { openBookingModal } from './CalendlyModal';
-import SwissMenuModal from './SwissMenuModal';
 
 const Manifesto: React.FC = () => {
   const trackRef = useRef<HTMLDivElement>(null);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   /* ==========================================================================
      SCROLL MATH (Identical to Hero):
@@ -50,7 +46,7 @@ const Manifesto: React.FC = () => {
       className="relative z-20 w-full h-[200vh] bg-[#07080a] select-none -mt-[100vh]"
     >
       {/* Pinned Sticky Viewport Window */}
-      <div className="sticky top-0 w-full h-screen overflow-hidden flex items-center justify-center p-0 z-0 bg-[#07080a]">
+      <div className="sticky top-0 w-full h-screen h-[100dvh] overflow-hidden flex items-center justify-center p-0 z-0 bg-[#07080a]">
         
         {/* Subtle Ambient Spatial Depth Grid (visible when manifesto card shrinks away from edges) */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_38%,_rgba(255,255,255,0.08)_0%,_transparent_65%)] pointer-events-none" />
@@ -64,7 +60,7 @@ const Manifesto: React.FC = () => {
             boxShadow,
             transformOrigin: 'center 38%',
           }}
-          className="relative w-full h-full overflow-hidden flex flex-col justify-between p-5 sm:p-10 lg:p-14 will-change-transform bg-[#0A0A0A] text-[#EDEDED]"
+          className="relative w-full h-full overflow-hidden flex flex-col justify-between p-4 xs:p-6 sm:p-10 lg:p-14 will-change-transform bg-[#0A0A0A] text-[#EDEDED]"
         >
           {/* Scroll-Driven Dimming Overlay */}
           <motion.div
@@ -72,50 +68,8 @@ const Manifesto: React.FC = () => {
             className="absolute inset-0 bg-black pointer-events-none z-10"
           />
 
-          {/* Top Swiss Control Bar (Integrated Navbar) */}
-          <div className="relative z-20 w-full max-w-[1440px] mx-auto">
-            <div className="flex items-center justify-between pb-3 sm:pb-3.5 border-b border-white/10">
-              
-              {/* Left Brand Wordmark */}
-              <div className="flex items-center gap-2">
-                <a
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                  className="text-xs sm:text-sm font-sans tracking-tight text-white hover:text-neutral-300 transition-colors font-medium"
-                >
-                  <span>AgenciGrow®</span>
-                </a>
-              </div>
-
-              {/* Center Agency Type */}
-              <div className="text-xs font-sans text-neutral-400 tracking-tight">
-                Boutique Agency
-              </div>
-
-              {/* Right Menu & Booking Actions */}
-              <div className="flex items-center gap-3 sm:gap-5">
-                <button
-                  onClick={openBookingModal}
-                  className="hidden md:inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-neutral-300 hover:text-white transition-colors cursor-pointer"
-                >
-                  <span>Book Call</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </button>
-
-                <button
-                  onClick={() => setIsMenuOpen(true)}
-                  className="text-xs sm:text-sm font-sans tracking-tight text-white hover:text-neutral-300 transition-colors cursor-pointer min-h-[36px] px-2 flex items-center"
-                  aria-label="Open Navigation Menu"
-                >
-                  Menu
-                </button>
-              </div>
-
-            </div>
-          </div>
+          {/* Top spacer for persistent fixed navbar */}
+          <div className="relative z-20 w-full pt-12 sm:pt-14" />
 
           {/* Center Monumental Headline with Scroll Drift & Subtle Fade */}
           <motion.div
@@ -123,33 +77,27 @@ const Manifesto: React.FC = () => {
               opacity: contentOpacity,
               y: contentTranslateY,
             }}
-            className="relative z-20 my-auto py-6 sm:py-10 w-full max-w-[1440px] mx-auto"
+            className="relative z-20 my-auto py-4 sm:py-8 lg:py-10 w-full max-w-[1440px] mx-auto overflow-y-auto sm:overflow-visible max-h-[68vh] sm:max-h-none scrollbar-none"
           >
-            <div className="max-w-6xl">
-              <h2 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-sans font-normal text-white leading-[1.08] tracking-tight">
+            <div className="max-w-6xl pr-1 sm:pr-0">
+              <h2 className="text-[1.65rem] xs:text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-sans font-normal text-white leading-[1.12] sm:leading-[1.08] tracking-tight">
                 Welcome to AgenciGrow® Where brands are born and taken to new heights through creative growth systems. It’s a fight against mediocrity and wasted ad spend. We create compounding value for you, your customers, and beyond.
               </h2>
             </div>
           </motion.div>
 
           {/* Bottom Swiss Editorial Metadata Bar */}
-          <div className="relative z-20 w-full max-w-[1440px] mx-auto">
-            <div className="w-full border-b border-white/10 mb-4 sm:mb-5" />
-            <div className="flex items-center justify-between text-xs font-sans text-neutral-400">
+          <div className="relative z-20 w-full max-w-[1440px] mx-auto pb-1 sm:pb-0">
+            <div className="w-full border-b border-white/10 mb-3 sm:mb-5" />
+            <div className="flex flex-wrap items-center justify-between gap-2 text-[10px] sm:text-xs font-sans text-neutral-400">
               <span className="font-mono text-neutral-500 uppercase tracking-wider">[01 / Manifesto]</span>
-              <span className="hidden sm:inline font-mono text-neutral-500 uppercase tracking-wider">Creative Growth Architecture</span>
+              <span className="hidden md:inline font-mono text-neutral-500 uppercase tracking-wider">Creative Growth Architecture</span>
               <span className="font-mono text-neutral-400 uppercase tracking-wider">Scroll To Explore Services ↓</span>
             </div>
           </div>
 
         </motion.div>
       </div>
-
-      {/* Expanded Swiss Navigation Modal */}
-      <SwissMenuModal
-        isOpen={isMenuOpen}
-        onClose={() => setIsMenuOpen(false)}
-      />
     </section>
   );
 };

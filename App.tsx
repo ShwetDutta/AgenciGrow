@@ -8,7 +8,7 @@ import WhoWeAre from './components/WhoWeAre';
 import ProcessCanvas from './components/ProcessCanvas';
 import MuscleLegacy from './components/MuscleLegacy';
 import FAQ from './components/FAQ';
-import ClosingTicker from './components/ClosingTicker';
+import { InstagramSection } from './components/InstagramSection';
 import Footer from './components/Footer';
 import CalendlyModal from './components/CalendlyModal';
 
@@ -53,6 +53,9 @@ const App: React.FC = () => {
         onClose={() => setIsBookingOpen(false)}
       />
 
+      {/* Global Fixed Navbar: Sticks in one place from Hero section to Footer section */}
+      <Navbar />
+
       {/* ====================================================================
           1. HERO SECTION: FULLSCREEN SCALE-DOWN ON SCROLL
           - Starts at 100vw and 100vh with high-resolution editorial visual.
@@ -76,10 +79,7 @@ const App: React.FC = () => {
           - rounded-t-[36px] sm:rounded-t-[48px] provides the physical card overlap.
           - Houses the light Navbar and the 6 Services entries.
           ==================================================================== */}
-      <div className="relative z-30 w-full bg-[#E5E3DD] text-[#111111] rounded-t-[36px] sm:rounded-t-[48px] -mt-[100vh] border-t border-black/15 shadow-[0_-35px_90px_rgba(0,0,0,0.85)] flex flex-col items-center">
-        {/* Sticky Top Control Bar inside the beige canvas */}
-        <Navbar theme="light" />
-
+      <div className="relative z-30 w-full bg-[#E5E3DD] text-[#111111] rounded-t-[36px] sm:rounded-t-[48px] -mt-[100vh] border-t border-black/15 shadow-[0_-35px_90px_rgba(0,0,0,0.85)] flex flex-col items-center pt-8 sm:pt-10">
         <div className="w-full">
           {/* Services Section: Exact Selected Projects sequence */}
           <Services />
@@ -113,36 +113,34 @@ const App: React.FC = () => {
       <ProcessCanvas />
 
       {/* ====================================================================
-          7. CLIENT WORK: MUSCLE LEGACY WITH HERO SHRINK EFFECT
+          7. CLIENT WORK: MUSCLE LEGACY (CONTINUOUS FLOW)
           - Sits at z-60, flowing directly after Process Chapter 03.
-          - Pinned sticky track in dark #07080a space.
+          - Natural document flow with zero artificial shrink or black gaps.
           - Displays "Client work" sliding marquee headline and case study showcase.
-          - Scales down (1.0 -> 0.72) with rounded corners and elevation shadow as FAQ ascends.
+          - Seamlessly transitions into FAQ.
           ==================================================================== */}
       <MuscleLegacy />
 
       {/* ====================================================================
-          9. FAQ SECTION WITH HERO SHRINK EFFECT
-          - Sits at z-80, reveals over MuscleLegacy with -mt-[100vh].
+          8. FAQ SECTION WITH CLOSING HERO SHRINK EFFECT
+          - Sits at z-70, docking seamlessly after Client Work.
           - Pinned sticky track in dark #07080a space.
-          - Scales down (1.0 -> 0.72) with rounded corners and elevation shadow.
+          - Scales down (1.0 -> 0.72) with rounded corners and elevation shadow as Footer ascends.
           ==================================================================== */}
       <FAQ />
 
       {/* ====================================================================
-          10. CLOSING CANVAS: TICKER & FOOTER (THE REVEAL OVER FAQ)
+          9. CLOSING CANVAS: INSTAGRAM & FOOTER (THE REVEAL OVER FAQ)
           - z-index: 90 places it directly above the shrinking FAQ card.
           - -mt-[100vh] seamlessly overlaps the receding card as user scrolls.
           - rounded-t-[36px] sm:rounded-t-[48px] creates physical card reveal.
-          - Houses Pre-Closing Typographic Ticker & Dark Editorial Footer.
+          - Houses Editorial Instagram Chapter & Dark Final Collaboration CTA.
           ==================================================================== */}
       <div className="relative z-90 w-full bg-[#0A0A0A] text-[#EDEDED] rounded-t-[36px] sm:rounded-t-[48px] -mt-[100vh] border-t border-white/15 shadow-[0_-35px_90px_rgba(0,0,0,0.95)] flex flex-col items-center overflow-hidden">
-        {/* Pre-Closing Typographic Ticker */}
-        <div className="w-full pt-8 sm:pt-12">
-          <ClosingTicker />
-        </div>
+        {/* Instagram / Social Presence Editorial Section */}
+        <InstagramSection />
 
-        {/* Dark Closing Statement & Collaboration Grid */}
+        {/* Dark Closing Statement & Collaboration Grid ("Drop us a line if you want to collab.") */}
         <Footer />
       </div>
 

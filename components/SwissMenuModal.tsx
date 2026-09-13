@@ -87,16 +87,16 @@ const SwissMenuModal: React.FC<SwissMenuModalProps> = ({ isOpen, onClose }) => {
             exit={{ opacity: 0, scale: 0.96, y: 14 }}
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-5xl h-[86vh] max-h-[780px] min-h-[480px] bg-[#000000] text-white rounded-2xl sm:rounded-3xl border border-white/20 p-6 sm:p-10 lg:p-12 flex flex-col justify-between shadow-[0_30px_90px_rgba(0,0,0,0.85)] overflow-hidden"
+            className="relative w-full max-w-5xl h-[90vh] sm:h-[86vh] max-h-[780px] min-h-[440px] bg-[#000000] text-white rounded-2xl sm:rounded-3xl border border-white/20 p-5 sm:p-10 lg:p-12 flex flex-col justify-between shadow-[0_30px_90px_rgba(0,0,0,0.85)] overflow-hidden"
           >
             {/* Top Bar matching reference: Left Brand • Center Agency Type • Right Close */}
-            <div className="w-full">
-              <div className="flex items-center justify-between pb-3.5 sm:pb-4 text-xs sm:text-sm font-sans tracking-tight text-white">
+            <div className="w-full shrink-0">
+              <div className="flex items-center justify-between pb-3 sm:pb-4 text-xs sm:text-sm font-sans tracking-tight text-white">
                 <span className="font-normal text-white tracking-tight">AgenciGrow®</span>
-                <span className="font-normal text-neutral-400">Boutique Agency</span>
+                <span className="font-normal text-neutral-400 hidden xs:inline-block">Boutique Agency</span>
                 <button
                   onClick={onClose}
-                  className="font-normal text-white hover:text-neutral-400 transition-colors cursor-pointer py-1 px-1 tracking-tight"
+                  className="font-normal text-white hover:text-neutral-400 transition-colors cursor-pointer py-1.5 px-2 tracking-tight min-h-[44px] flex items-center"
                   aria-label="Close menu"
                 >
                   Close
@@ -108,18 +108,18 @@ const SwissMenuModal: React.FC<SwissMenuModalProps> = ({ isOpen, onClose }) => {
             </div>
 
             {/* Generous Swiss Negative Space in the middle */}
-            <div className="flex-1 min-h-[40px] sm:min-h-[80px]" />
+            <div className="flex-1 min-h-[16px] sm:min-h-[60px]" />
 
             {/* Bottom Stacked Typographic Rows matching reference */}
-            <div className="w-full">
+            <div className="w-full overflow-y-auto max-h-[68vh] scrollbar-none pr-1">
               <div className="w-full divide-y divide-white/20 border-t border-b border-white/20">
                 {navLinks.map((item) => (
                   <button
                     key={item.name}
                     onClick={() => handleNavigate(item.href)}
-                    className="w-full text-left py-3 sm:py-4 lg:py-5 group flex items-center justify-between cursor-pointer transition-colors"
+                    className="w-full text-left py-2.5 sm:py-4 lg:py-5 group flex items-center justify-between cursor-pointer transition-colors min-h-[44px]"
                   >
-                    <span className="text-3xl sm:text-5xl lg:text-6xl font-sans font-normal tracking-tight text-white group-hover:text-neutral-400 transition-colors">
+                    <span className="text-2xl xs:text-3xl sm:text-5xl lg:text-6xl font-sans font-normal tracking-tight text-white group-hover:text-neutral-400 transition-colors">
                       {item.name}
                     </span>
                   </button>

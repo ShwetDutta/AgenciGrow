@@ -1,12 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowUpRight, Menu } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { openBookingModal } from './CalendlyModal';
-import SwissMenuModal from './SwissMenuModal';
 
 const Hero: React.FC = () => {
   const trackRef = useRef<HTMLDivElement>(null);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   /* ==========================================================================
      SCROLL MATH:
@@ -52,8 +50,8 @@ const Hero: React.FC = () => {
       id="hero"
       className="relative w-full h-[200vh] bg-[#07080a] select-none"
     >
-      {/* Pinned Sticky Viewport Window */}
-      <div className="sticky top-0 w-full h-screen overflow-hidden flex items-center justify-center p-0 z-0 bg-[#07080a]">
+      {/* Pinned Sticky Viewport Window - uses 100dvh for mobile dynamic toolbar awareness */}
+      <div className="sticky top-0 w-full h-screen h-[100dvh] overflow-hidden flex items-center justify-center p-0 z-0 bg-[#07080a]">
         
         {/* Subtle Ambient Spatial Depth Grid (visible when hero card shrinks away from edges) */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_38%,_rgba(255,255,255,0.08)_0%,_transparent_65%)] pointer-events-none" />
@@ -67,13 +65,13 @@ const Hero: React.FC = () => {
             boxShadow,
             transformOrigin: 'center 38%',
           }}
-          className="relative w-full h-full overflow-hidden flex flex-col justify-between p-5 sm:p-10 lg:p-14 will-change-transform bg-neutral-900 border border-white/15"
+          className="relative w-full h-full overflow-hidden flex flex-col justify-between p-4 xs:p-6 sm:p-10 lg:p-14 will-change-transform bg-neutral-900 border border-white/15"
         >
-          {/* Fullscreen High-Resolution Editorial Background Image from Unsplash */}
+          {/* Fullscreen High-Resolution Editorial Background Image from Unsplash - art-directed position for mobile landscape & portrait */}
           <img
             src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2560&q=85"
             alt="AgenciGrow Editorial Architecture"
-            className="absolute inset-0 w-full h-full object-cover filter grayscale contrast-125 brightness-75 scale-105 pointer-events-none"
+            className="absolute inset-0 w-full h-full object-cover object-[50%_35%] filter grayscale contrast-125 brightness-75 scale-105 pointer-events-none"
             referrerPolicy="no-referrer"
           />
 
@@ -86,24 +84,8 @@ const Hero: React.FC = () => {
             className="absolute inset-0 bg-black pointer-events-none z-10"
           />
 
-          {/* Top Swiss Metadata Line & Collapsed Navbar */}
-          <div className="relative z-20 w-full">
-            <div className="flex items-center justify-between pb-3 sm:pb-4 text-xs sm:text-sm font-sans tracking-tight">
-              <span className="font-normal text-white">Form</span>
-              <span className="font-normal text-neutral-400">Follows</span>
-              
-              {/* Top Right Collapsed Navbar Trigger (Three Lines) */}
-              <button
-                onClick={() => setIsMenuOpen(true)}
-                className="inline-flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/10 hover:bg-white text-white hover:text-black border border-white/20 transition-all duration-200 cursor-pointer backdrop-blur-md group shadow-sm"
-                aria-label="Open Navigation Menu"
-              >
-                <Menu className="w-4 h-4 transition-transform group-hover:scale-110" />
-              </button>
-            </div>
-            {/* Hairline Rule */}
-            <div className="w-full border-b border-white/20" />
-          </div>
+          {/* Top spacer for persistent fixed navbar */}
+          <div className="relative z-20 w-full pt-12 sm:pt-14" />
 
           {/* Center Oversized Typographic Track with Scroll Drift & Fade */}
           <motion.div
@@ -111,47 +93,33 @@ const Hero: React.FC = () => {
               opacity: contentOpacity,
               y: contentTranslateY,
             }}
-            className="relative z-20 my-auto py-6 sm:py-12 overflow-hidden w-full"
+            className="relative z-20 my-auto py-2 sm:py-6 overflow-visible w-full"
           >
             {/* Giant Horizontal Moving Wordmark */}
             <motion.div
               style={{ x: textXTranslation }}
-              className="flex items-center gap-10 sm:gap-20 whitespace-nowrap will-change-transform"
+              className="flex items-center gap-6 sm:gap-14 lg:gap-20 whitespace-nowrap will-change-transform overflow-visible"
             >
               <h1
-                className="text-[20vw] sm:text-[19vw] lg:text-[18vw] font-serif font-normal text-white leading-[0.80] tracking-[-0.035em] select-none"
+                className="text-[21vw] sm:text-[19vw] lg:text-[18vw] font-serif font-normal text-white leading-[1.05] tracking-[-0.035em] select-none py-2"
                 style={{ fontFamily: '"Bodoni Moda", "Playfair Display", Georgia, serif' }}
               >
                 AgenciGrow
               </h1>
-              <span
-                className="text-[20vw] sm:text-[19vw] lg:text-[18vw] font-serif font-normal text-white/40 leading-[0.80] tracking-[-0.035em] select-none"
-                style={{ fontFamily: '"Bodoni Moda", "Playfair Display", Georgia, serif' }}
-              >
-                Noble
-              </span>
-              <span
-                className="text-[20vw] sm:text-[19vw] lg:text-[18vw] font-serif font-normal text-white leading-[0.80] tracking-[-0.035em] select-none"
-                style={{ fontFamily: '"Bodoni Moda", "Playfair Display", Georgia, serif' }}
-              >
-                AgenciGrow
-              </span>
             </motion.div>
-
-            {/* Subtitle statement */}
-            <p className="mt-8 sm:mt-12 lg:mt-16 text-sm sm:text-base lg:text-lg text-neutral-300 font-sans font-light max-w-2xl leading-relaxed">
-              We design and engineer compounding revenue systems: high-converting web applications, precision Meta & Google ad funnels, and automated WhatsApp CRM pipelines.
-            </p>
           </motion.div>
 
           {/* Bottom Action Bar */}
-          <div className="relative z-20 w-full">
-            <div className="w-full border-b border-white/20 mb-5 sm:mb-6" />
+          <div className="relative z-20 w-full pb-2 sm:pb-0">
+            <div className="w-full border-b border-white/20 mb-3 sm:mb-5 lg:mb-6" />
 
-            <div className="flex items-center justify-end text-white">
+            <div className="flex items-center justify-between sm:justify-end text-white gap-3">
+              <span className="text-[10px] sm:hidden font-mono uppercase tracking-widest text-neutral-400">
+                Zurich // Global
+              </span>
               <button
                 onClick={openBookingModal}
-                className="inline-flex items-center justify-between gap-3 px-5 py-2.5 rounded-full bg-white text-black hover:bg-neutral-200 text-xs font-mono uppercase tracking-wider transition-all duration-200 cursor-pointer min-h-[42px] shadow-lg font-medium"
+                className="inline-flex items-center justify-between gap-2.5 sm:gap-3 px-4 sm:px-5 py-2.5 rounded-full bg-white text-black hover:bg-neutral-200 text-xs font-mono uppercase tracking-wider transition-all duration-200 cursor-pointer min-h-[44px] shadow-lg font-medium active:scale-95"
               >
                 <span>Book Consultation</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
@@ -161,12 +129,6 @@ const Hero: React.FC = () => {
 
         </motion.div>
       </div>
-
-      {/* Expanded Swiss Navigation Modal matching reference design */}
-      <SwissMenuModal
-        isOpen={isMenuOpen}
-        onClose={() => setIsMenuOpen(false)}
-      />
     </section>
   );
 };

@@ -146,38 +146,38 @@ const Process: React.FC = () => {
             <article
               key={step.number}
               id={`process-step-${step.number}`}
-              className="w-full grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 lg:gap-14 min-h-[85vh] sm:min-h-[90vh] lg:min-h-[95vh] pt-6 sm:pt-8 lg:pt-10 pb-20 sm:pb-28 lg:pb-36"
+              className="w-full grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-8 md:gap-10 lg:gap-14 min-h-0 md:min-h-[85vh] lg:min-h-[95vh] pt-6 sm:pt-8 lg:pt-10 pb-12 sm:pb-24 lg:pb-36"
             >
               {/* Column 1: Number — Sits cleanly on the left with NO line above it */}
               <div className="md:col-span-3 lg:col-span-3 relative">
-                <div className="sticky top-[64px] sm:top-[74px] lg:top-[84px] z-10 select-none">
-                  <span className="font-grotesk font-bold tracking-[-0.05em] leading-[0.74] text-black text-7xl sm:text-8xl md:text-[8.5rem] lg:text-[10.5rem] xl:text-[12rem] block">
+                <div className="relative md:sticky top-0 md:top-[74px] lg:top-[84px] z-10 select-none pb-2 md:pb-0">
+                  <span className="font-grotesk font-bold tracking-[-0.05em] leading-[0.78] text-black text-6xl xs:text-7xl sm:text-8xl md:text-[8rem] lg:text-[10rem] xl:text-[11.5rem] block">
                     {step.number}
                   </span>
                 </div>
               </div>
 
               {/* Columns 2 & 3: Content block with crisp solid black line starting at the title and spanning to the right edge */}
-              <div className="md:col-span-9 lg:col-span-9 border-t-2 border-black pt-5 sm:pt-6 lg:pt-7">
+              <div className="md:col-span-9 lg:col-span-9 border-t-2 border-black pt-4 sm:pt-6 lg:pt-7">
                 {/* Primary Section: Title + Subtitle & Narrative Paragraphs */}
-                <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 lg:gap-12 items-start">
+                <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 md:gap-8 lg:gap-12 items-start">
                   
                   {/* Title & Subtitle */}
-                  <div className="md:col-span-5 lg:col-span-5 flex flex-col justify-start">
-                    <h4 className="text-2xl sm:text-3xl md:text-[2.1rem] lg:text-[2.4rem] font-grotesk font-bold tracking-[-0.03em] leading-[1.12] text-black">
+                  <div className="lg:col-span-5 flex flex-col justify-start">
+                    <h4 className="text-xl xs:text-2xl sm:text-3xl md:text-[2.1rem] lg:text-[2.35rem] font-grotesk font-bold tracking-[-0.03em] leading-[1.12] text-black">
                       {step.title}
                     </h4>
-                    <div className="text-sm sm:text-base font-grotesk font-medium text-neutral-600 mt-2 sm:mt-2.5">
+                    <div className="text-xs sm:text-sm md:text-base font-grotesk font-medium text-neutral-600 mt-1 sm:mt-2.5">
                       {step.subLabel}
                     </div>
                   </div>
 
                   {/* Primary Narrative Paragraphs */}
-                  <div className="md:col-span-7 lg:col-span-7 flex flex-col space-y-4 sm:space-y-5">
-                    <p className="font-grotesk font-normal text-sm sm:text-base md:text-[0.975rem] text-neutral-700 leading-[1.68] tracking-[-0.01em]">
+                  <div className="lg:col-span-7 flex flex-col space-y-3 sm:space-y-4">
+                    <p className="font-grotesk font-normal text-xs sm:text-sm md:text-[0.975rem] text-neutral-700 leading-[1.68] tracking-[-0.01em]">
                       {step.paragraph1}
                     </p>
-                    <p className="font-grotesk font-normal text-sm sm:text-base md:text-[0.975rem] text-neutral-700 leading-[1.68] tracking-[-0.01em]">
+                    <p className="font-grotesk font-normal text-xs sm:text-sm md:text-[0.975rem] text-neutral-700 leading-[1.68] tracking-[-0.01em]">
                       {step.paragraph2}
                     </p>
                   </div>
@@ -185,21 +185,21 @@ const Process: React.FC = () => {
                 </div>
 
                 {/* Supporting Details / Editorial Breakdown Layer */}
-                <div className="mt-10 sm:mt-12 lg:mt-14 pt-8 sm:pt-10 border-t border-black/15">
-                  <div className="text-[11px] sm:text-xs font-mono uppercase tracking-[0.18em] text-neutral-600 mb-6 sm:mb-8">
+                <div className="mt-8 sm:mt-12 lg:mt-14 pt-6 sm:pt-10 border-t border-black/15">
+                  <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.18em] text-neutral-600 mb-4 sm:mb-8">
                     {step.supportingHeader}
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 lg:gap-x-14 gap-y-6 sm:gap-y-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 sm:gap-x-10 lg:gap-x-14 gap-y-4 sm:gap-y-8">
                     {step.supportingItems.map((item, idx) => (
                       <div
                         key={idx}
-                        className="flex flex-col space-y-2 pb-5 border-b border-black/10"
+                        className="flex flex-col space-y-1.5 sm:space-y-2 pb-3 sm:pb-5 border-b border-black/10"
                       >
-                        <div className="font-mono text-xs sm:text-[13px] font-bold text-black uppercase tracking-[0.06em]">
+                        <div className="font-mono text-[11px] sm:text-xs md:text-[13px] font-bold text-black uppercase tracking-[0.06em]">
                           {item.label}
                         </div>
-                        <p className="font-grotesk font-normal text-xs sm:text-sm text-neutral-700 leading-[1.62]">
+                        <p className="font-grotesk font-normal text-xs sm:text-sm text-neutral-700 leading-[1.6]">
                           {item.description}
                         </p>
                       </div>
@@ -208,8 +208,8 @@ const Process: React.FC = () => {
 
                   {/* Editorial Serif Closing Statement (for Step 03) */}
                   {step.closingStatement && (
-                    <div className="mt-8 sm:mt-10 pt-6 border-t border-black/15">
-                      <p className="font-serif italic text-xl sm:text-2xl md:text-[1.75rem] text-black leading-snug">
+                    <div className="mt-6 sm:mt-10 pt-4 sm:pt-6 border-t border-black/15">
+                      <p className="font-serif italic text-lg sm:text-2xl md:text-[1.75rem] text-black leading-snug">
                         "{step.closingStatement}"
                       </p>
                     </div>
